@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 /*
@@ -13,5 +14,13 @@ use App\Http\Controllers\Admin\HomeController;
 |
 */
 
-Route::get('/admin',[HomeController::class,'index']);
+Route::get('/admin',[HomeController::class,'index'])->name('admin')->middleware('auth');
 Route::get('admin/login',[HomeController::class,'get_login_form']);
+
+
+Route::group(['controller'=>AuthController::class,'prefix'=>'admin'],function()
+{
+    Route::get('login','loginView')->name('admin.login.view')->middleware('guest');
+    Route::post('login','login')->name('admin.login')->middleware('guest');
+    Route::get('logout','logout')->name('admin.logout')->middleware('auth');
+});
