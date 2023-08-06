@@ -14,8 +14,7 @@ class AddColumnToTable extends Migration
     public function up()
     {
         Schema::table('centers', function (Blueprint $table) {
-            $table->string('time_ids')->after('address');
-            $table->string('observer_num')->after('time_ids');
+
         });
     }
 
