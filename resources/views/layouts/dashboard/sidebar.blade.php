@@ -27,12 +27,15 @@
                     </a>
                 </li>
 
+                {{-- @if (auth()->user()->hasPermission('show_roles')) --}}
                 <li>
-                    <a href="calendar.html" class=" waves-effect">
+                    <a href="{{route('role.index')}}" class=" waves-effect">
                         <i class="ri-calendar-2-line"></i>
-                        <span>Calendar</span>
+                        <span>Roles</span>
                     </a>
-                </li>
+                </li>       
+                {{-- @endif --}}
+             
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
