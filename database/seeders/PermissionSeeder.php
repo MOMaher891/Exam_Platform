@@ -43,6 +43,22 @@ class PermissionSeeder extends Seeder
                 'display_name'=>'Edit Permissions',
             ],
 
+            [
+                'name'=>'show_staff',
+                'display_name'=>'Show Staff',
+            ],
+            [
+                'name'=>'add_staff',
+                'display_name'=>'Add Staff',
+            ],
+            [
+                'name'=>'edit_staff',
+                'display_name'=>'Edit Staff',
+            ],
+            [
+                'name'=>'delete_staff',
+                'display_name'=>'Delete Staff',
+            ],
 
             // todo
         ];
@@ -50,7 +66,7 @@ class PermissionSeeder extends Seeder
 
         foreach($data as $d)
         {
-            Permission::create($d);
+            Permission::firstOrCreate($d);
         }
     }
 }
