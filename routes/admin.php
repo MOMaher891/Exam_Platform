@@ -44,13 +44,13 @@ Route::group(['prefix'=>'admin'],function(){
         Route::group(['controller'=>StaffController::class,'prefix'=>'staff'],function(){
             //Get Functions
             $prefix = 'staff.';
-            Route::get('/','index')->name(config('app.admin').$prefix.'index');
-            Route::get('/create','create')->name(config('app.admin').$prefix.'create');
-            Route::get('/edit/{stf_id}','edit')->name(config('app.admin').$prefix.'edit');
+            Route::get('/','index')->middleware('permission:show_staff')->name(config('app.admin').$prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'create');
+            Route::get('/edit/{stf_id}','edit')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'edit');
             //Post Functions
-            Route::post('/store','store')->name(config('app.admin').$prefix.'store');
-            Route::post('update','update')->name(config('app.admin').$prefix.'update');
-            Route::get('/delete/{stf_id}','delete')->name(config('app.admin').$prefix.'delete');
+            Route::post('/store','store')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'store');
+            Route::post('update','update')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'update');
+            Route::get('/delete/{stf_id}','delete')->middleware('permission:delete_staff')->name(config('app.admin').$prefix.'delete');
         });
     });
 
@@ -58,12 +58,12 @@ Route::group(['prefix'=>'admin'],function(){
 });
 Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],function()
 {
-    Route::get('/','index')->name('role.index');
-    Route::get('/create','create')->name('role.create');
-    Route::get('data','data')->name('role.data');
-    Route::get('{id}/edit','edit')->name('role.edit');
-    Route::post('/store','store')->name('role.store');
-    Route::post('{id}/update','update')->name('role.update');
+    Route::get('/','index')->middleware('permission:show_roles')->name('role.index');
+    Route::get('/create','create')->middleware('permission:add_roles')->name('role.create');
+    Route::get('data','data')->middleware('permission:show_roles')->name('role.data');
+    Route::get('{id}/edit','edit')->middleware('permission:edit_roles')->name('role.edit');
+    Route::post('/store','store')->middleware('permission:add_roles')->name('role.store');
+    Route::post('{id}/update','update')->middleware('permission:edit_roles')->name('role.update');
 });
 
 Route::group(['controller'=>PermissionController::class,'prefix'=>'admin/permissions'],function()
