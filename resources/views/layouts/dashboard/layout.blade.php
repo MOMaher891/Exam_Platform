@@ -122,5 +122,16 @@
     {{-- Toster --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+    @if (Session::has('success'))
+        <script>
+            toastr.success('{{ Session::get('success') }}', 'success');
+        </script>
+    @endif
+
+    @if (Session::has('error'))
+        <script>
+            toastr.error('{{ Session::get('error') }}', 'error');
+        </script>
+    @endif
     @yield('scripts')
 </body>

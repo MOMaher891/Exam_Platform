@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-class StaffController extends Controller
+
+class ExamController extends Controller
 {
     /**
      * View Functions
