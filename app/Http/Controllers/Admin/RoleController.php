@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
@@ -18,8 +19,15 @@ class RoleController extends Controller
     
     public function index()
     {
-        $roles = Role::all();
-        return view('dashboard.roles.index',compact('roles'));
+        return view('dashboard.roles.index');
+    }
+
+    public function data()
+    {
+        $data = Role::query()->latest();
+        return DataTables::of($data)->addColumn('action',function($data){
+            return view('dashboard.roles.action',['role'=>$data,'type'=>'action']);
+        })->make(true);
     }
 
     public function create()
