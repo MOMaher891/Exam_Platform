@@ -13,8 +13,4 @@ class HomeController extends Controller
     public function index(){
         return view('dashboard.index');
     }
-    public function get_login_form(){
-        return view('dashboard.login');
-    }
-
 }
