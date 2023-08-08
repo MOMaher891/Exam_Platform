@@ -34,14 +34,16 @@
                 </li>
 
 
-                {{-- @if (auth()->user()->hasPermission('show_roles')) --}}
+                @if (auth()->user()->hasPermission('show_roles'))
                 <li>
                     <a href="{{route('role.index')}}" class=" waves-effect">
                         <i class="ri-calendar-2-line"></i>
                         <span>Roles</span>
                     </a>
                 </li>       
-                {{-- @endif --}}
+                @endif
+
+                @if (auth()->user()->hasPermission('show_staff'))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <span class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
@@ -52,7 +54,9 @@
                         <li><a href="{{ route('admin.staff.index') }}">Staff List</a></li>
                         <li><a href="{{ route('admin.staff.create') }}">Add Staff</a></li>
                     </ul>
-                </li>
+                </li>       
+                @endif
+             
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
