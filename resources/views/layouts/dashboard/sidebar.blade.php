@@ -1,3 +1,9 @@
+<style>
+    .badge {
+        position: absolute !important;
+        right: 45px !important;
+    }
+</style>
 <div class="vertical-menu">
 
     <div data-simplebar class="h-100">
@@ -5,10 +11,10 @@
         <!-- User details -->
         <div class="user-profile text-center mt-3">
             <div class="">
-                <img src="assets/images/users/avatar-1.jpg" alt="" class="avatar-md rounded-circle">
+                <img src="{{ asset('assets/images/users/person.jpg') }}" alt="" class="avatar-md rounded-circle">
             </div>
             <div class="mt-3">
-                <h4 class="font-size-16 mb-1">Julia Hudda</h4>
+                <h4 class="font-size-16 mb-1">{{ Auth::guard()->user()->name }}</h4>
                 <span class="text-muted"><i class="ri-record-circle-line align-middle font-size-14 text-success"></i>
                     Online</span>
             </div>
@@ -22,26 +28,21 @@
 
                 <li>
                     <a href="index-2.html" class="waves-effect">
-                        <i class="ri-dashboard-line"></i><span class="badge rounded-pill bg-success float-end">3</span>
+                        <i class="ri-home-2-line"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
 
-                <li>
-                    <a href="calendar.html" class=" waves-effect">
-                        <i class="ri-calendar-2-line"></i>
-                        <span>Calendar</span>
-                    </a>
-                </li>
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="ri-mail-send-line"></i>
-                        <span>Email</span>
+                        <span class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
+                        <i class="ri-user-3-line"></i>
+                        <span>Staff</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="email-inbox.html">Inbox</a></li>
-                        <li><a href="email-read.html">Read Email</a></li>
+                        <li><a href="{{ route('admin.staff.index') }}">Staff List</a></li>
+                        <li><a href="{{ route('admin.staff.create') }}">Add Staff</a></li>
                     </ul>
                 </li>
 
