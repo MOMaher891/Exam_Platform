@@ -59,8 +59,8 @@ Route::group(['prefix'=>'admin'],function(){
 Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],function()
 {
     Route::get('/','index')->name('role.index');
-    
     Route::get('/create','create')->name('role.create');
+    Route::get('data','data')->name('role.data');
     Route::get('{id}/edit','edit')->name('role.edit');
     Route::post('/store','store')->name('role.store');
     Route::post('{id}/update','update')->name('role.update');
