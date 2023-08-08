@@ -34,6 +34,14 @@
                 </li>
 
 
+                {{-- @if (auth()->user()->hasPermission('show_roles')) --}}
+                <li>
+                    <a href="{{route('role.index')}}" class=" waves-effect">
+                        <i class="ri-calendar-2-line"></i>
+                        <span>Roles</span>
+                    </a>
+                </li>       
+                {{-- @endif --}}
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <span class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
