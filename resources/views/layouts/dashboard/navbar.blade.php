@@ -5,19 +5,19 @@
             <div class="navbar-brand-box">
                 <a href="index-2.html" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="logo-sm" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="logo-sm" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-dark.png" alt="logo-dark" height="20">
+                        <img src="{{ asset('assets/images/logo-dark.png') }}" alt="logo-dark" height="20">
                     </span>
                 </a>
 
                 <a href="index-2.html" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.png" alt="logo-sm-light" height="22">
+                        <img src="{{ asset('assets/images/logo-sm.png') }}" alt="logo-sm-light" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-light.png" alt="logo-light" height="20">
+                        <img src="{{ asset('assets/images/logo-light.png') }}" alt="logo-light" height="20">
                     </span>
                 </a>
             </div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
 
-            <div class="dropdown d-none d-sm-inline-block">
+            {{-- <div class="dropdown d-none d-sm-inline-block">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false">
                     <img class="" src="assets/images/flags/us.jpg" alt="Header Language" height="16">
@@ -91,7 +91,7 @@
                         <span class="align-middle">Russian</span>
                     </a>
                 </div>
-            </div>
+            </div> --}}
 
 
             <div class="dropdown d-none d-lg-inline-block ms-1">
@@ -137,8 +137,8 @@
                         </a>
                         <a href="#" class="text-reset notification-item">
                             <div class="d-flex">
-                                <img src="assets/images/users/avatar-3.jpg" class="me-3 rounded-circle avatar-xs"
-                                    alt="user-pic">
+                                <img src="{{ asset('assets/images/users/avatar-3.jpg') }}"
+                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                 <div class="flex-1">
                                     <h6 class="mb-1">James Lemire</h6>
                                     <div class="font-size-12 text-muted">
@@ -167,8 +167,8 @@
 
                         <a href="#" class="text-reset notification-item">
                             <div class="d-flex">
-                                <img src="assets/images/users/avatar-4.jpg" class="me-3 rounded-circle avatar-xs"
-                                    alt="user-pic">
+                                <img src="{{ asset('assets/images/users/avatar-4.jpg') }}"
+                                    class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                 <div class="flex-1">
                                     <h6 class="mb-1">Salena Layfield</h6>
                                     <div class="font-size-12 text-muted">
@@ -192,9 +192,9 @@
             <div class="dropdown d-inline-block user-dropdown">
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
-                        alt="Header Avatar">
-                    <span class="d-none d-xl-inline-block ms-1">Julia</span>
+                    <img class="rounded-circle header-profile-user"
+                        src="{{ asset('assets/images/users/person.jpg') }}" alt="Header Avatar">
+                    {{-- <span class="d-none d-xl-inline-block ms-1">{{ Auth::guard()->user()->name }}</span> --}}
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -209,7 +209,7 @@
                     <a class="dropdown-item" href="#"><i class="ri-lock-unlock-line align-middle me-1"></i>
                         Lock screen</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item text-danger" href="{{route('admin.logout')}}"><i
+                    <a class="dropdown-item text-danger" href="{{ route('admin.logout') }}"><i
                             class="ri-shut-down-line align-middle me-1 text-danger"></i> Logout</a>
                 </div>
             </div>
