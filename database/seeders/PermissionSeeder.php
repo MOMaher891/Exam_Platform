@@ -87,6 +87,26 @@ class PermissionSeeder extends Seeder
 
             //End Exam Permission
 
+            //Start Category Permission
+            [
+                'name'=>'show_category',
+                'display_name'=>'Show category',
+            ],
+            [
+                'name'=>'add_category',
+                'display_name'=>'Add category',
+            ],
+            [
+                'name'=>'edit_category',
+                'display_name'=>'Edit category',
+            ],
+            [
+                'name'=>'delete_category',
+                'display_name'=>'Delete category',
+            ],
+
+            //End Category Permission
+
 
             // todo
         ];

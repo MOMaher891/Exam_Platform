@@ -51,7 +51,12 @@
         @include('layouts.dashboard.navbar')
         @include('layouts.dashboard.sidebar')
         <div class="main-content">
-            @yield('content')
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    @yield('content')
+                </div>
+            </div>
         </div>
 
         <footer class="footer">

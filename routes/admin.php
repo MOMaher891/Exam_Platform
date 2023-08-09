@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\ExamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
@@ -48,6 +50,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::get('/','index')->middleware('permission:show_staff')->name(config('app.admin').$prefix.'index');
             Route::get('/create','create')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'create');
             Route::get('/edit/{stf_id}','edit')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_staff')->name($prefix.'data');
             //Post Functions
             Route::post('/store','store')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'store');
             Route::post('update','update')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'update');
@@ -60,13 +63,30 @@ Route::group(['prefix'=>'admin'],function(){
         Route::group(['controller'=>ExamController::class,'prefix'=>'exam'],function(){
             $prefix = 'exam.';
             //Get Functions
-            Route::get('/','index')->middleware('permission:show_staff')->name(config('app.admin').$prefix.'index');
-            Route::get('/create','create')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'create');
-            Route::get('/edit/{stf_id}','edit')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'edit');
+            Route::get('/','index')->middleware('permission:show_exam')->name(config('app.admin').$prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_exam')->name(config('app.admin').$prefix.'create');
+            Route::get('/edit/{exam_id}','edit')->middleware('permission:edit_exam')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_exam')->name($prefix.'data');
             //Post Functions
-            Route::post('/store','store')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'store');
-            Route::post('update','update')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'update');
-            Route::get('/delete/{stf_id}','delete')->middleware('permission:delete_staff')->name(config('app.admin').$prefix.'delete');
+            Route::post('/store','store')->middleware('permission:add_exam')->name(config('app.admin').$prefix.'store');
+            Route::post('update','update')->middleware('permission:edit_exam')->name(config('app.admin').$prefix.'update');
+            Route::delete('/delete/{exam_id}','delete')->middleware('permission:delete_exam')->name(config('app.admin').$prefix.'delete');
+        });
+
+        /**
+        * Category routes
+        */
+        Route::group(['controller'=>CategoriesController::class,'prefix'=>'category'],function(){
+            $prefix = 'category.';
+            //Get Functions
+            Route::get('/','index')->middleware('permission:show_category')->name(config('app.admin').$prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_category')->name(config('app.admin').$prefix.'create');
+            Route::get('/edit/{category_id}','edit')->middleware('permission:edit_category')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_category')->name($prefix.'data');
+            //Post Functions
+            Route::post('/store','store')->middleware('permission:add_category')->name(config('app.admin').$prefix.'store');
+            Route::post('update','update')->middleware('permission:edit_category')->name(config('app.admin').$prefix.'update');
+            Route::delete('/delete/{category_id}','delete')->middleware('permission:delete_category')->name(config('app.admin').$prefix.'delete');
         });
 
         /**

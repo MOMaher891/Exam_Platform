@@ -13,10 +13,10 @@ class RoleController extends Controller
     //
     public function __construct()
     {
-        $this->middleware(['role:superadmin']);     
+        $this->middleware(['role:superadmin']);
     }
 
-    
+
     public function index()
     {
         return view('dashboard.roles.index');
@@ -40,7 +40,7 @@ class RoleController extends Controller
         $role = Role::findOrFail($id);
         return view('dashboard.roles.edit',compact('role'));
     }
-    
+
     public function store(Request $request)
     {
         $request->validate(['display_name'=>'required']);

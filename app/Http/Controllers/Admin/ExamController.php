@@ -2,54 +2,77 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\staffValidation;
-use App\Models\Role;
-use App\Models\User;
+use App\Http\Requests\ExamValidation;
+use App\Models\Category;
+use App\Models\Exam;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
-
+use Yajra\DataTables\Facades\DataTables;
 class ExamController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:superadmin']);
+    }
     /**
      * View Functions
      */
     public function index(){
         try{
-            //Get Users
-            $staff = User::with(['roles'=>function($q){
-                $q->whereIn('name',['analyst','admin']);
-            }])->get();
-
-            //Filter Staff (Admin & Analyst)
-            $staff = $staff->filter(function ($object) {
-                return isset($object->roles[0]) && $object->roles[0] !== null;
-            });
-
-            return view('dashboard.staff.index',compact('staff'));
+            return view('dashboard.exam.index');
 
         }catch(\Exception $ex){
             return view('errors.500');
         }
+    }
+
+    public function data(){
+
+        $data = Exam::query()->latest();
+        return DataTables::of($data)
+        ->addColumn('category_id',function($data){return $data->category->name;})
+        ->addColumn('price',function($data){return $data->price.' $';})
+        ->addColumn('status',function($data){
+            $current_date = Carbon::today()->addDay();
+            $date = Carbon::parse($data->date)->format('Y-m-d');
+            $days = Carbon::parse($date)->diffInDays($current_date);
+            $diff = Carbon::parse($date)->diff($current_date)->invert;
+
+            if($days!=0 && $diff==0){
+                $data->update(['expire'=>1]);
+                $status = -1;
+            }else if($days==0 && $diff==0){
+                $status = 0;
+            }else{
+                $status = 1;
+            }
+
+            return view('dashboard.exam.action',['status'=>$status,'type'=>'status']);
+        })->addColumn('action',function($data){
+            return view('dashboard.exam.action',['exam'=>$data,'type'=>'action']);
+        })->make(true);
     }
 
     public function create(){
         try{
-            $roles = DB::table('roles')->orderBy('id', 'asc')->get()->slice(1); // Skip the first row (Super Admin)
-            return view('dashboard.staff.create',compact('roles'));
+            $categories = Category::all(); // Get All Categories
+            return view('dashboard.exam.create',compact('categories'));
         }catch(\Exception $ex){
             return view('errors.500');
         }
 
     }
 
-    public function edit($stf_id){
+    public function edit($exam_id){
         try{
-            $user = User::with(['roles'=>function($q){$q->select('id','name','display_name');}])->findOrFail($stf_id);
-            $roles = DB::table('roles')->orderBy('id', 'asc')->get()->slice(1);
-            return view('dashboard.staff.edit',compact('user','roles'));
+            $categories = Category::get();
+            $exam = Exam::find($exam_id);
+            if(!$exam){
+                return view('errors.404');
+            }
+            return view('dashboard.exam.edit',compact('exam','categories'));
         }catch(\Exception $ex){
             return view('errors.500');
         }
@@ -58,20 +81,14 @@ class ExamController extends Controller
     /**
      * Functionality Functions
      */
-    public function store(staffValidation $request){
+    public function store(ExamValidation $request){
         $request->validated();
         try{
-            DB::beginTransaction();
-            //Create User
-            $user = User::create(array_merge($request->except(['_token','role']),['password' => Hash::make($request->input('password'))]));
-            //Create role for this user
-            $user->attachRole($request->role);
-            DB::commit();
-
+            //Create Exam
+            Exam::create($request->except('_token'));
             return redirect()->back()->with(['success'=>'Data saved successfully!']);
 
         }catch(\Exception $ex){
-            DB::rollBack();
             return redirect()->back()->with(['error'=>'There are error , Try again later...']);
         }
     }
@@ -82,14 +99,14 @@ class ExamController extends Controller
              * Validation
              */
             $validator = Validator::make($request->all(), [
-                'name'=>'required|string',
-                'phone'=>'required|string|max:20|min:5',
-                'role'=>'required',
-                'email' => [
+                'price'=>'required|numeric|gt:0',
+                'date'=>'required|date',
+                'name' => [
                     'required',
-                    'email',
-                    Rule::unique('users')->ignore($request->id), //Check Email expect his email
+                    'string',
+                    Rule::unique('exams')->ignore($request->id), //Check Name In exam table
                 ],
+                'category_id'=>'required'
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
@@ -97,34 +114,28 @@ class ExamController extends Controller
                     ->withInput();
             }
             //Check User exist or not
-            $user = User::findOrFail($request->id);
-            if(!$user){
-                return redirect()->back()->with(['error'=>"Some thing error ,Please try again later ..."]);
+            $exam = Exam::findOrFail($request->id);
+            if(!$exam){
+                return view('errors.404');
             }
             else{
-
-                DB::beginTransaction();
-                $user->update($request->only(['name','email','phone']));
-                //Update User in role table
-                $user->syncRoles([$request->role]);
-                DB::commit();
+                $exam->update($request->except('_token'));
                 return redirect()->back()->with(['success'=>"Data saved successfully!"]);
             }
         }catch(\Exception $ex){
-            DB::rollBack();
             return view('errors.500');
         }
     }
 
-    public function delete($stf_id){
+    public function delete($exam_id){
         try{
-            $user = User::findOrFail($stf_id);
-            if (!$user ){
-                return redirect()->back()->with(['error'=>"Some thing error ,Please try again later ..."]);
+            $exam = Exam::findOrFail($exam_id);
+            if (!$exam ){
+                return view('errors.500');
             }
 
-            $user->delete();
-            return redirect()->back()->with(['success'=>"Data Deleted successfully!"]);
+            $exam->delete();
+            return response()->json(['success'=>"Data deleted successfully!"]);
         }
         catch(\Exception $ex){
             return view('errors.500');
