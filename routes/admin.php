@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\ExamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
@@ -34,42 +36,92 @@ Route::group(['prefix'=>'admin'],function(){
     /**
      * Dashboard Routes
      */
-    Route::group(['middleware'=>['auth'],],function(){
-        //Dashboard Home
+
+    Route::group(['middleware'=>['auth']],function(){
+        //Home
         Route::get('/',[HomeController::class,'index'])->name('admin');
 
         /**
-        * Dashboard Staff routes
+        * Staff routes
         */
         Route::group(['controller'=>StaffController::class,'prefix'=>'staff'],function(){
-            //Get Functions
             $prefix = 'staff.';
+            //Get Functions
             Route::get('/','index')->middleware('permission:show_staff')->name(config('app.admin').$prefix.'index');
             Route::get('/create','create')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'create');
             Route::get('/edit/{stf_id}','edit')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_staff')->name($prefix.'data');
             //Post Functions
             Route::post('/store','store')->middleware('permission:add_staff')->name(config('app.admin').$prefix.'store');
             Route::post('update','update')->middleware('permission:edit_staff')->name(config('app.admin').$prefix.'update');
             Route::get('/delete/{stf_id}','delete')->middleware('permission:delete_staff')->name(config('app.admin').$prefix.'delete');
         });
+
+        /**
+        * Exam routes
+        */
+        Route::group(['controller'=>ExamController::class,'prefix'=>'exam'],function(){
+            $prefix = 'exam.';
+            //Get Functions
+            Route::get('/','index')->middleware('permission:show_exam')->name(config('app.admin').$prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_exam')->name(config('app.admin').$prefix.'create');
+            Route::get('/edit/{exam_id}','edit')->middleware('permission:edit_exam')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_exam')->name($prefix.'data');
+            //Post Functions
+            Route::post('/store','store')->middleware('permission:add_exam')->name(config('app.admin').$prefix.'store');
+            Route::post('update','update')->middleware('permission:edit_exam')->name(config('app.admin').$prefix.'update');
+            Route::delete('/delete/{exam_id}','delete')->middleware('permission:delete_exam')->name(config('app.admin').$prefix.'delete');
+        });
+
+        /**
+        * Category routes
+        */
+        Route::group(['controller'=>CategoriesController::class,'prefix'=>'category'],function(){
+            $prefix = 'category.';
+            //Get Functions
+            Route::get('/','index')->middleware('permission:show_category')->name(config('app.admin').$prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_category')->name(config('app.admin').$prefix.'create');
+            Route::get('/edit/{category_id}','edit')->middleware('permission:edit_category')->name(config('app.admin').$prefix.'edit');
+            Route::get('data','data')->middleware('permission:show_category')->name($prefix.'data');
+            //Post Functions
+            Route::post('/store','store')->middleware('permission:add_category')->name(config('app.admin').$prefix.'store');
+            Route::post('update','update')->middleware('permission:edit_category')->name(config('app.admin').$prefix.'update');
+            Route::delete('/delete/{category_id}','delete')->middleware('permission:delete_category')->name(config('app.admin').$prefix.'delete');
+        });
+
+        /**
+         * Role Routes
+         */
+        Route::group(['controller'=>RoleController::class,'prefix'=>'roles'],function()
+        {
+            $prefix = 'role.';
+            //Get Functions
+            Route::get('/','index')->middleware('permission:show_roles')->name($prefix.'index');
+            Route::get('/create','create')->middleware('permission:add_roles')->name($prefix.'create');
+            Route::get('data','data')->middleware('permission:show_roles')->name($prefix.'data');
+            Route::get('{id}/edit','edit')->middleware('permission:edit_roles')->name($prefix.'edit');
+            //Post Functions
+            Route::post('/store','store')->middleware('permission:add_roles')->name($prefix.'store');
+            Route::post('{id}/update','update')->middleware('permission:edit_roles')->name($prefix.'update');
+        });
+
+        /**
+        * Permission Routes
+        */
+        Route::group(['controller'=>PermissionController::class,'prefix'=>'permissions'],function()
+        {
+            $prefix = 'permission.';
+            //Get Functions
+            Route::get('{id}/edit','index')->name($prefix.'edit');
+            //Post Functions
+            Route::post('{id}/update','update')->name($prefix.'update');
+        });
     });
 
 
 });
-Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],function()
-{
-    Route::get('/','index')->middleware('permission:show_roles')->name('role.index');
-    Route::get('/create','create')->middleware('permission:add_roles')->name('role.create');
-    Route::get('data','data')->middleware('permission:show_roles')->name('role.data');
-    Route::get('{id}/edit','edit')->middleware('permission:edit_roles')->name('role.edit');
-    Route::post('/store','store')->middleware('permission:add_roles')->name('role.store');
-    Route::post('{id}/update','update')->middleware('permission:edit_roles')->name('role.update');
-});
 
-Route::group(['controller'=>PermissionController::class,'prefix'=>'admin/permissions'],function()
-{
-    Route::get('{id}/edit','index')->name('permission.edit');
-    Route::post('{id}/update','update')->name('permission.update');
-});
+
+
 
 
