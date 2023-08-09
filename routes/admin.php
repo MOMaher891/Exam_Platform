@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CenterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
@@ -64,6 +65,16 @@ Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],funct
     Route::get('{id}/edit','edit')->middleware('permission:edit_roles')->name('role.edit');
     Route::post('/store','store')->middleware('permission:add_roles')->name('role.store');
     Route::post('{id}/update','update')->middleware('permission:edit_roles')->name('role.update');
+});
+
+Route::group(['controller'=>CenterController::class,'prefix'=>'admin/center'],function()
+{
+    Route::get('/','index')->middleware('permission:show_center')->name('center.index');
+    Route::get('/create','create')->middleware('permission:add_center')->name('center.create');
+    Route::get('data','data')->middleware('permission:show_center')->name('center.data');
+    Route::get('{id}/edit','edit')->middleware('permission:edit_center')->name('center.edit');
+    Route::post('/store','store')->middleware('permission:add_center')->name('center.store');
+    Route::post('{id}/update','update')->middleware('permission:edit_center')->name('center.update');
 });
 
 Route::group(['controller'=>PermissionController::class,'prefix'=>'admin/permissions'],function()
