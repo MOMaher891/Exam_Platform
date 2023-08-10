@@ -107,8 +107,26 @@ class PermissionSeeder extends Seeder
 
             //End Category Permission
 
+            [
+                'name'=>'show_center',
+                'display_name'=>'Show Centers',
+            ],
+            [
+                'name'=>'add_center',
+                'display_name'=>'Add Centers',
+            ],
+            [
+                'name'=>'edit_center',
+                'display_name'=>'Edit Centers',
+            ],
+            [
+                'name'=>'delete_center',
+                'display_name'=>'Delete Centers',
+            ],
+
 
             // todo
+            
         ];
 
 

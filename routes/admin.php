@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ExamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StaffController;
 
@@ -116,12 +118,53 @@ Route::group(['prefix'=>'admin'],function(){
             //Post Functions
             Route::post('{id}/update','update')->name($prefix.'update');
         });
+
+        
+        Route::group(['controller'=>CenterController::class,'prefix'=>'center'],function()
+        {
+            $prefix = 'center';
+            Route::get('/','index')->middleware('permission:show_center')->name(config('app.admin').$prefix.'.index');
+            Route::get('/create','create')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.create');
+            Route::get('data','data')->middleware('permission:show_center')->name(config('app.admin').$prefix.'.data');
+            Route::get('{id}/edit','edit')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.edit');
+            Route::post('/store','store')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.store');
+            Route::post('{id}/update','update')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.update');
+            Route::post('/upload-excel','uploadCenters')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.upload-center');
+            Route::get('delete/{id}','delete')->middleware('permission:delete_center')->name(config('app.admin').$prefix.'.delete');
+        
+        });
+
+        Route::group(['controller'=>ProfileController::class,'prefix'=>'profile'],function()
+        {
+            $prefix = 'profile';
+            Route::get('/','index')->name('profile.index');
+            Route::get('send-mail','sendEmail')->name('profile.send-email');
+
+            Route::get('check-code','checkCode')->name('profile.check');
+            Route::post('change-password','changePassword')->name('profile.change-password');
+            Route::post('update','update')->name('profile.update');
+
+
+        
+        });
     });
 
 
 });
+// Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],function()
+// {
+//     Route::get('/','index')->middleware('permission:show_roles')->name('role.index');
+//     Route::get('/create','create')->middleware('permission:add_roles')->name('role.create');
+//     Route::get('data','data')->middleware('permission:show_roles')->name('role.data');
+//     Route::get('{id}/edit','edit')->middleware('permission:edit_roles')->name('role.edit');
+//     Route::post('/store','store')->middleware('permission:add_roles')->name('role.store');
+//     Route::post('{id}/update','update')->middleware('permission:edit_roles')->name('role.update');
+// });
 
-
-
+// Route::group(['controller'=>PermissionController::class,'prefix'=>'admin/permissions'],function()
+// {
+//     Route::get('{id}/edit','index')->name('permission.edit');
+//     Route::post('{id}/update','update')->name('permission.update');
+// });
 
 
