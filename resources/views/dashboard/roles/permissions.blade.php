@@ -71,7 +71,7 @@
     </div>
     
 @endsection
-@section('js')
+@section('scripts')
 <script>
       $("#selectAll").click(function(){
             $("input[type=checkbox]").prop('checked', $(this).prop('checked'));
