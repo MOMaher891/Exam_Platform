@@ -23,7 +23,11 @@
         
                         <h4 class="card-title">Centers</h4>
                         <div class="text-center mb-3">
-                            <a href="{{route('admin.center.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
+                            <button type="button" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#firstmodal">Import Excel</button>
+                            <a href="{{asset('assets/excel/center_example.xlsx')}}"  target="__blank" class="btn btn-info" >Download Example</a>
+                         
+                            <a href="" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
+
                         </div>
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
@@ -46,6 +50,37 @@
         </div> <!-- end row -->
     </div>
 </div>
+
+
+                                            <!-- First modal dialog -->
+                                            <div class="modal fade" id="firstmodal" aria-hidden="true" aria-labelledby="..." tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Import Excel</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form action="{{route('admin.center.upload-center')}}" method="POST" enctype="multipart/form-data">
+                                                                @csrf
+                                                                <div class="row">
+                                                                    <div class="form-group mb-3">
+                                                                        <label for="">File</label>
+                                                                        <input type="file" name="file" class="form-control">
+                                                                     
+                                                                    </div>
+                                                                    
+
+                                                                    <div class="form-group">
+                                                                        <button class="btn btn-primary">Save</button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                            </div>
 
 @endsection
 

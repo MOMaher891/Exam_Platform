@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Center\CenterRequest;
+use App\Imports\CenterImport;
 use App\Models\Center;
 use App\Models\Time;
 use App\Models\User;
@@ -11,6 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CenterController extends Controller
 {
@@ -37,6 +39,23 @@ class CenterController extends Controller
         $time = Time::all();
         $users = User::all();
         return view('dashboard.centers.edit',['data'=>$data,'users'=>$users,'times'=>$time,'observeNum'=>explode(',',$data->observer_num),'numTimes'=>explode(',',$data->time_ids)]);
+    }
+
+
+    public function uploadCenters(Request $request)
+    {
+        $request->validate(['file'=>'required|file|mimes:xlsx,csv']);
+        try {
+            if($request->hasFile('file')) {
+                Excel::import(new CenterImport, request()->file('file'));
+                return redirect()->back()->with('success','Data Added');
+            } else {
+                return redirect()->back()->with('error','Incorrect Data Type');
+            }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 
     public function data()
