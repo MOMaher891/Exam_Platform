@@ -114,10 +114,11 @@ class CenterController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete($id)
     {
-        $data = Center::findOrFail($request->id);
+        $data = Center::findOrFail($id);
         $data->delete();
-        return redirect()->back()->with('success','Data Deleted Successfuly');
+        return response()->json(['status'=>true]);
+        // return redirect()->back()->with('success','Data Deleted Successfuly');
     }
 }

@@ -129,6 +129,7 @@ Route::group(['prefix'=>'admin'],function(){
             Route::post('/store','store')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.store');
             Route::post('{id}/update','update')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.update');
             Route::post('/upload-excel','uploadCenters')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.upload-center');
+            Route::get('delete/{id}','delete')->middleware('permission:delete_center')->name(config('app.admin').$prefix.'.delete');
         
         });
     });
