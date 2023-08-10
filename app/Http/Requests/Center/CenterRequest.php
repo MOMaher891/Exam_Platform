@@ -25,11 +25,11 @@ class CenterRequest extends FormRequest
     {
         return [
             //
-            'name'=>'required|string',
-            'phone'=>'required|string|max:20|min:5',
-            'address'=>'required|string',
+            'name'=>'required',
+            'phone'=>'required|max:20|min:5',
+            'address'=>'required',
             'time_ids'=>'required|array',
-            'observer_num'=>'required|numeric',
+            'observer_num'=>'required',
             'user_id'=>'required'
         ];
     }

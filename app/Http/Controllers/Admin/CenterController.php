@@ -17,6 +17,7 @@ class CenterController extends Controller
     //
     public function index()
     {
+      
         return view('dashboard.centers.index');
     }
 
@@ -34,17 +35,25 @@ class CenterController extends Controller
     {
         $data = Center::with('user')->findOrFail($id);
         $time = Time::all();
-        return view('dashboard.centers.edit',['data'=>$data,'times'=>$time]);
+        $users = User::all();
+        return view('dashboard.centers.edit',['data'=>$data,'users'=>$users,'times'=>$time,'observeNum'=>explode(',',$data->observer_num),'numTimes'=>explode(',',$data->time_ids)]);
     }
 
     public function data()
     {
         $data = Center::with('user')->latest();
-
         return DataTables::of($data)
         ->addColumn('action',function($data){
             return view('dashboard.centers.action',['type'=>'action','data'=>$data]);
-        });
+        })
+        ->editColumn('time_ids',function($data){
+            $times = Time::whereIn('id',explode(',',$data->time_ids))->get();
+            return view('dashboard.centers.action',['type'=>'times','data'=>$times]);
+        })
+        ->editColumn('observer_num',function($data){
+            $nums = explode(',',$data->observer_num);
+            return view('dashboard.centers.action',['type'=>'observer_num','data'=>$nums]);
+        })->make(true);
     }
 
 
@@ -54,7 +63,9 @@ class CenterController extends Controller
         $data = $request->validated();
         try{
             DB::beginTransaction();
-            Center::create(array_merge($data,['time_ids'=>implode(',',$request->time_ids)]));
+            Center::create(
+                array_merge($data,['time_ids'=>implode(',',$request->time_ids)
+                ,'observer_num'=>implode(',',$request->observer_num)]));
             DB::commit();
             return redirect()->back()->with('success','Data Added Successfuly');
 
@@ -72,7 +83,10 @@ class CenterController extends Controller
         $center = Center::findOrFail($id);
         try{
         DB::beginTransaction();
-        $center->update(array_merge($data,['time_ids'=>implode(',',$request->time_ids)]));
+        $center->update(
+            array_merge($data,['time_ids'=>implode(',',$request->time_ids)
+            ,'observer_num'=>implode(',',$request->observer_num)])
+        );
         DB::commit();
         return redirect()->back()->with('success','Data Updated Successfuly');
         }catch(Exception $e)

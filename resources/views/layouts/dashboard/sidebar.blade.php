@@ -56,6 +56,20 @@
                     </ul>
                 </li>       
                 @endif
+
+                @if (auth()->user()->hasPermission('show_center'))
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <span class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
+                        <i class="ri-user-3-line"></i>
+                        <span>Centers</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('admin.center.index') }}">Center List</a></li>
+                        <li><a href="{{ route('admin.center.create') }}">Add Center</a></li>
+                    </ul>
+                </li>    
+                @endif
              
 
                 <li>

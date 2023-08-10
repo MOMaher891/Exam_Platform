@@ -23,7 +23,7 @@
         
                         <h4 class="card-title">Centers</h4>
                         <div class="text-center mb-3">
-                            <a href="{{route('.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
+                            <a href="{{route('admin.center.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
                         </div>
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                             <thead>
@@ -54,7 +54,7 @@
      let DataTable = null
 
 function setDatatable() {
-    var url = "{{ route('center.data') }}";
+    var url = "{{ route('admin.center.data') }}";
 
     DataTable = $("#datatable-buttons").DataTable({
         processing: true,
@@ -77,14 +77,27 @@ function setDatatable() {
         columns: [
             
             {
-                data: 'display_name'
+                data: 'name'
             },
             {
-                data: 'description'
+                data: 'user.name'
+            },
+            {
+                data: 'time_ids'
+            },
+            {
+                data: 'observer_num'
+            },
+
+            {
+                data: 'address'
+            },
+            {
+                data: 'phone'
             },
             {
                 data: 'action'
-            }
+            },
         ],
     });
 }

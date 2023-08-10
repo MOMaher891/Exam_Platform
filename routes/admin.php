@@ -69,12 +69,13 @@ Route::group(['controller'=>RoleController::class,'prefix'=>'admin/roles'],funct
 
 Route::group(['controller'=>CenterController::class,'prefix'=>'admin/center'],function()
 {
-    Route::get('/','index')->middleware('permission:show_center')->name('center.index');
-    Route::get('/create','create')->middleware('permission:add_center')->name('center.create');
-    Route::get('data','data')->middleware('permission:show_center')->name('center.data');
-    Route::get('{id}/edit','edit')->middleware('permission:edit_center')->name('center.edit');
-    Route::post('/store','store')->middleware('permission:add_center')->name('center.store');
-    Route::post('{id}/update','update')->middleware('permission:edit_center')->name('center.update');
+    $prefix = 'center';
+    Route::get('/','index')->middleware('permission:show_center')->name(config('app.admin').$prefix.'.index');
+    Route::get('/create','create')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.create');
+    Route::get('data','data')->middleware('permission:show_center')->name(config('app.admin').$prefix.'.data');
+    Route::get('{id}/edit','edit')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.edit');
+    Route::post('/store','store')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.store');
+    Route::post('{id}/update','update')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.update');
 });
 
 Route::group(['controller'=>PermissionController::class,'prefix'=>'admin/permissions'],function()
