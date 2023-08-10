@@ -27,7 +27,7 @@
                 <li class="menu-title">Menu</li>
 
                 <li>
-                    <a href="index-2.html" class="waves-effect">
+                    <a href="{{ route('admin') }}" class="waves-effect">
                         <i class="ri-home-2-line"></i>
                         <span>Dashboard</span>
                     </a>
@@ -35,26 +35,34 @@
 
 
                 @if (auth()->user()->hasPermission('show_roles'))
-                <li>
-                    <a href="{{route('role.index')}}" class=" waves-effect">
-                        <i class="ri-calendar-2-line"></i>
-                        <span>Roles</span>
-                    </a>
-                </li>       
+                    <li>
+                        <a href="{{ route('role.index') }}" class=" waves-effect">
+                            @if (App\Models\Role::count() != 0)
+                                <span
+                                    class="badge rounded-pill bg-success float-end">{{ App\Models\Role::count() }}</span>
+                            @endif
+                            <i class="ri-calendar-2-line"></i>
+                            <span>Roles</span>
+                        </a>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasPermission('show_staff'))
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <span class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
-                        <i class="ri-user-3-line"></i>
-                        <span>Staff</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{ route('admin.staff.index') }}">Staff List</a></li>
-                        <li><a href="{{ route('admin.staff.create') }}">Add Staff</a></li>
-                    </ul>
-                </li>       
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            @if (App\Models\User::count() - 1 != 0)
+                                <span
+                                    class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
+                            @endif
+
+                            <i class="ri-user-3-line"></i>
+                            <span>Staff</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('admin.staff.index') }}">Staff List</a></li>
+                            <li><a href="{{ route('admin.staff.create') }}">Add Staff</a></li>
+                        </ul>
+                    </li>
                 @endif
 
                 @if (auth()->user()->hasPermission('show_center'))
@@ -72,37 +80,41 @@
                 @endif
              
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="ri-layout-3-line"></i>
-                        <span>Layouts</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">Vertical</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="layouts-dark-sidebar.html">Dark Sidebar</a></li>
-                                <li><a href="layouts-compact-sidebar.html">Compact Sidebar</a></li>
-                                <li><a href="layouts-icon-sidebar.html">Icon Sidebar</a></li>
-                                <li><a href="layouts-boxed.html">Boxed Layout</a></li>
-                                <li><a href="layouts-preloader.html">Preloader</a></li>
-                                <li><a href="layouts-colored-sidebar.html">Colored Sidebar</a></li>
-                            </ul>
-                        </li>
 
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">Horizontal</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="layouts-horizontal.html">Horizontal</a></li>
-                                <li><a href="layouts-hori-topbar-light.html">Topbar light</a></li>
-                                <li><a href="layouts-hori-boxed-width.html">Boxed width</a></li>
-                                <li><a href="layouts-hori-preloader.html">Preloader</a></li>
-                                <li><a href="layouts-hori-colored-header.html">Colored Header</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
+                @if (auth()->user()->hasPermission('show_staff'))
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
 
+                            <i class="ri-layout-3-line"></i>
+                            <span>Quiz & Categories</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="true">
+                            <li>
+                                @if (App\Models\Exam::count() != 0)
+                                    <span
+                                        class="badge rounded-pill bg-success float-end">{{ App\Models\Exam::count() }}</span>
+                                @endif
+                                <a href="javascript: void(0);" class="has-arrow">Quiz</a>
+                                <ul class="sub-menu" aria-expanded="true">
+                                    <li><a href="{{ route('admin.exam.index') }}">Quiz List</a></li>
+                                    <li><a href="{{ route('admin.exam.create') }}">Add Quiz</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                @if (App\Models\Category::count() != 0)
+                                    <span
+                                        class="badge rounded-pill bg-success float-end">{{ App\Models\Category::count() }}</span>
+                                @endif
+                                <a href="javascript: void(0);" class="has-arrow">Categories</a>
+                                <ul class="sub-menu" aria-expanded="true">
+                                    <li><a href="{{ route('admin.category.index') }}">Category List</a></li>
+                                    <li><a href="{{ route('admin.category.create') }}">Add Category</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+
+                @endif
                 <li class="menu-title">Pages</li>
 
                 <li>

@@ -76,7 +76,7 @@
                                         aria-label="Default select example" required>
                                         <option selected="" value="" disabled>Choose Role</option>
                                         @foreach ($roles as $role)
-                                            <option value='{{ $role->name }}'
+                                            <option value='{{ $role->id }}'
                                                 @if ($role->name == $user->roles[0]->name) selected @endif>{{ $role->display_name }}
                                             </option>
                                         @endforeach
@@ -101,17 +101,3 @@
     </div>
     <!-- End Page-content -->
 @endsection
-
-@push('scripts')
-    @if (Session::has('success'))
-        <script>
-            toastr.success('{{ Session::get('success') }}', 'success');
-        </script>
-    @endif
-
-    @if (Session::has('error'))
-        <script>
-            toastr.error('{{ Session::get('error') }}', 'error');
-        </script>
-    @endif
-@endpush

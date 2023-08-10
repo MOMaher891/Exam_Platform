@@ -51,7 +51,12 @@
         @include('layouts.dashboard.navbar')
         @include('layouts.dashboard.sidebar')
         <div class="main-content">
-            @yield('content')
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    @yield('content')
+                </div>
+            </div>
         </div>
 
         <footer class="footer">
@@ -122,8 +127,16 @@
     {{-- Toster --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-    {{-- <script>
-        $(".select2").select
-    </script> --}}
+    @if (Session::has('success'))
+        <script>
+            toastr.success('{{ Session::get('success') }}', 'success');
+        </script>
+    @endif
+
+    @if (Session::has('error'))
+        <script>
+            toastr.error('{{ Session::get('error') }}', 'error');
+        </script>
+    @endif
     @yield('scripts')
 </body>

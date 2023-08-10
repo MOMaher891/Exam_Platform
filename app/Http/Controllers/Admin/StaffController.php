@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
 class StaffController extends Controller
 {
     /**
@@ -17,21 +18,31 @@ class StaffController extends Controller
      */
     public function index(){
         try{
-            //Get Users
-            $staff = User::with(['roles'=>function($q){
-                $q->whereIn('name',['analyst','admin']);
-            }])->get();
 
-            //Filter Staff (Admin & Analyst)
-            $staff = $staff->filter(function ($object) {
-                return isset($object->roles[0]) && $object->roles[0] !== null;
-            });
 
-            return view('dashboard.staff.index',compact('staff'));
+            return view('dashboard.staff.index');
 
         }catch(\Exception $ex){
             return view('errors.500');
         }
+    }
+
+    public function data()
+    {
+        //Get Users
+        $data = User::with(['roles'=>function($q){
+            $q->whereIn('name',['analyst','admin']);
+        }])->get();
+        //Filter staff (Admin & Analyst)
+        $data = $data->filter(function ($object) {
+            return isset($object->roles[0]) && $object->roles[0] !== null;
+        });
+
+        return DataTables::of($data)->addColumn('role',function($data){
+            return $data->roles[0]->display_name;
+        })->addColumn('action',function($data){
+            return view('dashboard.staff.action',['staff'=>$data,'type'=>'action']);
+        })->make(true);
     }
 
     public function create(){
@@ -95,15 +106,17 @@ class StaffController extends Controller
                     ->withErrors($validator)
                     ->withInput();
             }
-            //Check User exist or not 
+            //Check User exist or not
             $user = User::findOrFail($request->id);
             if(!$user){
                 return redirect()->back()->with(['error'=>"Some thing error ,Please try again later ..."]);
             }
             else{
+
                 DB::beginTransaction();
                 $user->update($request->only(['name','email','phone']));
-                // $user->attachRole($request->role);
+                //Update User in role table
+                $user->syncRoles([$request->role]);
                 DB::commit();
                 return redirect()->back()->with(['success'=>"Data saved successfully!"]);
             }
@@ -119,7 +132,7 @@ class StaffController extends Controller
             if (!$user ){
                 return redirect()->back()->with(['error'=>"Some thing error ,Please try again later ..."]);
             }
-            
+
             $user->delete();
             return redirect()->back()->with(['success'=>"Data Deleted successfully!"]);
         }
