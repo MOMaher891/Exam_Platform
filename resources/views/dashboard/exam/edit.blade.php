@@ -63,7 +63,7 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="col-md-3 col-lg-3 col-sm-12">
                             <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="date" name="date" id="example-date-input"
@@ -73,6 +73,20 @@
                                     
                                     echo $nextDay; ?>" required>
                                 @error('date')
+                                    <span class="text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-12">
+                            <label for="example-date-input" class="col-sm-3 col-form-label">Show date</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="date" name="show_date" id="example-date-input"
+                                    value="{{ $exam->show_date }}" min="<?php $currentDate = new DateTime();
+                                    $currentDate->add(new DateInterval('P1D'));
+                                    $nextDay = $currentDate->format('Y-m-d');
+                                    
+                                    echo $nextDay; ?>" required>
+                                @error('show_date')
                                     <span class="text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>

@@ -34,6 +34,7 @@
                                 <th>Name</th>
                                 <th>Category</th>
                                 <th>date</th>
+                                <th>Show date</th>
                                 <th>Price</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -87,6 +88,9 @@
                     },
                     {
                         data: 'date'
+                    },
+                    {
+                        data: 'show_date'
                     },
                     {
                         data: 'price'
