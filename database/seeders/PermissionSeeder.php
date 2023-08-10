@@ -107,9 +107,6 @@ class PermissionSeeder extends Seeder
 
             //End Category Permission
 
-
-            // todo
-
             [
                 'name'=>'show_center',
                 'display_name'=>'Show Centers',
@@ -126,6 +123,10 @@ class PermissionSeeder extends Seeder
                 'name'=>'delete_center',
                 'display_name'=>'Delete Centers',
             ],
+
+
+            // todo
+            
         ];
 
 

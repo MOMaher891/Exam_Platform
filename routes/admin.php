@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StaffController;
 
@@ -130,6 +131,20 @@ Route::group(['prefix'=>'admin'],function(){
             Route::post('{id}/update','update')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.update');
             Route::post('/upload-excel','uploadCenters')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.upload-center');
             Route::get('delete/{id}','delete')->middleware('permission:delete_center')->name(config('app.admin').$prefix.'.delete');
+        
+        });
+
+        Route::group(['controller'=>ProfileController::class,'prefix'=>'profile'],function()
+        {
+            $prefix = 'profile';
+            Route::get('/','index')->name('profile.index');
+            Route::get('send-mail','sendEmail')->name('profile.send-email');
+
+            Route::get('check-code','checkCode')->name('profile.check');
+            Route::post('change-password','changePassword')->name('profile.change-password');
+            Route::post('update','update')->name('profile.update');
+
+
         
         });
     });
