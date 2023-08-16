@@ -6,12 +6,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Add Centers</h4>
+                    <h4 class="mb-sm-0">Edit Centers</h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{route('admin')}}">Dashboard</a></li>
                             <li class="breadcrumb-item " ><a href="{{route('admin.center.index')}}">Centers</a></li>
-                            <li class="breadcrumb-item active">Add</li>
+                            <li class="breadcrumb-item active">Edit</li>
 
                         </ol>
                     </div>
@@ -65,7 +65,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <label for="">Number Of Times</label>
                                 <input type="number" class="form-control" name="" onchange="container()" id="input-number">
                             </div>
@@ -98,7 +98,7 @@
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
-                          
+                           --}}
 
                             <div class="col-md-12">
                                 <div class="form-group">

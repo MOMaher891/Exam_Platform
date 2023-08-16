@@ -14,7 +14,9 @@ class Exam extends Model
         'date',
         'show_date',
         'expire',
-        'price'
+        'price',
+        'num_of_hours',
+        'time'
     ];
     public $timestamps = false;
 

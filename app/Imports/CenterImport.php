@@ -28,7 +28,7 @@ class CenterImport implements ToModel , WithStartRow
     {
         // try{
 
-            $user_id = User::where('name',$row[0])->first();
+            $user_id = User::where('code',$row[0])->first();
             $dataTime =  Time::all()->pluck('id');
             $times = [];
             // check if there is

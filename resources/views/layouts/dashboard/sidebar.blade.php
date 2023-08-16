@@ -114,8 +114,22 @@
                             </li>
                         </ul>
                     </li>
-
                 @endif
+
+
+
+                {{-- @if (auth()->user()->hasPermission('show_roles')) --}}
+                    <li>
+                        <a href="{{ route('admin.exam_times.index') }}" class=" waves-effect">
+                            {{-- @if (App\Models\Role::count() != 0)
+                                <span
+                                    class="badge rounded-pill bg-success float-end">{{ App\Models\Role::count() }}</span>
+                            @endif --}}
+                            <i class="ri-calendar-2-line"></i>
+                            <span>Exam to Apply</span>
+                        </a>
+                    </li>
+                {{-- @endif --}}
 
 
             </ul>

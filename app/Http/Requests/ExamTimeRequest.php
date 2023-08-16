@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Center;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CenterRequest extends FormRequest
+class ExamTimeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,12 +25,11 @@ class CenterRequest extends FormRequest
     {
         return [
             //
-            'name'=>'required',
-            'phone'=>'required|max:20|min:5',
-            'address'=>'required',
-            // 'time_ids'=>'required|array',
-            // 'observer_num'=>'required',
-            'user_id'=>'required'
+            'center_id'=>'required',
+            // 'exam_id'=>'required',
+            'from'=>'required|array',
+            'to'=>'required|array',
+            'num_of_observe'=>'required|array'
         ];
     }
 }

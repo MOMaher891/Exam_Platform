@@ -15,7 +15,7 @@ class ProfileController extends Controller
     public function sendEmail()
     {
         try{
-            $code =  rand(10000,99999);
+            $code = rand(10000,99999);
             Mail::to(auth()->user()->email)->send(new ProfileEmail($code));
             $user = User::findOrFail(auth()->user()->id);  
             $user->update(['code'=>$code]); 
@@ -38,11 +38,8 @@ class ProfileController extends Controller
         }
     }
 
-    // update profile
 
-
-
-
+    
     public function changePassword(Request $request)
     {
         $request->validate([

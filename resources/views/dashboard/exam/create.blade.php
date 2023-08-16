@@ -28,7 +28,7 @@
                     <h4 class="card-title">Add New Quiz</h4>
                     <p class="card-title-desc">Here are examples : You can add Quiz Programming on 23-8-2023</p>
                     <div class="row mb-3">
-                        <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Name</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="text" name="name" placeholder="Ex: Programming Exam"
@@ -39,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <label class="col-sm-2 col-form-label">Category</label>
                             <div class="col-sm-10">
                                 <select class="form-select" name="category_id" id="selectCategory"
@@ -60,7 +60,7 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-6 col-sm-12">
                             <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="date" name="date" id="example-date-input"
@@ -74,7 +74,8 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+
+                        <div class="col-md-6 col-sm-12">
                             <label for="example-date-input" class="col-sm-3 col-form-label">Show date</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="date" name="show_date" id="example-date-input"
@@ -89,8 +90,32 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="example-date-input" class="col-sm-2 col-form-label">Start Time</label>
+                                <div class="col-sm-10">
+                                    <input class="form-control" type="time" name="time" id="example-date-input"
+                                        value="{{ old('time') }}" required>
+                                    @error('time')
+                                        <span class="text-danger mt-2">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="example-date-input" class="col-form-label">Number of Hours</label>
+                                    <input class="form-control" type="number" name="num_of_hours" id="example-date-input"
+                                        value="{{ old('num_of_hours') }}" required>
+                                    @error('num_of_hours')
+                                        <span class="text-danger mt-2">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                
+                            </div>
+                        </div>
 
-                        <div class="col-md-6 col-lg-6 col-sm-12">
+
+                        <div class="col-md-6 col-sm-12">
                             <label for="example-number-input" class="col-sm-2 col-form-label">Period price</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="number" name="price" id="example-number-input"
