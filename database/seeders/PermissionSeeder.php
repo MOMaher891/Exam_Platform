@@ -124,7 +124,22 @@ class PermissionSeeder extends Seeder
                 'display_name'=>'Delete Centers',
             ],
 
-
+            [
+                'name'=>'show_exam_times',
+                'display_name'=>'Show Apply Exam',
+            ],
+            [
+                'name'=>'add_exam_times',
+                'display_name'=>'Add Apply Exam',
+            ],
+            [
+                'name'=>'edit_exam_times',
+                'display_name'=>'Edit Apply Exam',
+            ],
+            [
+                'name'=>'delete_exam_times',
+                'display_name'=>'Delete Apply Exam',
+            ],
             // todo
             
         ];

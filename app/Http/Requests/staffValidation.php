@@ -27,8 +27,9 @@ class staffValidation extends FormRequest
             'name'=>'required|string',
             'email'=>'required|email|string|unique:users,email',
             'phone'=>'required|string|max:20|min:5',
-            'password'=>'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/',
+            'password'=>'required|string|min:8',
             'confirm_password'=>'required|same:password',
+            'code'=>'required|unique:users,code,'.auth()->user()->id,
             'role'=>'required'
         ];
     }

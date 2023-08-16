@@ -36,9 +36,9 @@ class CenterController extends Controller
     public function edit($id)
     {
         $data = Center::with('user')->findOrFail($id);
-        $time = Time::all();
+        // $time = Time::all();
         $users = User::all();
-        return view('dashboard.centers.edit',['data'=>$data,'users'=>$users,'times'=>$time,'observeNum'=>explode(',',$data->observer_num),'numTimes'=>explode(',',$data->time_ids)]);
+        return view('dashboard.centers.edit',['data'=>$data,'users'=>$users]);
     }
 
 
@@ -65,14 +65,7 @@ class CenterController extends Controller
         ->addColumn('action',function($data){
             return view('dashboard.centers.action',['type'=>'action','data'=>$data]);
         })
-        ->editColumn('time_ids',function($data){
-            $times = Time::whereIn('id',explode(',',$data->time_ids))->get();
-            return view('dashboard.centers.action',['type'=>'times','data'=>$times]);
-        })
-        ->editColumn('observer_num',function($data){
-            $nums = explode(',',$data->observer_num);
-            return view('dashboard.centers.action',['type'=>'observer_num','data'=>$nums]);
-        })->make(true);
+        ->make(true);
     }
 
 
@@ -83,8 +76,7 @@ class CenterController extends Controller
         try{
             DB::beginTransaction();
             Center::create(
-                array_merge($data,['time_ids'=>implode(',',$request->time_ids)
-                ,'observer_num'=>implode(',',$request->observer_num)]));
+                array_merge($data));
             DB::commit();
             return redirect()->back()->with('success','Data Added Successfuly');
 
@@ -102,10 +94,7 @@ class CenterController extends Controller
         $center = Center::findOrFail($id);
         try{
         DB::beginTransaction();
-        $center->update(
-            array_merge($data,['time_ids'=>implode(',',$request->time_ids)
-            ,'observer_num'=>implode(',',$request->observer_num)])
-        );
+        $center->update($data);
         DB::commit();
         return redirect()->back()->with('success','Data Updated Successfuly');
         }catch(Exception $e)

@@ -28,6 +28,8 @@ class ExamValidation extends FormRequest
             'category_id'=>'required',
             'date'=>'required|date',
             'price'=>'required|numeric|gt:0',
+            'time'=>'required',
+            'num_of_hours'=>'required|numeric'
         ];
     }
 
@@ -40,7 +42,8 @@ class ExamValidation extends FormRequest
             'price.numeric'=>"Price should be numeric",
             'price.gt'=>"Price can't be zero",
             'name.unique'=>":Exam name already exist in database.",
-            'date.date'=>'Date field should be date'
+            'date.date'=>'Date field should be date',
+            'num_of_hours'=>'Number of Hours is required'
         ];
     }
 }
