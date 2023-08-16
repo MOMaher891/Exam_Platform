@@ -7,7 +7,6 @@
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                 <h4 class="mb-sm-0">Add New Staff</h4>
-
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin') }}">DashBoard</a></li>
@@ -39,6 +38,7 @@
                             @enderror
                         </div>
                     </div>
+
                     <div class="row mb-3">
                         <label for="example-text-input" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
@@ -57,6 +57,16 @@
                             <input class="form-control" name="phone" type="tel" placeholder="Ex: +971 52 806 741"
                                 id="example-tel-input" value="{{ old('phone') }}" required>
                             @error('phone')
+                                <span class="text-danger mt-2">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="example-tel-input" class="col-sm-2 col-form-label">Code</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="code" type="text" placeholder="XXXXXXXXX"
+                                id="example-tel-input" value="{{ old('code') }}" required>
+                            @error('code')
                                 <span class="text-danger mt-2">{{ $message }}</span>
                             @enderror
                         </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CenterController;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\ExamController;
+use App\Http\Controllers\Admin\ExamTimeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HomeController;
 
@@ -131,6 +132,22 @@ Route::group(['prefix'=>'admin'],function(){
             Route::post('{id}/update','update')->middleware('permission:edit_center')->name(config('app.admin').$prefix.'.update');
             Route::post('/upload-excel','uploadCenters')->middleware('permission:add_center')->name(config('app.admin').$prefix.'.upload-center');
             Route::get('delete/{id}','delete')->middleware('permission:delete_center')->name(config('app.admin').$prefix.'.delete');
+        
+        });
+
+
+
+        
+        Route::group(['controller'=>ExamTimeController::class,'prefix'=>'exam_times'],function()
+        {
+            $prefix = 'exam_times';
+            Route::get('/','index')->middleware('permission:show_exam_times')->name(config('app.admin').$prefix.'.index');
+            Route::get('{id}/create','create')->middleware('permission:add_exam_times')->name(config('app.admin').$prefix.'.create');
+            Route::get('data','data')->middleware('permission:show_exam_times')->name(config('app.admin').$prefix.'.data');
+            Route::get('{id}/edit','edit')->middleware('permission:edit_exam_times')->name(config('app.admin').$prefix.'.edit');
+            Route::post('{id}/store','store')->middleware('permission:add_exam_times')->name(config('app.admin').$prefix.'.store');
+            Route::post('{id}/update','update')->middleware('permission:edit_exam_times')->name(config('app.admin').$prefix.'.update');
+            Route::get('delete/{id}','delete')->middleware('permission:delete_exam_times')->name(config('app.admin').$prefix.'.delete');
         
         });
 

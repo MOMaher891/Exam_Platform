@@ -28,8 +28,8 @@ class CenterRequest extends FormRequest
             'name'=>'required',
             'phone'=>'required|max:20|min:5',
             'address'=>'required',
-            'time_ids'=>'required|array',
-            'observer_num'=>'required',
+            // 'time_ids'=>'required|array',
+            // 'observer_num'=>'required',
             'user_id'=>'required'
         ];
     }

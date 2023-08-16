@@ -65,7 +65,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <label for="">Number Of Times</label>
                                 <input type="number" class="form-control" name="" onchange="container()" id="input-number">
                             </div>
@@ -80,7 +80,7 @@
                                 @error('observer_num')
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-12">
                                 <div class="form-group">

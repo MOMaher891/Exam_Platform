@@ -16,6 +16,7 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
     'admin'=> 'admin.',
     'center'=>'center.',
+    'exam_times'=>'exam_times',
 
     /*
     |--------------------------------------------------------------------------
