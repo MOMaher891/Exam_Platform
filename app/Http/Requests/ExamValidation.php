@@ -28,8 +28,9 @@ class ExamValidation extends FormRequest
             'category_id'=>'required',
             'date'=>'required|date',
             'price'=>'required|numeric|gt:0',
-            'time'=>'required',
-            'num_of_hours'=>'required|numeric'
+            'num_of_hours'=>'required|numeric',
+            'type'=>'required',
+            'center_id'=>'array',
         ];
     }
 

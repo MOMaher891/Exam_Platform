@@ -20,8 +20,12 @@ class PermissionController extends Controller
     public function update(Request $request,$id)
     {
         $role = Role::findOrFail($id);
-        $role->syncPermissions($request->permissions);
-        
+        if($request->permissions != null)
+        {
+            $role->syncPermissions($request->permissions);
+        }else{
+            $role->syncPermissions([]);
+        }
         return redirect()->back()->with('success','Permission Updated');
     }
 }
