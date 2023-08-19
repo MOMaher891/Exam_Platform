@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamValidation;
 use App\Models\Category;
+use App\Models\Center;
 use App\Models\Exam;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -34,6 +35,15 @@ class ExamController extends Controller
         return DataTables::of($data)
         ->addColumn('category_id',function($data){return $data->category->name;})
         ->addColumn('price',function($data){return $data->price.' $';})
+        ->editColumn('type',function($data){
+            $centers = '';
+            if($data->type=='private')
+            {
+                $centers = Center::whereIn('id',explode(',',$data->centers))->get();
+            }
+            
+            return view('dashboard.exam.action',['data'=>$data,'centers'=>$centers,'type'=>'type']);
+        })
         ->addColumn('status',function($data){
             $current_date = Carbon::today()->addDay();
             $date = Carbon::parse($data->date)->format('Y-m-d');
@@ -57,8 +67,9 @@ class ExamController extends Controller
 
     public function create(){
         try{
+            $centers =  Center::all();
             $categories = Category::all(); // Get All Categories
-            return view('dashboard.exam.create',compact('categories'));
+            return view('dashboard.exam.create',compact('categories','centers'));
         }catch(\Exception $ex){
             return view('errors.500');
         }
@@ -82,10 +93,13 @@ class ExamController extends Controller
      * Functionality Functions
      */
     public function store(ExamValidation $request){
-        $request->validated();
+        $data =  $request->validated();
         try{
-            //Create Exam
-            Exam::create($request->except('_token'));
+            if($request->center_id)
+            {
+                $centers =  implode(',',$request->center_id);
+                Exam::create(array_merge($data,['centers'=>$centers]));
+            }
             return redirect()->back()->with(['success'=>'Data saved successfully!']);
 
         }catch(\Exception $ex){

@@ -4,25 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColToExams extends Migration
+class AddColInExam extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('exams', function (Blueprint $table) {
-            $table->string('num_of_hours')->nullable();
+            $table->enum('type',['private','public']);
+            $table->string('centers')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('exams', function (Blueprint $table) {

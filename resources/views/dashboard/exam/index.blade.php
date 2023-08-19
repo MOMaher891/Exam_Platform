@@ -35,8 +35,8 @@
                                 <th>Category</th>
                                 <th>date</th>
                                 <th>Show date</th>
-                                <th>Start Time</th>
                                 <th>Number of Hours</th>
+                                <th>Centers</th>
                                 <th>Price</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -94,11 +94,12 @@
                     {
                         data: 'show_date'
                     },
-                    {
-                        data: 'time'
-                    },
+                    
                     {
                         data: 'num_of_hours'
+                    },
+                    {
+                        data:'type'
                     },
                     {
                         data: 'price'

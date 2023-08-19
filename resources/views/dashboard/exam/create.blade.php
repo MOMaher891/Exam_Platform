@@ -90,28 +90,16 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label for="example-date-input" class="col-sm-2 col-form-label">Start Time</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="time" name="time" id="example-date-input"
-                                        value="{{ old('time') }}" required>
-                                    @error('time')
-                                        <span class="text-danger mt-2">{{ $message }}</span>
-                                    @enderror
-                                </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="example-date-input" class="col-form-label">Number of Hours</label>
+                                <input class="form-control" type="number" name="num_of_hours" id="example-date-input"
+                                    value="{{ old('num_of_hours') }}" required>
+                                @error('num_of_hours')
+                                    <span class="text-danger mt-2">{{ $message }}</span>
+                                @enderror
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="example-date-input" class="col-form-label">Number of Hours</label>
-                                    <input class="form-control" type="number" name="num_of_hours" id="example-date-input"
-                                        value="{{ old('num_of_hours') }}" required>
-                                    @error('num_of_hours')
-                                        <span class="text-danger mt-2">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                
-                            </div>
+                            
                         </div>
 
 
@@ -126,6 +114,52 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <h5 class="font-size-14 mb-4">Type of Exam</h5>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" value="public"  onclick="hideCenters()">
+                                    <label class="form-check-label" for="formCheck1">
+                                        Public
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" value="private" onclick="ShowCenters()" >
+                                    <label class="form-check-label" for="formCheck1">
+                                        Private
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- show centers if private --}}
+
+                        <div class="col-md-12 d-none" id="Centers" >
+                            <div class="card">
+                                <div class="card-title">
+                                    Choose Center
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                    @foreach ($centers as $center)
+                                        <div class="col-md-4 bg-white">
+                                            <div class="">
+                                                <div class="checkbox checkbox-primary mb-2">
+                                                    <input id="{{ $center->id }}" type="checkbox"
+                                                        value="{{ $center->id }}" name="center_id[]" class="form-check-input" >
+                                                    <label for="{{ $center->id }}">{{ $center->name }}</label>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col-->
+                                    @endforeach
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <button type="submit" id="submit" class="btn btn-info waves-effect waves-light"
                         style="margin-top:20px">Save</button>
                     <a href="{{ route('admin.staff.index') }}" class="btn btn-light waves-effect"
@@ -136,4 +170,20 @@
     </div>
     <!-- end row -->
 
+@endsection
+
+@section('scripts')
+<script>
+    function ShowCenters()
+    {
+        $("#Centers").removeClass('d-none')
+    }
+</script>
+<script>
+function hideCenters()
+    {
+        $("#Centers").addClass('d-none')
+    }
+</script>
+    
 @endsection

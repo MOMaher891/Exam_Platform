@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamTimeRequest;
 use App\Models\Center;
 use App\Models\Exam;
+use App\Models\ExamCenter;
 use App\Models\ExamTime;
 use Carbon\Carbon;
 use Exception;
@@ -18,14 +19,34 @@ class ExamTimeController extends Controller
     //
     public function index()
     {
+     
         return view('dashboard.exam_times.index');  
     }
 
     public function data()
     {
-        $center =  Center::where('user_id',auth()->user()->id)->pluck('id');
-        $exist = ExamTime::whereIn('center_id',$center)->pluck('exam_id')->unique();
-        $data = Exam::query()->with('category')->whereNotIn('id',$exist)->where('expire',0)->latest();
+        $privateList=[];
+        $center =  Center::where('user_id',auth()->user()->id)->first();  
+        $exist = ExamTime::where('center_id',$center->id)->pluck('exam_id')->unique(); // id exams times
+        $privateExams = Exam::where('type','private')->where('expire',0)->get();
+        
+        foreach($privateExams as $exam)
+        {
+            if(in_array($center->id,explode(',',$exam->centers)))
+            {
+                if(in_array($exam->id,json_decode(json_encode ( $exist ) , true) ) == false)
+                {
+                    array_push($privateList,$exam->id);
+
+                }
+            }
+        }
+        $allPublicExams = Exam::where('type','public')->whereNotIn('id',$exist)->where('expire',0)->pluck('id');
+
+        $all =  array_merge($privateList,json_decode(json_encode ( $allPublicExams ) , true));
+        
+
+        $data = Exam::query()->with('category')->whereIn('id',$all)->latest();
         return DataTables::of($data)
         ->addColumn('action',function($data){
             return view('dashboard.exam_times.action',['data'=>$data,'type'=>'action']);
@@ -43,24 +64,25 @@ class ExamTimeController extends Controller
     {
         $data = $request->validated();
         try{
-            if(count($data['from']) == count($data['to']) && count($data['from']) == count($data['num_of_observe']))
-            {
+            // if(count($data['from']) == count($data['to']) && count($data['from']) == count($data['num_of_observe']))
+            // {
                 DB::beginTransaction();
-                foreach($data['from'] as $index => $d)
+                foreach($data['num_of_observe'] as $index => $d)
                 {
                     ExamTime::create(array_merge($data,[
                     'exam_id'=>$id,
-                    'from'=>$d,
-                    'to'=>$data['to'][$index] , 
-                    'num_of_observe'=>$data['num_of_observe'][$index]]));
+                    'num_of_observe'=>$d
+                ]));
                 }
                 DB::commit();
                 return redirect()->route('admin.exam_times.index')->with('success','You Have Applyed to this Exam');
-            }
+            // }
         }catch(Exception $e){
             DB::rollBack();
             return redirect()->back()->with('error',$e->getMessage());
         }
       
     }
+
+    
 }
