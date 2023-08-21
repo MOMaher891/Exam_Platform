@@ -89,7 +89,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('data', 'data')->middleware('permission:show_inspector')->name($prefix . 'data');
             Route::get('/accept/{inspector_id}', 'accept')->middleware('permission:accept_inspector')->name(config('app.admin') . $prefix . 'accept');
             Route::get('/reject/{inspector_id}', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
-            Route::get('/filter_accounts', 'filter_accounts')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'filter');
+            Route::post('/filter_accounts', 'filter_accounts')->middleware('permission:filter_inspector')->name(config('app.admin') . $prefix . 'filter');
             //Post Functions
             Route::post('/store', 'store')->middleware('permission:add_inspector')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_inspector')->name(config('app.admin') . $prefix . 'update');
