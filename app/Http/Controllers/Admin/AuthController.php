@@ -17,13 +17,13 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate(['email'=>'required|email','password'=>'required']);
 
-        if(! Auth::attempt($request->only('email','password')))
-        {
-            return redirect()->back()->with('error','Invaild Email and Password');
-        }else{
-            return redirect()->route('admin')->with('success','Welcome');
+        $request->validate(['email' => 'required|email', 'password' => 'required']);
+
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return redirect()->back()->with('error', 'Invaild Email and Password');
+        } else {
+            return redirect()->route('admin')->with('success', 'Welcome');
         }
     }
 

@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers\Inspector;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\InspectorValidation;
+use App\Models\Observe;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+
+class AuthController extends Controller
+{
+    /**
+     * View Functions
+     */
+    public function registerView()
+    {
+        return view('website.register');
+    }
+    public function loginView()
+    {
+        return view('website.login');
+    }
+
+    /**************************
+     * Authentication functions
+     ***************************/
+
+    public function register(InspectorValidation $request)
+    {
+
+        $request->validated();
+
+        try {
+            $data = $request->except('_token');
+            $data['password'] = Hash::make($data['password']); // Hash the password
+
+            try {
+                /***********************
+                 * Save Images
+                 ************************/
+                if ($request->file('img_personal')) {
+                    $data['img_personal'] = $this->uploadImage($request->file('img_personal'), $this->personal);
+                }
+                if ($request->file('img_national')) {
+                    $data['img_national'] = $this->uploadImage($request->file('img_national'), $this->national_id);
+                }
+                if ($request->file('img_passport')) {
+                    $data['img_passport'] = $this->uploadImage($request->file('img_passport'), $this->passport);
+                }
+                if ($request->file('img_certificate')) {
+                    $data['img_certificate'] = $this->uploadImage($request->file('img_certificate'), $this->certificate);
+                }
+                if ($request->file('img_certificate_good_conduct')) {
+                    $data['img_certificate_good_conduct'] = $this->uploadImage($request->file('img_certificate_good_conduct'), $this->certificate_good_conduct);
+                }
+            } catch (\Exception $ex) {
+                return redirect()->back()->with(['error' => "There are error occur"]);
+            }
+
+            Observe::create($data);
+
+
+            return redirect()->back()->with(['success' => "Data saved successfully!"]);
+        } catch (\Exception $ex) {
+            return $ex;
+            return redirect()->back()->with(['error' => "There are error occur"]);
+        }
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate(['email' => 'required|email', 'password' => 'required']);
+
+        if (!Auth::guard('observe')->attempt($request->only('email', 'password'))) {
+            // return redirect()->back()->with('error', 'Invaild Email and Password');
+            return response()->json(['Error' => "Error in email or password"]);
+        } else {
+            // return redirect()->route('admin')->with('success', 'Welcome');
+            return response()->json(['Success' => "Welcome"]);
+        }
+        return $request;
+    }
+}

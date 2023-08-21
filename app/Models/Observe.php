@@ -2,10 +2,39 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laratrust\Traits\LaratrustUserTrait;
 
-class Observe extends Model
+class Observe extends Authenticatable
 {
+    use LaratrustUserTrait;
+    use HasFactory, Notifiable;
+
+    protected $table = "observes";
+    protected $fillable = [
+        'name',
+        'national_id',
+        'email',
+        'password',
+        'nationality',
+        'price',
+        'phone',
+        'status',
+        'job_title',
+        'birth_date',
+        'gender',
+        'expire_date',
+        'address',
+        'img_personal',
+        'img_national',
+        'img_passport',
+        'img_certificate',
+        'img_certificate_good_conduct',
+    ];
+
+    public $timestamps = false;
     use HasFactory;
 }
