@@ -16,8 +16,10 @@ class Exam extends Model
         'expire',
         'price',
         'num_of_hours',
-        'time'
+        'type',
+        'centers'
     ];
+    
     public $timestamps = false;
 
     public function category(){
@@ -27,4 +29,10 @@ class Exam extends Model
     public function getExpire($query){
         return $query->expire == 0 ? 'Active' :'Expired';
     }
+
+    public function examCenter()
+    {
+        return $this->hasMany(ExamCenter::class);
+    }
+
 }

@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'observe' => [
+            'driver' => 'session',
+            'provider' => 'observes',
+        ],
 
         'api' => [
             'driver' => 'token',
@@ -69,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'observes' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Observe::class,
         ],
 
         // 'users' => [

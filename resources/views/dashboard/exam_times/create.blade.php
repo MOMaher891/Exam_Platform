@@ -43,27 +43,6 @@
                             </div>
 
                             <div class="col-md-12" >
-                                <div class="col-sm-6 mb-2">
-                                    <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">from</label>
-                                            <input type="time" name="from[]"  value="{{$time_from}}" class="form-control" id="first-from">    
-                                        </div>
-                                    </div> 
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="">to</label>
-                                            <input type="time" name="to[]" value="{{$time_to}}" class="form-control" id="">    
-                                        </div>
-                                    </div>    
-                                    </div>
-                                    
-                        
-                                    <label for="">Number of Observes</label>
-                        
-                                    <input type="number"  name="num_of_observe[]" value="0" class="form-control" id="">
-                                </div>
                                 <div class="row" id="observe-content">
                                    
                                      
@@ -108,20 +87,6 @@
         {
             html += `
             <div class="col-sm-6 mb-2">
-                <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">from</label>
-                                <input type="time" name="from[]"  value="" onchange="addHours(event,{{$data->num_of_hours}},${i})" class="form-control" id="first-from-">    
-                            </div>
-                        </div> 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="">to</label>
-                                <input type="time" name="to[]" value="" class="form-control" id="time-from-${i}">    
-                            </div>
-                        </div>    
-                </div>    
                 <label for="">Number of Observes</label>
                     <input type="number"  name="num_of_observe[]"  value="0" class="form-control" id="">
             </div>

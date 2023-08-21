@@ -14,8 +14,6 @@ class AddColToExams extends Migration
     public function up()
     {
         Schema::table('exams', function (Blueprint $table) {
-            //
-            $table->time('time')->nullable();
             $table->string('num_of_hours')->nullable();
         });
     }

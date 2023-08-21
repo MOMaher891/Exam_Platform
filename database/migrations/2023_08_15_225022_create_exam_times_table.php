@@ -19,8 +19,6 @@ class CreateExamTimesTable extends Migration
             $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->unsignedBigInteger('center_id');
             $table->foreign('center_id')->references('id')->on('centers')->onDelete('cascade');
-            $table->time('from')->nullable();
-            $table->time('to')->nullable();
             $table->string('num_of_observe');
             $table->timestamps();
         });

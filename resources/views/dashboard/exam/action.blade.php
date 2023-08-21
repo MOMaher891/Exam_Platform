@@ -14,6 +14,14 @@
             <p class="btn btn-danger">Expire</p>
         @endif
     @break
-
+    @case('type')
+        @if ($data->type == 'public')
+            <p class="btn btn-sm btn-primary">Access To All Centers</p>
+        @else        
+            @foreach ($centers as $d )
+                <p>{{$d->name}}</p>
+            @endforeach
+        @endif
+    @break
     @default
 @endswitch
