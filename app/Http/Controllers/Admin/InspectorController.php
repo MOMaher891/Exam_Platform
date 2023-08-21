@@ -21,7 +21,7 @@ class InspectorController extends Controller
     }
     public function data(Request $request)
     {
-        $data = Observe::query()->where('status', $request->status)->latest()->get();
+        $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
 
         return DataTables::of($data)
             ->addColumn('action', function ($data) {

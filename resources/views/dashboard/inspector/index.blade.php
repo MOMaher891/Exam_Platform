@@ -60,6 +60,7 @@
                                 <th>Phone</th>
                                 <th>National ID</th>
                                 <th>Address</th>
+                                <th>Center</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -117,6 +118,9 @@
                     },
                     {
                         data: 'address'
+                    },
+                    {
+                        data: 'center_id'
                     },
                     {
                         data: 'action'

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inspector;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InspectorValidation;
+use App\Models\Center;
 use App\Models\Observe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,8 @@ class AuthController extends Controller
      */
     public function registerView()
     {
-        return view('website.register');
+        $centers = Center::all();
+        return view('website.register', compact('centers'));
     }
     public function loginView()
     {
