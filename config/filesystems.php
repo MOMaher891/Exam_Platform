@@ -38,7 +38,37 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+        // 'personal' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('app/public/uploads/inspector/personal'),
+        //     'url' => env('APP_URL') . '/storage',
+        //     'visibility' => 'public',
+        // ],
+        'national_id' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/uploads/inspector/national_id'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+        'passport' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/uploads/inspector/passport'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+        'certificate' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/uploads/inspector/certificate'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+        'certificate_good_conduct' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/uploads/inspector/certificate_good_conduct'),
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 

@@ -64,6 +64,23 @@
                         </ul>
                     </li>
                 @endif
+                @if (auth()->user()->hasPermission('show_inspector'))
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            @if (App\Models\Observe::count() != 0)
+                                <span
+                                    class="badge rounded-pill bg-success float-end">{{ App\Models\Observe::count() }}</span>
+                            @endif
+
+                            <i class="ri-user-3-line"></i>
+                            <span>Inspector</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('admin.inspector.index') }}">Inspector List</a></li>
+                            <li><a href="{{ route('admin.inspector.create') }}">Add inspector</a></li>
+                        </ul>
+                    </li>
+                @endif
 
                 @if (auth()->user()->hasPermission('show_center'))
                     <li>

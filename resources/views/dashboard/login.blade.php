@@ -12,15 +12,15 @@
             </div>
         </div>
 
-        <h4 class="text-muted text-center font-size-18"><b>Sign Up</b></h4>
+        <h4 class="text-muted text-center font-size-18"><b>SignIn</b></h4>
 
-      
+
         <div class="p-3">
             <form class="form-horizontal mt-3" action="{{route('admin.login')}}" method="POST">
                 @csrf
                 <div class="form-group mb-3 row">
                     <div class="col-12">
-                        <input class="form-control" type="text" required="" name="email" placeholder="Username">
+                        <input class="form-control" type="email" required="" name="email" placeholder="Email">
                     </div>
                 </div>
 
