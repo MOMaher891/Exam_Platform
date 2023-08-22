@@ -35,7 +35,6 @@
                                 <th>Category</th>
                                 <th>date</th>
                                 <th>Show date</th>
-                                <th>Number of Hours</th>
                                 <th>Centers</th>
                                 <th>Price</th>
                                 <th>Status</th>
@@ -93,10 +92,6 @@
                     },
                     {
                         data: 'show_date'
-                    },
-                    
-                    {
-                        data: 'num_of_hours'
                     },
                     {
                         data:'type'
