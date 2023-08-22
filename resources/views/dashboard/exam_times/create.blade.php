@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="">Number Of Times</label>
+                                <label for="">Number Of Shifts</label>
                                 <input type="number" class="form-control" name="" onchange="container()" id="input-number">
                             </div>
 
@@ -87,7 +87,7 @@
         {
             html += `
             <div class="col-sm-6 mb-2">
-                <label for="">Number of Observes</label>
+                <label for="">Number of Inspector Of Shift ${i+1}</label>
                     <input type="number"  name="num_of_observe[]"  value="0" class="form-control" id="">
             </div>
             `

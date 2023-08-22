@@ -42,6 +42,14 @@
                     </a>
                 </li>
 
+                  
+                <li>
+                    <a href="{{ route('inspector.exam.profile.index') }}" class="waves-effect">
+                        <i class="ri-home-2-line"></i>
+                        <span>Exams Profile</span>
+                    </a>
+                </li>
+
 
    
 

@@ -41,6 +41,7 @@ class ExamTimeController extends Controller
                 }
             }
         }
+
         $allPublicExams = Exam::where('type','public')->whereNotIn('id',$exist)->where('expire',0)->pluck('id');
 
         $all =  array_merge($privateList,json_decode(json_encode ( $allPublicExams ) , true));
@@ -50,7 +51,9 @@ class ExamTimeController extends Controller
         return DataTables::of($data)
         ->addColumn('action',function($data){
             return view('dashboard.exam_times.action',['data'=>$data,'type'=>'action']);
-        })->make(true);
+        })
+        
+        ->make(true);
     }
     public function create($id)
     {
@@ -71,7 +74,8 @@ class ExamTimeController extends Controller
                 {
                     ExamTime::create(array_merge($data,[
                     'exam_id'=>$id,
-                    'num_of_observe'=>$d
+                    'num_of_observe'=>$d,
+                    'shift'=>$index+1
                 ]));
                 }
                 DB::commit();

@@ -87,10 +87,12 @@ class ExamController extends Controller
         try {
             $categories = Category::get();
             $exam = Exam::find($exam_id);
+            $centers =  Center::all();
+            $selectedCenter  = explode(',',$exam->centers);
             if (!$exam) {
                 return view('errors.404');
             }
-            return view('dashboard.exam.edit', compact('exam', 'categories'));
+            return view('dashboard.exam.edit', compact('exam','selectedCenter','centers', 'categories'));
         } catch (\Exception $ex) {
             return view('errors.500');
         }
@@ -133,6 +135,7 @@ class ExamController extends Controller
                     Rule::unique('exams')->ignore($request->id), //Check Name In exam table
                 ],
                 'show_date' => 'required|date',
+                'center_id'=>'array'
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
@@ -144,7 +147,14 @@ class ExamController extends Controller
             if (!$exam) {
                 return view('errors.404');
             } else {
-                $exam->update($request->except('_token'));
+                if($request->center_id)
+                {
+                    $centers =  implode(',',$request->center_id);
+                    // Exam::create(array_merge($data,['centers'=>$centers]));
+                   $exam->update(array_merge($request->all(),['centers'=>$centers]));
+                }else{
+                    $exam->update($request->except('_token,center_id'));
+                }
                 return redirect()->back()->with(['success' => "Data saved successfully!"]);
             }
         } catch (\Exception $ex) {
