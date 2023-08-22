@@ -61,6 +61,7 @@
                                 <th>National ID</th>
                                 <th>Address</th>
                                 <th>Center</th>
+                                <th>Total price</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -121,6 +122,9 @@
                     },
                     {
                         data: 'center_id'
+                    },
+                    {
+                        data: 'price'
                     },
                     {
                         data: 'action'
