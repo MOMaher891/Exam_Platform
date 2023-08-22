@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ExamValidation;
 use App\Models\Category;
@@ -11,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+
 class ExamController extends Controller
 {
     public function __construct()
@@ -20,71 +22,76 @@ class ExamController extends Controller
     /**
      * View Functions
      */
-    public function index(){
-        try{
+    public function index()
+    {
+        try {
             return view('dashboard.exam.index');
-
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             return view('errors.500');
         }
     }
 
-    public function data(){
+    public function data()
+    {
 
         $data = Exam::query()->latest();
         return DataTables::of($data)
-        ->addColumn('category_id',function($data){return $data->category->name;})
-        ->addColumn('price',function($data){return $data->price.' $';})
-        ->editColumn('type',function($data){
-            $centers = '';
-            if($data->type=='private')
-            {
-                $centers = Center::whereIn('id',explode(',',$data->centers))->get();
-            }
-            
-            return view('dashboard.exam.action',['data'=>$data,'centers'=>$centers,'type'=>'type']);
-        })
-        ->addColumn('status',function($data){
-            $current_date = Carbon::today()->addDay();
-            $date = Carbon::parse($data->date)->format('Y-m-d');
-            $days = Carbon::parse($date)->diffInDays($current_date);
-            $diff = Carbon::parse($date)->diff($current_date)->invert;
+            ->addColumn('category_id', function ($data) {
+                return $data->category->name;
+            })
+            ->addColumn('price', function ($data) {
+                return $data->price . ' $';
+            })
+            ->editColumn('type', function ($data) {
+                $centers = '';
+                if ($data->type == 'private') {
+                    $centers = Center::whereIn('id', explode(',', $data->centers))->get();
+                }
 
-            if($days!=0 && $diff==0){
-                $data->update(['expire'=>1]);
-                $status = -1;
-            }else if($days==0 && $diff==0){
-                $status = 0;
-            }else{
-                $status = 1;
-            }
+                return view('dashboard.exam.action', ['data' => $data, 'centers' => $centers, 'type' => 'type']);
+            })
+            ->addColumn('status', function ($data) {
+                $current_date = Carbon::today()->addDay();
+                $date = Carbon::parse($data->date)->format('Y-m-d');
+                $days = Carbon::parse($date)->diffInDays($current_date);
+                $diff = Carbon::parse($date)->diff($current_date)->invert;
 
-            return view('dashboard.exam.action',['status'=>$status,'type'=>'status']);
-        })->addColumn('action',function($data){
-            return view('dashboard.exam.action',['exam'=>$data,'type'=>'action']);
-        })->make(true);
+                if ($days != 0 && $diff == 0) {
+                    $data->update(['expire' => 1]);
+                    $status = -1;
+                } else if ($days == 0 && $diff == 0) {
+                    $status = 0;
+                } else {
+                    $status = 1;
+                }
+
+                return view('dashboard.exam.action', ['status' => $status, 'type' => 'status']);
+            })->addColumn('action', function ($data) {
+                return view('dashboard.exam.action', ['exam' => $data, 'type' => 'action']);
+            })->make(true);
     }
 
-    public function create(){
-        try{
+    public function create()
+    {
+        try {
             $centers =  Center::all();
             $categories = Category::all(); // Get All Categories
-            return view('dashboard.exam.create',compact('categories','centers'));
-        }catch(\Exception $ex){
+            return view('dashboard.exam.create', compact('categories', 'centers'));
+        } catch (\Exception $ex) {
             return view('errors.500');
         }
-
     }
 
-    public function edit($exam_id){
-        try{
+    public function edit($exam_id)
+    {
+        try {
             $categories = Category::get();
             $exam = Exam::find($exam_id);
-            if(!$exam){
+            if (!$exam) {
                 return view('errors.404');
             }
-            return view('dashboard.exam.edit',compact('exam','categories'));
-        }catch(\Exception $ex){
+            return view('dashboard.exam.edit', compact('exam', 'categories'));
+        } catch (\Exception $ex) {
             return view('errors.500');
         }
     }
@@ -92,7 +99,8 @@ class ExamController extends Controller
     /**
      * Functionality Functions
      */
-    public function store(ExamValidation $request){
+    public function store(ExamValidation $request)
+    {
         $data =  $request->validated();
         try{
             if($request->center_id)
@@ -110,20 +118,21 @@ class ExamController extends Controller
         }
     }
 
-    public function update(Request $request){
-        try{
+    public function update(Request $request)
+    {
+        try {
             /**
              * Validation
              */
             $validator = Validator::make($request->all(), [
-                'price'=>'required|numeric|gt:0',
-                'date'=>'required|date',
+                'price' => 'required|numeric|gt:0',
+                'date' => 'required|date',
                 'name' => [
                     'required',
                     'string',
                     Rule::unique('exams')->ignore($request->id), //Check Name In exam table
                 ],
-                'category_id'=>'required'
+                'show_date' => 'required|date',
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
@@ -132,32 +141,29 @@ class ExamController extends Controller
             }
             //Check User exist or not
             $exam = Exam::findOrFail($request->id);
-            if(!$exam){
+            if (!$exam) {
                 return view('errors.404');
-            }
-            else{
+            } else {
                 $exam->update($request->except('_token'));
-                return redirect()->back()->with(['success'=>"Data saved successfully!"]);
+                return redirect()->back()->with(['success' => "Data saved successfully!"]);
             }
-        }catch(\Exception $ex){
+        } catch (\Exception $ex) {
             return view('errors.500');
         }
     }
 
-    public function delete($exam_id){
-        try{
+    public function delete($exam_id)
+    {
+        try {
             $exam = Exam::findOrFail($exam_id);
-            if (!$exam ){
+            if (!$exam) {
                 return view('errors.500');
             }
 
             $exam->delete();
-            return response()->json(['success'=>"Data deleted successfully!"]);
-        }
-        catch(\Exception $ex){
+            return response()->json(['success' => "Data deleted successfully!"]);
+        } catch (\Exception $ex) {
             return view('errors.500');
         }
     }
-
-
 }
