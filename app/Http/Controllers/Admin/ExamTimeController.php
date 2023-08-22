@@ -71,7 +71,8 @@ class ExamTimeController extends Controller
                 {
                     ExamTime::create(array_merge($data,[
                     'exam_id'=>$id,
-                    'num_of_observe'=>$d
+                    'num_of_observe'=>$d,
+                    'shift'=>$index+1
                 ]));
                 }
                 DB::commit();
