@@ -99,7 +99,10 @@ class ExamController extends Controller
             {
                 $centers =  implode(',',$request->center_id);
                 Exam::create(array_merge($data,['centers'=>$centers]));
+            }else{
+                Exam::create($data);
             }
+
             return redirect()->back()->with(['success'=>'Data saved successfully!']);
 
         }catch(\Exception $ex){
