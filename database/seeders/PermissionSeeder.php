@@ -168,8 +168,26 @@ class PermissionSeeder extends Seeder
                 'name' => 'delete_exam_times',
                 'display_name' => 'Delete Apply Exam',
             ],
-            // todo
 
+
+            // Apply in Exams
+            [
+                'name'=>'show_inspector_exams',
+                'display_name' => 'Show Inspector Exams',
+            ],
+            [
+                'name'=>'apply_inspector_exams',
+                'display_name' => 'Apply in Exams',
+            ],
+
+
+            //Inspector Exams Profile
+            [
+                'name'=>'show_inspector_exams_profile',
+                'display_name' => 'Show Exams Profile',
+            ],
+
+            
         ];
 
 

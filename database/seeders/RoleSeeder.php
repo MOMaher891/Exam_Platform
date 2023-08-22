@@ -31,11 +31,17 @@ class RoleSeeder extends Seeder
                 'display_name'=>'Analyst',
                 'description'=>'Has Finicial Access'
             ],
+
+            [
+                'name'=>'inspector',
+                'display_name'=>'Inspector',
+                'description'=>'Has Inspector Access'
+            ],
         ];
         // Role::create($data);
         foreach($data as $d)
         {
-            Role::create($d);
+            Role::firstOrCreate($d);
         }
     }
 }

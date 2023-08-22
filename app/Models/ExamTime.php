@@ -13,7 +13,8 @@ class ExamTime extends Model
         'center_id',
         'from',
         'to',
-        'num_of_observe'
+        'num_of_observe',
+        'is_done'
     ];
 
     public function center()
@@ -24,5 +25,10 @@ class ExamTime extends Model
     public function exam()
     {
         return $this->belongsTo(Exam::class,'exam_id');
+    }
+
+    public function observeActivity()
+    {
+        return $this->hasMany(ObserveActivity::class);
     }
 }

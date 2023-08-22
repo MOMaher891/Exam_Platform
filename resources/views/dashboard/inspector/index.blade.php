@@ -23,6 +23,32 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="row  w-100 ">
+
+                        <div class="col-md-6"></div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="">Status</label>
+                                <select name="" class=" form-control select" id="statuss">
+                                        <option value="" selected disabled>Choose Status</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="accept">Accept</option>
+                                        <option value="cancel">cencel</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-md-2">
+                            <div class="form-group d-flex" style="margin-top: 30px">
+                                <button onclick="handleFilter()" class="btn btn-primary p-2" >Search <i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button onclick="ClearFilter()" class="btn btn-light" >Clear</button>
+                            </div>
+                        </div>
+
+                    </div>
                     <h4 class="card-title">Inspector List</h4>
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
 
@@ -34,6 +60,7 @@
                                 <th>Phone</th>
                                 <th>National ID</th>
                                 <th>Address</th>
+                                <th>Center</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -41,16 +68,6 @@
                         <tbody>
 
                         </tbody>
-                        <form id="filter_form">
-                            @csrf
-                            <select name="status" id="">
-                                <option value="Choose Status" selected disabled>Choose Status</option>
-                                <option value="pending" >Pending</option>
-                                <option value="accept" >Accept</option>
-                                <option value="cancel" >Reject</option>
-                            </select>
-                            <button type="submit" class="btn btn-info">Filter</button>
-                        </form>
                     </table>
 
                 </div> <!-- end card body-->
@@ -103,6 +120,9 @@
                         data: 'address'
                     },
                     {
+                        data: 'center_id'
+                    },
+                    {
                         data: 'action'
                     }
                 ],
@@ -110,6 +130,23 @@
         }
 
         setDatatable();
+
+        function handleFilter()
+        {
+            status = $("#statuss").val() || '';
+            if(DataTable){
+                url = "{{route('inspector.data')}}"+`?status=${status}`;
+                DataTable.ajax.url(url).load();
+            }
+        }
+
+        function ClearFilter()
+        {
+            status = $('#statuss').val('');
+            var url = "{{ route('inspector.data') }}";
+            RequestsTable.ajax.url(url).load();
+
+        }
     </script>
 
     <script>
@@ -131,23 +168,5 @@
             }
         });
     </script>
-    <script>
-        //Delete Function
-        $("#filter_form").on('submit',function(){
-            $.ajax({
-                    type: "GET",
-                    url: '{{route("admin.inspector.filter")}}',
-                    success: function(data) {
-                        // $('#datatable-buttons').DataTable().ajax.reload();
-                        // toastr.success('Data deleted successfully!', 'success');
-                        console.log(data);
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                    }
-                });
 
-        })
-
-    </script>
 @endsection

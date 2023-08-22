@@ -36,6 +36,18 @@
                       @enderror
                       </div>
                     <div class="form-group ">
+                        <label for="inputPhone">Compoany <span class="text-gray">(Optional)</span></label>
+                        <select name="center_id" class="form-control" id="">
+                            <option value=""  selected disabled>Choose Company</option>
+                            @foreach ($centers as $center)
+                                <option value="{{$center->id}}">{{$center->name}}</option>
+                            @endforeach
+                        </select>
+                        @error('job_title')
+                        <span class="text-danger mt-2">{{ $message }}</span>
+                      @enderror
+                    </div>
+                    <div class="form-group ">
                         <label for="inputPhone">Job Title</label>
                         <input type="text" class=" form-control w-100" id="inputPhone" name="job_title" placeholder="Academic Coordinator"  value="{{old('job_title')}}" >
                         @error('job_title')

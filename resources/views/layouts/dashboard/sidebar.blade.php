@@ -135,7 +135,7 @@
 
 
 
-                {{-- @if (auth()->user()->hasPermission('show_roles')) --}}
+                @if ( auth()->user()->hasRole('admin') )
                     <li>
                         <a href="{{ route('admin.exam_times.index') }}" class=" waves-effect">
                             {{-- @if (App\Models\Role::count() != 0)
@@ -146,7 +146,7 @@
                             <span>Exam to Apply</span>
                         </a>
                     </li>
-                {{-- @endif --}}
+                @endif
 
 
             </ul>

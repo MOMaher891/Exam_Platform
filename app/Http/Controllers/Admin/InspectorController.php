@@ -19,9 +19,9 @@ class InspectorController extends Controller
     {
         return view('dashboard.inspector.index');
     }
-    public function data()
+    public function data(Request $request)
     {
-        $data = Observe::query()->where('status', 'pending')->latest()->get();
+        $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
 
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
@@ -33,21 +33,6 @@ class InspectorController extends Controller
             ->make(true);
     }
 
-    public function filter_accounts(Request $request)
-    {
-        $request->validate(['status' => 'required|string|in:accept,pending,cancel']);
-        $data = Observe::query()->where('status', $request->status)->latest()->get();
-        return $data;
-
-        return DataTables::of($data)
-            ->addColumn('action', function ($data) {
-                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'action']);
-            })
-            ->addColumn('show_profile', function ($data) {
-                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'show_profile']);
-            })
-            ->make(true);
-    }
 
     public function show($inspector_id)
     {

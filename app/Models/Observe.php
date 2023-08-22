@@ -22,6 +22,7 @@ class Observe extends Authenticatable
         'nationality',
         'price',
         'phone',
+        'center_id',
         'status',
         'job_title',
         'birth_date',
@@ -37,4 +38,9 @@ class Observe extends Authenticatable
 
     public $timestamps = false;
     use HasFactory;
+
+    public function center()
+    {
+        return $this->belongsTo(Center::class);
+    }
 }

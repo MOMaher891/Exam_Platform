@@ -136,6 +136,8 @@
         <link rel="stylesheet" href="{{asset('assets/phoneNumber/css/demo.css')}}">
         <link rel="stylesheet" href="{{asset('assets/phoneNumber/css/intlTelInput.css')}}">
         <link rel="stylesheet" href="{{asset('assets/phoneNumber/css/intlTelInput.min.css')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
     {{-- Toster --}}
     {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
@@ -159,7 +161,7 @@
 
     @yield('script')
         {{-- Toster --}}
-        {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> --}}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
         @if (Session::has('success'))
             <script>
