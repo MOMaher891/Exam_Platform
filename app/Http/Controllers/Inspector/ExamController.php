@@ -14,8 +14,7 @@ class ExamController extends Controller
 {
     //
     public function index()
-    {    
-        
+    {            
         return view('website.dashboard.exams.index');
     }
 
@@ -31,18 +30,24 @@ class ExamController extends Controller
 
            foreach($private as $exam)
            {
-                if(in_array($center->id,explode(',',$exam->centers)))
+                if(in_array($center,explode(',',$exam->centers)))
                 {
-                    array_push($list,$exam);
+                    array_push($list,$exam->id);
                 }
            }
         }   
         // Check if Applyed Before //
         $activity  = ObserveActivity::where('observe_id',auth('observe')->user()->id)->pluck('exam_time_id');
-        //    
+        if(count($activity) > 0)
+        {
+            $data->whereNotIn('id',json_decode(json_encode ( $activity ) , true));
+        }
+        
         $allExams  = Exam::where('type','public')->where('expire',0)->pluck('id');
+
         $all =  array_merge($list,json_decode(json_encode ( $allExams ) , true));
-        $data = $data->with('exam')->with('center')->where('is_done',0)->whereIn('exam_id',$all)->whereNotIn('id',json_decode(json_encode ( $activity ) , true))->latest();
+
+        $data = $data->with('exam')->with('center')->where('is_done',0)->whereIn('exam_id',$all)->latest();
 
         return DataTables::of($data)->addColumn('action',function($data){
             return view('website.dashboard.exams.action',['type'=>'action','data'=>$data]);
