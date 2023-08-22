@@ -44,9 +44,12 @@ class ExamTimeController extends Controller
 
         $data = Exam::query()->with('category')->whereIn('id', $all)->latest();
         return DataTables::of($data)
-            ->addColumn('action', function ($data) {
-                return view('dashboard.exam_times.action', ['data' => $data, 'type' => 'action']);
-            })->make(true);
+        ->addColumn('action',function($data){
+            return view('dashboard.exam_times.action',['data'=>$data,'type'=>'action']);
+        })
+        
+        ->make(true);
+
     }
     public function create($id)
     {
