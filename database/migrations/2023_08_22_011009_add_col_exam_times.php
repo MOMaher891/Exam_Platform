@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnTableObserves extends Migration
+class AddColExamTimes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class AddColumnTableObserves extends Migration
      */
     public function up()
     {
-        Schema::table('observes', function (Blueprint $table) {
-            $table->unsignedBigInteger('center_id')->after('password')->nullable()->default(null);
-            $table->foreign('center_id')
-                ->references('id')
-                ->on('centers');
+        Schema::table('exam_times', function (Blueprint $table) {
+            //
+            $table->boolean('is_done')->default(false);
         });
     }
 
@@ -28,7 +26,7 @@ class AddColumnTableObserves extends Migration
      */
     public function down()
     {
-        Schema::table('observes', function (Blueprint $table) {
+        Schema::table('exam_times', function (Blueprint $table) {
             //
         });
     }
