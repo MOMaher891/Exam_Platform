@@ -15,7 +15,7 @@ class Exam extends Model
         'expire',
         'price',
         'type',
-        'centers
+        'centers'
     ];
 
     public $timestamps = false;

@@ -24,7 +24,7 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Exams to Apply</h4>
-                   
+
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
