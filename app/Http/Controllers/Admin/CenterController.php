@@ -19,7 +19,7 @@ class CenterController extends Controller
     //
     public function index()
     {
-      
+
         return view('dashboard.centers.index');
     }
 
@@ -27,45 +27,44 @@ class CenterController extends Controller
     {
         $times = Time::all();
         $user  = User::whereRoleIs('admin')->get();
-        return view('dashboard.centers.create',['data'=>$user,'times'=>$times]);
+        return view('dashboard.centers.create', ['data' => $user, 'times' => $times]);
     }
 
 
-    
+
 
     public function edit($id)
     {
         $data = Center::with('user')->findOrFail($id);
         // $time = Time::all();
         $users = User::all();
-        return view('dashboard.centers.edit',['data'=>$data,'users'=>$users]);
+        return view('dashboard.centers.edit', ['data' => $data, 'users' => $users]);
     }
 
 
     public function uploadCenters(Request $request)
     {
-        $request->validate(['file'=>'required|file|mimes:xlsx,csv']);
+        $request->validate(['file' => 'required|file|mimes:xlsx,csv']);
         try {
-            if($request->hasFile('file')) {
+            if ($request->hasFile('file')) {
                 Excel::import(new CenterImport, request()->file('file'));
-                return redirect()->back()->with('success','Data Added');
+                return redirect()->back()->with('success', 'Data Added');
             } else {
-                return redirect()->back()->with('error','Incorrect Data Type');
+                return redirect()->back()->with('error', 'Incorrect Data Type');
             }
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
 
     public function data()
     {
         $data = Center::with('user')->latest();
         return DataTables::of($data)
-        ->addColumn('action',function($data){
-            return view('dashboard.centers.action',['type'=>'action','data'=>$data]);
-        })
-        ->make(true);
+            ->addColumn('action', function ($data) {
+                return view('dashboard.centers.action', ['type' => 'action', 'data' => $data]);
+            })
+            ->make(true);
     }
 
 
@@ -73,33 +72,29 @@ class CenterController extends Controller
     public function store(CenterRequest $request)
     {
         $data = $request->validated();
-        try{
+        try {
             DB::beginTransaction();
-            Center::create(
-                array_merge($data));
+            Center::create($data);
             DB::commit();
-            return redirect()->back()->with('success','Data Added Successfuly');
+            return redirect()->back()->with('success', 'Data Added Successfuly');
+        } catch (Exception $e) {
 
-        }catch(Exception $e)
-
-        {
             DB::rollBack();
-            return redirect()->back()->with('error','Error Accure');
+            return redirect()->back()->with('error', 'Error Accure');
         }
     }
 
-    public function update(CenterRequest $request,$id)
+    public function update(CenterRequest $request, $id)
     {
         $data = $request->validated();
         $center = Center::findOrFail($id);
-        try{
-        DB::beginTransaction();
-        $center->update($data);
-        DB::commit();
-        return redirect()->back()->with('success','Data Updated Successfuly');
-        }catch(Exception $e)
-        {
-            return redirect()->back()->with('error','Error Accure');
+        try {
+            DB::beginTransaction();
+            $center->update($data);
+            DB::commit();
+            return redirect()->back()->with('success', 'Data Updated Successfuly');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Error Accure');
         }
     }
 
@@ -107,7 +102,7 @@ class CenterController extends Controller
     {
         $data = Center::findOrFail($id);
         $data->delete();
-        return response()->json(['status'=>true]);
+        return response()->json(['status' => true]);
         // return redirect()->back()->with('success','Data Deleted Successfuly');
     }
 }

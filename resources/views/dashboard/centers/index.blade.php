@@ -20,12 +20,11 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-        
+
                         <h4 class="card-title">Centers</h4>
                         <div class="text-center mb-3">
                             <button type="button" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#firstmodal">Import Excel</button>
                             <a href="{{asset('assets/excel/center_example.xlsx')}}"  target="__blank" class="btn btn-info" >Download Example</a>
-                         
                             <a href="{{route('admin.center.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
 
                         </div>
@@ -39,7 +38,7 @@
                                 <th>Actions</th>
                             </tr>
                             </thead>
-                            <tbody>          
+                            <tbody>
                             </tbody>
                         </table>
                     </div>
@@ -65,9 +64,9 @@
                                                                     <div class="form-group mb-3">
                                                                         <label for="">File</label>
                                                                         <input type="file" name="file" class="form-control">
-                                                                     
+
                                                                     </div>
-                                                                    
+
 
                                                                     <div class="form-group">
                                                                         <button class="btn btn-primary">Save</button>
@@ -75,7 +74,7 @@
                                                                 </div>
                                                             </form>
                                                         </div>
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,7 +107,7 @@ function setDatatable() {
 
 
         columns: [
-            
+
             {
                 data: 'name'
             },
@@ -143,31 +142,31 @@ setDatatable();
                 cancelButtonText: "No, cancel!",
                 reverseButtons: !0
             }).then(function (e) {
-    
+
                 if (e.value === true) {
                     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    
+
                     $.ajax({
                         type: 'GET',
                         url: "{{url('admin/center/delete')}}/" + id,
                         data: {_token: CSRF_TOKEN},
                         dataType: 'JSON',
                         success: function (results) {
-    
-                               
+
+
                                 if(results.status == true)
                                 {
                                     swal("Done!", results.message, "success");
                                     DataTable.ajax.reload()
-                               
+
                                 }
                         },
                     });
-    
+
                 } else {
                     e.dismiss;
                 }
-    
+
             }, function (dismiss) {
                 return false;
             })
