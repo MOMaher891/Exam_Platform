@@ -9,14 +9,13 @@ class Exam extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
         'category_id',
         'date',
         'show_date',
         'expire',
         'price',
         'type',
-        'centers'
+        'centers
     ];
 
     public $timestamps = false;
