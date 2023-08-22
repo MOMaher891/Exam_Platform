@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Exam;
 use App\Models\ExamTime;
 use App\Models\ObserveActivity;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class ExamController extends Controller
 {
     //
     public function index()
-    {            
+    {    
         return view('website.dashboard.exams.index');
     }
 
@@ -22,6 +24,7 @@ class ExamController extends Controller
     {
         $center  = auth('observe')->user()->center_id;
         $list = [];
+        
         
         $data = ExamTime::query();
         if($center != null)
@@ -46,12 +49,16 @@ class ExamController extends Controller
         $allExams  = Exam::where('type','public')->where('expire',0)->pluck('id');
 
         $all =  array_merge($list,json_decode(json_encode ( $allExams ) , true));
-
-        $data = $data->with('exam')->with('center')->where('is_done',0)->whereIn('exam_id',$all)->latest();
-
+        $data = $data->with('center')->where('is_done', 0)
+          ->whereIn('exam_id', $all)
+          ->whereHas('exam', function($q) {
+            $q->whereDate('date','>',Carbon::now())->whereDate('show_date','<=',Carbon::now());
+        })
+          ->latest();
         return DataTables::of($data)->addColumn('action',function($data){
             return view('website.dashboard.exams.action',['type'=>'action','data'=>$data]);
-        })->make(true);
+        })->make(true);   
+       
     }
 
     public function apply(Request $request)
