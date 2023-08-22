@@ -26,4 +26,9 @@ class ExamTime extends Model
     {
         return $this->belongsTo(Exam::class,'exam_id');
     }
+
+    public function observeActivity()
+    {
+        return $this->hasMany(ObserveActivity::class);
+    }
 }

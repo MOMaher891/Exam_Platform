@@ -1,4 +1,4 @@
-@extends('website.dashboard.exams.index')
+@extends('layouts.website.dashboard.layout')
 @section('title', 'Exams')
 @section('content')
     <!-- start page title -->
@@ -52,7 +52,7 @@
         let DataTable = null
 
         function setDatatable() {
-            var url = "{{ route('exam.data') }}";
+            var url = "{{ route('inspector.exam.data') }}";
 
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
@@ -90,6 +90,35 @@
         }
 
         setDatatable();
+
+        function Apply(id)
+        {
+                 $.ajax({
+                     type: 'GET',
+                     url: "{{route('inspector.exam.apply')}}",
+                     data: {
+                        id,
+                    },
+                     dataType: 'JSON',
+                     success: function (results) {
+                        if(results.status == true)
+                        {
+                            toastr.success('Applyed Successfuly', 'success');
+                            DataTable.ajax.reload()
+                        }else{
+                            toastr.error(results.message, 'success');
+                        }
+                     },
+
+                     error:function(result){
+                        console.log(result);
+                        alert(error)
+                     }
+                 });
+
+        }
+    </script>
+
     </script>
 
 @endsection
