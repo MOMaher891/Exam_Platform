@@ -26,7 +26,7 @@
                             <button type="button" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#firstmodal">Import Excel</button>
                             <a href="{{asset('assets/excel/center_example.xlsx')}}"  target="__blank" class="btn btn-info" >Download Example</a>
                          
-                            <a href="" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
+                            <a href="{{route('admin.center.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
 
                         </div>
                         <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
