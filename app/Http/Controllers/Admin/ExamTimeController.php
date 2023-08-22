@@ -62,11 +62,13 @@ class ExamTimeController extends Controller
         try {
             // if(count($data['from']) == count($data['to']) && count($data['from']) == count($data['num_of_observe']))
             // {
-            DB::beginTransaction();
-            foreach ($data['num_of_observe'] as $index => $d) {
-                ExamTime::create(array_merge($data, [
-                    'exam_id' => $id,
-                    'num_of_observe' => $d
+                DB::beginTransaction();
+                foreach($data['num_of_observe'] as $index => $d)
+                {
+                    ExamTime::create(array_merge($data,[
+                    'exam_id'=>$id,
+                    'num_of_observe'=>$d,
+                    'shift'=>$index+1
                 ]));
             }
             DB::commit();

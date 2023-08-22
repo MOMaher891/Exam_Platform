@@ -102,17 +102,20 @@ class ExamController extends Controller
     public function store(ExamValidation $request)
     {
         $data =  $request->validated();
-        try {
-            if ($request->center_id) {
-                $centers =  implode(',', $request->center_id);
-                Exam::create(array_merge($data, ['centers' => $centers]));
-            } else {
+
+        try{
+            if($request->center_id)
+            {
+                $centers =  implode(',',$request->center_id);
+                Exam::create(array_merge($data,['centers'=>$centers]));
+            }else{
                 Exam::create($data);
             }
 
-            return redirect()->back()->with(['success' => 'Data saved successfully!']);
-        } catch (\Exception $ex) {
-            return redirect()->back()->with(['error' => 'There are error , Try again later...']);
+            return redirect()->back()->with(['success'=>'Data saved successfully!']);
+
+        }catch(\Exception $ex){
+            return redirect()->back()->with(['error'=>'There are error , Try again later...']);
         }
     }
 

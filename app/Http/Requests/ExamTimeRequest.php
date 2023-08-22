@@ -27,8 +27,8 @@ class ExamTimeRequest extends FormRequest
             //
             'center_id'=>'required',
             // 'exam_id'=>'required',
-            'from'=>'required|array',
-            'to'=>'required|array',
+            // 'from'=>'required|array',
+            // 'to'=>'required|array',
             'num_of_observe'=>'required|array'
         ];
     }
