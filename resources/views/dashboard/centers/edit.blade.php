@@ -125,7 +125,7 @@
 </div>
 @endsection
 @section('scripts')
-<script>
+{{-- <script>
      function container()
     {
         let inputval = $('#input-number').val();
@@ -154,5 +154,5 @@
         $('#observe-content').html(html);
 
     }
-</script>
+</script> --}}
 @endsection

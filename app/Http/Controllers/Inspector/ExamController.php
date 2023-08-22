@@ -16,7 +16,7 @@ class ExamController extends Controller
 {
     //
     public function index()
-    {    
+    {         
         return view('website.dashboard.exams.index');
     }
 
@@ -29,8 +29,9 @@ class ExamController extends Controller
         $data = ExamTime::query();
         if($center != null)
         {
-           $private = Exam::where('type','private')->where('expire',0)->get();
 
+           $private = Exam::where('type','private')->where('expire',0)->get();
+           
            foreach($private as $exam)
            {
                 if(in_array($center,explode(',',$exam->centers)))
@@ -49,7 +50,7 @@ class ExamController extends Controller
         $allExams  = Exam::where('type','public')->where('expire',0)->pluck('id');
 
         $all =  array_merge($list,json_decode(json_encode ( $allExams ) , true));
-        $data = $data->with('center')->where('is_done', 0)
+        $data = $data->with('center')->with('exam')->where('is_done', 0)
           ->whereIn('exam_id', $all)
           ->whereHas('exam', function($q) {
             $q->whereDate('date','>',Carbon::now())->whereDate('show_date','<=',Carbon::now());
@@ -57,8 +58,11 @@ class ExamController extends Controller
           ->latest();
         return DataTables::of($data)->addColumn('action',function($data){
             return view('website.dashboard.exams.action',['type'=>'action','data'=>$data]);
+        })
+        ->editColumn('shift',function($data){
+            return 'Shift'.$data->shift;
         })->make(true);   
-       
+  
     }
 
     public function apply(Request $request)

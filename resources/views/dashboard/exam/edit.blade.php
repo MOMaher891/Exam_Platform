@@ -63,7 +63,7 @@
 
 
                     <div class="row mb-3">
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-6 ">
                             <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="date" name="date" id="example-date-input"
@@ -77,7 +77,7 @@
                                 @enderror
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-6 ">
                             <label for="example-date-input" class="col-sm-3 col-form-label">Show date</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="date" name="show_date" id="example-date-input"
@@ -93,7 +93,7 @@
                         </div>
 
 
-                        <div class="col-md-6 col-lg-6 col-sm-12">
+                        <div class="col-md-12 col-lg-6 col-sm-12">
                             <label for="example-number-input" class="col-sm-2 col-form-label">Period price</label>
                             <div class="col-sm-10">
                                 <input class="form-control" type="number" name="price" id="example-number-input"
@@ -103,14 +103,79 @@
                                 @enderror
                             </div>
                         </div>
+
+                        
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <h5 class="font-size-14 mb-4">Type of Exam</h5>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" value="public" {{$exam->type == 'public' ? 'checked' : ''}}  onclick="hideCenters()">
+                                    <label class="form-check-label" for="formCheck1">
+                                        Public
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" {{$exam->type == 'private' ? 'checked' : ''}} value="private" onclick="ShowCenters()" >
+                                    <label class="form-check-label" for="formCheck1">
+                                        Private
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- show centers if private --}}
+                        @if ($exam->type == 'private')
+                        <div class="col-md-12 " id="Centers" >
+                            <div class="card">
+                                <div class="card-title">
+                                    Choose Center
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                    @foreach ($centers as $center)
+                                        <div class="col-md-4 bg-white">
+                                            <div class="">
+                                                <div class="checkbox checkbox-primary mb-2">
+                                                    <input id="{{ $center->id }}" type="checkbox"
+                                                        value="{{ $center->id }}" {{in_array($center->id,$selectedCenter) ? 'checked' : ''}} name="center_id[]" class="form-check-input" >
+                                                    <label for="{{ $center->id }}">{{ $center->name }}</label>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col-->
+                                    @endforeach
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>     
+                        @endif
+                       
+                    </div> 
                     </div>
                     <button type="submit" id="submit" class="btn btn-info waves-effect waves-light"
                         style="margin-top:20px">Save</button>
-                    <a href="{{ route('admin.staff.index') }}" class="btn btn-light waves-effect"
+                    <a href="{{ route('admin.exam.index') }}" class="btn btn-light waves-effect"
                         style="margin-top:20px">Cancel</a>
                 </form>
             </div>
         </div> <!-- end col -->
     </div>
     <!-- end row -->
+@endsection
+
+
+@section('scripts')
+<script>
+    function ShowCenters()
+    {
+        $("#Centers").removeClass('d-none')
+    }
+</script>
+<script>
+function hideCenters()
+    {
+        $("#Centers").addClass('d-none')
+    }
+</script>
+
 @endsection

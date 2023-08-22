@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Inspector\AuthController;
 use App\Http\Controllers\Inspector\ExamController;
+use App\Http\Controllers\Inspector\ExamProfileController;
 use App\Http\Controllers\Inspector\HomeController;
+use App\Http\Controllers\Inspector\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,8 +37,23 @@ Route::group(['middleware'=>'auth:observe'],function(){
         Route::get('/','index')->name('inspector.exam.index');
         Route::get('/data','data')->name('inspector.exam.data');
         Route::get('/apply','apply')->name('inspector.exam.apply');
+    });
 
+    Route::group(['prefix'=>'profile','controller'=>ProfileController::class],function(){
+        Route::get('/', 'index')->name('inspector.profile.index');
+        Route::get('verify', 'verify')->name('inspector.profile.verify');
 
+        Route::get('send-mail', 'sendEmail')->name('inspector.profile.send-email');
+        Route::get('check-code', 'checkCode')->name('inspector.profile.check');
+        Route::post('change-password', 'changePassword')->name('inspector.profile.change-password');
+        Route::post('update', 'update')->name('inspector.profile.update');
+  
+    });
+
+    Route::group(['prefix'=>'exam-profile','controller'=>ExamProfileController::class],function(){
+        Route::get('/','index')->name('inspector.exam.profile.index');
+        Route::get('/data','data')->name('inspector.exam.profile.data');
+        
     });
 });
 

@@ -66,7 +66,7 @@ class AuthController extends Controller
             DB::beginTransaction();
             $user =  Observe::create($data);
             // Attach User With Role Inspector //
-            $user->attachRole('inspector');
+            // $user->attachRole('inspector');
             DB::commit();
 
 
