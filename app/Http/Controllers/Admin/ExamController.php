@@ -104,6 +104,7 @@ class ExamController extends Controller
     public function store(ExamValidation $request)
     {
         $data =  $request->validated();
+
         try{
             if($request->center_id)
             {

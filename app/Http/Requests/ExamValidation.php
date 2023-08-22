@@ -24,9 +24,9 @@ class ExamValidation extends FormRequest
     public function rules()
     {
         return [
-            "name" => 'required|string|unique:exams,name',
             'category_id' => 'required',
             'date' => 'required|date',
+            'show_date' => 'required|date',
             'price' => 'required|numeric|gt:0',
             'type' => 'required',
             'center_id' => 'array',
@@ -36,14 +36,15 @@ class ExamValidation extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Name field required',
+            // 'name.required' => 'Name field required',
             'category_id.required' => 'Name field required',
             'date.required' => 'Name field required',
             'price.required' => 'Name field required',
             'price.numeric' => "Price should be numeric",
             'price.gt' => "Price can't be zero",
-            'name.unique' => ":Exam name already exist in database.",
+            // 'name.unique' => ":Exam name already exist in database.",
             'date.date' => 'Date field should be date',
+            'show_date.date' => 'Show date field should be date',
         ];
     }
 }
