@@ -52,9 +52,9 @@ class ExamController extends Controller
     public function apply(Request $request)
     {
         try{
-            $numOfObserve = ExamTime::find($request->id)->num_of_observe;
+            $examTime = ExamTime::find($request->id);
             $numOfActivity= ObserveActivity::where('exam_time_id',$request->id)->count();
-            if($numOfObserve > $numOfActivity)
+            if($examTime->num_of_observe > $numOfActivity)
             {
                 $data =  ObserveActivity::create([
                     'observe_id'=>auth('observe')->user()->id,
@@ -62,6 +62,7 @@ class ExamController extends Controller
                 ]);
                 return response()->json(['status'=>true]);
             }else{
+                $examTime->update(['is_done'=>true]);
                 return response()->json(['status'=>false,'message'=>'Exam Completed']);
             }
         }catch(Exception $e)

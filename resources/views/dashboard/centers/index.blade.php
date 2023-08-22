@@ -25,7 +25,6 @@
                         <div class="text-center mb-3">
                             <button type="button" class="btn btn-success waves-effect waves-light" data-bs-toggle="modal" data-bs-target="#firstmodal">Import Excel</button>
                             <a href="{{asset('assets/excel/center_example.xlsx')}}"  target="__blank" class="btn btn-info" >Download Example</a>
-
                             <a href="{{route('admin.center.create')}}" class="btn btn-primary" >Add Centers <i class="fa fa-plus"></i></a>
 
                         </div>
@@ -115,7 +114,6 @@ function setDatatable() {
             {
                 data: 'user.name'
             },
-
             {
                 data: 'address'
             },
