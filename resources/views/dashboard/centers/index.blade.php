@@ -34,8 +34,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Owner</th>
-                                <th>Times</th>
-                                <th>Number of Observe</th>
                                 <th>Adderss</th>
                                 <th>Phone</th>
                                 <th>Actions</th>
@@ -117,13 +115,6 @@ function setDatatable() {
             {
                 data: 'user.name'
             },
-            {
-                data: 'time_ids'
-            },
-            {
-                data: 'observer_num'
-            },
-
             {
                 data: 'address'
             },
