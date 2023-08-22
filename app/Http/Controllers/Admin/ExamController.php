@@ -102,6 +102,7 @@ class ExamController extends Controller
     public function store(ExamValidation $request)
     {
         $data =  $request->validated();
+
         try{
             if($request->center_id)
             {
@@ -132,7 +133,7 @@ class ExamController extends Controller
                     'string',
                     Rule::unique('exams')->ignore($request->id), //Check Name In exam table
                 ],
-                'show_date' => 'required|date',
+                'category_id' => 'required'
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
