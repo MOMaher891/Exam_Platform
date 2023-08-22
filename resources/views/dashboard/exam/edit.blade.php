@@ -30,23 +30,13 @@
                     <h4 class="card-title">Edit Quiz</h4>
                     <p class="card-title-desc">Here are examples : You can edit Quiz name or date or price</p>
                     <div class="row mb-3">
-                        <div class="col-md-6 col-lg-6 col-sm-12">
-                            <label for="example-text-input" class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="text" name="name" placeholder="Ex: Programming Exam"
-                                    id="example-text-input" value="{{ $exam->name }}" required>
-                                @error('name')
-                                    <span class="text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
 
                         <div class="col-md-6 col-lg-6 col-sm-12">
-                            <label class="col-sm-2 col-form-label">Category</label>
+                            <label class="col-sm-2 col-form-label">Exam</label>
                             <div class="col-sm-10">
                                 <select class="form-select" name="category_id" id="selectCategory"
                                     aria-label="Default select example" required>
-                                    <option selected="" value="" disabled>Choose Category</option>
+                                    <option selected="" value="" disabled>Choose exam</option>
                                     @foreach ($categories as $category)
                                         <option value='{{ $category->id }}'
                                             @if ($exam->category_id == $category->id) selected @endif>{{ $category->name }}</option>
@@ -57,42 +47,6 @@
                                 @enderror
                             </div>
                         </div>
-
-                    </div>
-
-
-
-                    <div class="row mb-3">
-                        <div class="col-md-3 col-lg-3 col-sm-12">
-                            <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="date" name="date" id="example-date-input"
-                                    value="{{ $exam->date }}" min="<?php $currentDate = new DateTime();
-                                    $currentDate->add(new DateInterval('P1D'));
-                                    $nextDay = $currentDate->format('Y-m-d');
-                                    
-                                    echo $nextDay; ?>" required>
-                                @error('date')
-                                    <span class="text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
-                            <label for="example-date-input" class="col-sm-3 col-form-label">Show date</label>
-                            <div class="col-sm-10">
-                                <input class="form-control" type="date" name="show_date" id="example-date-input"
-                                    value="{{ $exam->show_date }}" min="<?php $currentDate = new DateTime();
-                                    $currentDate->add(new DateInterval('P1D'));
-                                    $nextDay = $currentDate->format('Y-m-d');
-                                    
-                                    echo $nextDay; ?>" required>
-                                @error('show_date')
-                                    <span class="text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                        </div>
-
-
                         <div class="col-md-6 col-lg-6 col-sm-12">
                             <label for="example-number-input" class="col-sm-2 col-form-label">Period price</label>
                             <div class="col-sm-10">
@@ -101,6 +55,87 @@
                                 @error('price')
                                     <span class="text-danger mt-2">{{ $message }}</span>
                                 @enderror
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="row mb-3">
+                        <div class="col-md-6 col-lg-6 col-sm-12">
+                            <label for="example-date-input" class="col-sm-2 col-form-label">Date</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="date" name="date" id="example-date-input"
+                                    value="{{ $exam->date }}" min="<?php $currentDate = new DateTime();
+                                    $currentDate->add(new DateInterval('P1D'));
+                                    $nextDay = $currentDate->format('Y-m-d');
+
+                                    echo $nextDay; ?>" required>
+                                @error('date')
+                                    <span class="text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-6 col-sm-12">
+                            <label for="example-date-input" class="col-sm-3 col-form-label">Show date</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="date" name="show_date" id="example-date-input"
+                                    value="{{ $exam->show_date }}" min="<?php $currentDate = new DateTime();
+                                    $currentDate->add(new DateInterval('P1D'));
+                                    $nextDay = $currentDate->format('Y-m-d');
+
+                                    echo $nextDay; ?>" required>
+                                @error('show_date')
+                                    <span class="text-danger mt-2">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div>
+                                <h5 class="font-size-14 mb-4">Type of Exam</h5>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" value="public"  onclick="hideCenters()">
+                                    <label class="form-check-label" for="formCheck1">
+                                        Public
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" id="formCheck1" name="type" value="private" onclick="ShowCenters()" >
+                                    <label class="form-check-label" for="formCheck1">
+                                        Private
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- show centers if private --}}
+
+                        <div class="col-md-12 d-none" id="Centers" >
+                            <div class="card">
+                                <div class="card-title">
+                                    Choose Center
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                    @foreach ($centers as $center)
+                                        <div class="col-md-4 bg-white">
+                                            <div class="">
+                                                <div class="checkbox checkbox-primary mb-2">
+                                                    <input id="{{ $center->id }}" type="checkbox"
+                                                        value="{{ $center->id }}" name="center_id[]" class="form-check-input" >
+                                                    <label for="{{ $center->id }}">{{ $center->name }}</label>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end col-->
+                                    @endforeach
+
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -113,4 +148,19 @@
         </div> <!-- end col -->
     </div>
     <!-- end row -->
+@endsection
+@section('scripts')
+<script>
+    function ShowCenters()
+    {
+        $("#Centers").removeClass('d-none')
+    }
+</script>
+<script>
+function hideCenters()
+    {
+        $("#Centers").addClass('d-none')
+    }
+</script>
+
 @endsection
