@@ -13,7 +13,8 @@ class ExamTime extends Model
         'center_id',
         'from',
         'to',
-        'num_of_observe'
+        'num_of_observe',
+        'is_done'
     ];
 
     public function center()

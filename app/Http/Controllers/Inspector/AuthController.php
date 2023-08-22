@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -62,11 +63,16 @@ class AuthController extends Controller
                 return redirect()->back()->with(['error' => "There are error occur"]);
             }
 
-            Observe::create($data);
+            DB::beginTransaction();
+            $user =  Observe::create($data);
+            // Attach User With Role Inspector //
+            $user->attachRole('inspector');
+            DB::commit();
 
 
             return redirect()->back()->with(['success' => "Data saved successfully!"]);
         } catch (\Exception $ex) {
+            DB::rollBack();
             return $ex;
             return redirect()->back()->with(['error' => "There are error occur"]);
         }
@@ -77,12 +83,17 @@ class AuthController extends Controller
         $request->validate(['email' => 'required|email', 'password' => 'required']);
 
         if (!Auth::guard('observe')->attempt($request->only('email', 'password'))) {
-            // return redirect()->back()->with('error', 'Invaild Email and Password');
-            return response()->json(['Error' => "Error in email or password"]);
+            return redirect()->back()->with('error', 'Invaild Email and Password');
+            // return response()->json(['Error' => "Error in email or password"]);
         } else {
-            // return redirect()->route('admin')->with('success', 'Welcome');
-            return response()->json(['Success' => "Welcome"]);
+            return redirect()->route('inspector.home')->with('success', 'Welcome');
         }
-        return $request;
+        // return $request;
+    }
+
+    public function logout()
+    {
+        auth('observe')->logout();
+        return redirect('/');
     }
 }
