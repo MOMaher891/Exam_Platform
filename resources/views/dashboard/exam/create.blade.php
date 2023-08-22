@@ -90,18 +90,6 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="example-date-input" class="col-form-label">Number of Hours</label>
-                                <input class="form-control" type="number" name="num_of_hours" id="example-date-input"
-                                    value="{{ old('num_of_hours') }}" required>
-                                @error('num_of_hours')
-                                    <span class="text-danger mt-2">{{ $message }}</span>
-                                @enderror
-                            </div>
-                            
-                        </div>
-
 
                         <div class="col-md-6 col-sm-12">
                             <label for="example-number-input" class="col-sm-2 col-form-label">Period price</label>
@@ -185,5 +173,5 @@ function hideCenters()
         $("#Centers").addClass('d-none')
     }
 </script>
-    
+
 @endsection
