@@ -43,4 +43,13 @@ class Observe extends Authenticatable
     {
         return $this->belongsTo(Center::class);
     }
+
+    public function observe_activities()
+    {
+        return $this->hasMany(\App\Models\ObserveActivity::class, 'observe_id');
+    }
+    public function black_list()
+    {
+        return $this->hasOne(Black_lists::class, 'observe_id');
+    }
 }

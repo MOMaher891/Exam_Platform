@@ -24,13 +24,12 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Exams List</h4>
-                 
+
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Date</th>
                                 <th>Center</th>
-                                <th>Number Of Hours</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -78,9 +77,6 @@
                     },
                     {
                         data:'center.name'
-                    },
-                    {
-                        data:'exam.num_of_hours'
                     },
                     {
                         data: 'action'
