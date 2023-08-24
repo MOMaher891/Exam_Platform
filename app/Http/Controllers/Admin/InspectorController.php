@@ -3,12 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Center;
+use App\Models\ExamTime;
 use App\Models\Observe;
+use App\Models\ObserveActivity;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Contracts\DataTable;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\accept_inspector;
+use App\Models\Black_lists;
+use App\Models\Exam;
+use Illuminate\Support\Facades\DB;
 
 class InspectorController extends Controller
 {
@@ -17,18 +26,75 @@ class InspectorController extends Controller
      */
     public function index()
     {
+
+
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
+        $data = Observe::with(['observe_activities' => function ($q) use ($center) {
+            $q->whereHas('exam_time', function ($q) use ($center) {
+                $q->where('center_id', $center->id);
+            })->with(['exam_time' => function ($q) {
+                $q->with('center');
+            }]);
+        }])->whereHas('observe_activities', function ($q) use ($center) {
+            $q->whereHas('exam_time', function ($q) use ($center) {
+                $q->where('center_id', $center->id);
+            })->with(['exam_time']);
+        })
+            ->with(['black_list' => function ($q) use ($center) {
+                $q->where('center_id', $center->id);
+            }])
+            ->get();
+
+        // return $data;
+
         return view('dashboard.inspector.index');
     }
     public function data(Request $request)
     {
-        $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
 
+        if (Auth::user()->hasRole('admin')) {
+
+            $user_id = Auth::user()->id;
+            $center = Center::where('user_id', $user_id)->first();
+            $data = Observe::with(['observe_activities' => function ($q) use ($center) {
+                $q->whereHas('exam_time', function ($q) use ($center) {
+                    $q->where('center_id', $center->id);
+                })->with(['exam_time' => function ($q) {
+                    $q->with('center');
+                }]);
+            }])->whereHas('observe_activities', function ($q) use ($center) {
+                $q->whereHas('exam_time', function ($q) use ($center) {
+                    $q->where('center_id', $center->id);
+                })->with(['exam_time']);
+            })
+                ->with(['black_list' => function ($q) use ($center) {
+                    $q->where('center_id', $center->id);
+                }])
+                ->get();
+
+
+
+            return $this->return_data($data);
+        } else {
+            $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
+
+            return $this->return_data($data);
+        }
+    }
+
+    public function return_data($data)
+    {
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'action']);
             })
             ->addColumn('show_profile', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'show_profile']);
+            })
+            ->addColumn('block', function ($data) {
             })
             ->make(true);
     }
@@ -41,6 +107,87 @@ class InspectorController extends Controller
         return view('dashboard.inspector.show', compact('inspector'));
     }
 
+    public function exams()
+    {
+        return view('dashboard.inspector.exam');
+    }
+    public function exam_data()
+    {
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
+        $data = ExamTime::where('center_id', $center->id)->with(['exam' => function ($q) {
+            $q->with('category');
+        }])->get();
+        return DataTables::of($data)
+            ->addColumn('action', function ($data) {
+                return view('dashboard.inspector.exam_action', ['inspector' => $data, 'type' => 'action']);
+            })
+            ->addColumn('show_profile', function ($data) {
+                return view('dashboard.inspector.exam_action', ['inspector' => $data, 'type' => 'show_profile']);
+            })
+            ->make(true);
+    }
+    public function exam_observe(Request $request)
+    {
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
+
+        $data = ExamTime::where('center_id', $center->id)->where('id', $request->exam_id)->with(['observeActivity' => function ($q) {
+            $q->with('observes');
+        }])->first();
+
+        // return $data;
+        return view('dashboard.inspector.exam_observe', compact('data'));
+    }
+
+    public function is_come($observe_id)
+    {
+        $observe_activitie = ObserveActivity::with('exam_time')->findOrFail($observe_id);
+        $inspector = Observe::findOrFail($observe_activitie->observe_id);
+        $exam = Exam::findOrFail($observe_activitie->exam_time->exam_id);
+        // return $exam;
+        try {
+            DB::beginTransaction();
+            $observe_activitie->update(['is_come' => 1]);
+            $inspector->update(['price' => $inspector->price + $exam->price]);
+            DB::commit();
+            return redirect()->back()->with(['success' => 'تم تحضير المراقب']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with(['error' => 'There are error occur']);
+        }
+    }
+
+
+
+    /**************************
+     * Block Inspector
+     ***************************/
+    public function block($inspector_id)
+    {
+        $inspector = Observe::findOrFail($inspector_id);
+
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
+
+        $black_list = Black_lists::where('observe_id', $inspector->id)->where('center_id', $center->id)->first();
+        // return $black_list;
+        try {
+            if (!$black_list) {
+                Black_lists::create([
+                    'observe_id' => $inspector->id,
+                    'center_id' => $center->id,
+                ]);
+                return redirect()->back()->with(['success' => 'User blocked successfully']);
+            } else {
+                $black_list->delete();
+                return redirect()->back()->with(['success' => 'User unblocked successfully']);
+            }
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => 'There are error occur']);
+        }
+    }
+
     /**************************
      * Accept or reject inspector
      ***************************/
@@ -50,9 +197,22 @@ class InspectorController extends Controller
         if (!$inspector) {
             return response()->json(['error' => 'Inspector not found']);
         }
-        $inspector->update(['status' => 'accept']);
-        return redirect()->back()->with(['success' => 'Data saved successfully!']);
+        try {
+            $inspector->update(['status' => 'accept']);
+            $data = [
+                'subject' => 'Exam Platform mail',
+                'body' => 'Congratulation .
+                        Your data has been reviewed successfully, now you can log in'
+            ];
+
+            Mail::to($inspector->email)->send(new accept_inspector($data));
+            return redirect()->back()->with(['success' => 'Data saved successfully!']);
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => 'There are error occur']);
+        }
     }
+
+
     public function reject($inspector_id)
     {
         $inspector = Observe::findOrFail($inspector_id);
