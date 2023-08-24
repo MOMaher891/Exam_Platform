@@ -20,6 +20,7 @@ class Observe extends Authenticatable
         'email',
         'password',
         'nationality',
+        'code',
         'price',
         'phone',
         'center_id',

@@ -26,4 +26,9 @@ class ObserveActivity extends Model
     {
         return $this->belongsTo(Observe::class, 'observe_id');
     }
+    public function examTime()
+    {
+        return $this->belongsTo(ExamTime::class,'exam_time_id');
+    }
+
 }

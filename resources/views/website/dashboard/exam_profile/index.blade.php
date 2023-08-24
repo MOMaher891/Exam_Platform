@@ -24,15 +24,15 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Exams List</h4>
-
+                 
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Date</th>
-                                <th>Center</th>
-                                <th>Number Of Hours</th>
+                                <th>Center</th>                                
                                 <th>Shifts</th>
-                                <th>Action</th>
+                                <th>Attend</th>
+                                {{-- <th>Action</th> --}}
                             </tr>
                         </thead>
 
@@ -53,7 +53,7 @@
         let DataTable = null
 
         function setDatatable() {
-            var url = "{{ route('inspector.exam.data') }}";
+            var url = "{{ route('inspector.exam.profile.data') }}";
 
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
@@ -75,19 +75,16 @@
 
                 columns: [
                     {
-                        data:'exam.date'
+                        data:'date'
                     },
                     {
-                        data:'center.name'
-                    },
-                    {
-                        data:'exam.num_of_hours'
+                        data:'center'
                     },
                     {
                         data:'shift'
                     },
                     {
-                        data: 'action'
+                        data:'is_done'
                     }
                 ],
             });
@@ -95,32 +92,32 @@
 
         setDatatable();
 
-        function Apply(id)
-        {
-                 $.ajax({
-                     type: 'GET',
-                     url: "{{route('inspector.exam.apply')}}",
-                     data: {
-                        id,
-                    },
-                     dataType: 'JSON',
-                     success: function (results) {
-                        if(results.status == true)
-                        {
-                            toastr.success('Applyed Successfuly', 'success');
-                            DataTable.ajax.reload()
-                        }else{
-                            toastr.error(results.message, 'success');
-                        }
-                     },
+        // function Apply(id)
+        // {
+        //          $.ajax({
+        //              type: 'GET',
+        //              url: "{{route('inspector.exam.apply')}}",
+        //              data: {
+        //                 id,
+        //             },
+        //              dataType: 'JSON',
+        //              success: function (results) {
+        //                 if(results.status == true)
+        //                 {
+        //                     toastr.success('Applyed Successfuly', 'success');
+        //                     DataTable.ajax.reload()
+        //                 }else{
+        //                     toastr.error(results.message, 'success');
+        //                 }
+        //              },
 
-                     error:function(result){
-                        console.log(result);
-                        alert(error)
-                     }
-                 });
+        //              error:function(result){
+        //                 console.log(result);
+        //                 alert(error)
+        //              }
+        //          });
 
-        }
+        // }
     </script>
 
     </script>
