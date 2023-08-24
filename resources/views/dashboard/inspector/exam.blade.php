@@ -5,13 +5,13 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Inspector List</h4>
+                <h4 class="mb-sm-0">Exams List</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin') }}">DashBoard</a></li>
                         </li>
-                        <li class="breadcrumb-item active">Inspector</li>
+                        <li class="breadcrumb-item active">Exams</li>
                     </ol>
                 </div>
 
@@ -50,18 +50,15 @@
                         @endif
 
                     </div>
-                    <h4 class="card-title">Inspector List</h4>
+                    <h4 class="card-title">Exams List</h4>
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
 
                         <thead>
 
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>National ID</th>
-                                <th>Address</th>
-                                <th>Total price</th>
+                                <th>Exam</th>
+                                <th>Date</th>
+                                <th>Shift</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -83,7 +80,7 @@
         let DataTable = null
 
         function setDatatable() {
-            var url = "{{ route('inspector.data') }}";
+            var url = "{{ route('inspector.exam_data') }}";
 
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
@@ -106,22 +103,14 @@
                 columns: [
 
                 {
-                        data: 'name'
+                data: 'exam.category.name'
+                    },
+
+                {
+                data: 'exam.date'
                     },
                     {
-                        data: 'email'
-                    },
-                    {
-                        data: 'phone'
-                    },
-                    {
-                        data: 'national_id'
-                    },
-                    {
-                        data: 'address'
-                    },
-                    {
-                        data: 'price'
+                        data: 'shift'
                     },
                     {
                         data: 'action'
@@ -136,7 +125,7 @@
         {
             status = $("#statuss").val() || '';
             if(DataTable){
-                url = "{{route('inspector.data')}}"+`?status=${status}`;
+                url = "{{route('inspector.exam_data')}}"+`?status=${status}`;
                 DataTable.ajax.url(url).load();
             }
         }

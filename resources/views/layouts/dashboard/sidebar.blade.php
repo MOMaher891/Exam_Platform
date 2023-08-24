@@ -81,6 +81,18 @@
                         </ul>
                     </li>
                 @endif
+                @if (auth()->user()->hasRole('admin'))
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+
+                            <i class="ri-layout-3-line"></i>
+                            <span>Exams</span>
+                        </a>
+                        <ul class="sub-menu" aria-expanded="false">
+                            <li><a href="{{ route('admin.inspector.exams') }}">Exams List</a></li>
+                        </ul>
+                    </li>
+                @endif
 
                 @if (auth()->user()->hasPermission('show_center'))
                     <li>

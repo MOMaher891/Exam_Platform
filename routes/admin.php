@@ -87,13 +87,18 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/edit/{inspector_id}', 'edit')->middleware('permission:edit_inspector')->name(config('app.admin') . $prefix . 'edit');
             Route::get('/show/{inspector_id}', 'show')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'show');
             Route::get('data', 'data')->middleware('permission:show_inspector')->name($prefix . 'data');
+            Route::get('exam_data', 'exam_data')->middleware('permission:show_inspector')->name($prefix . 'exam_data');
+            Route::get('/exams', 'exams')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'exams');
             Route::get('/accept/{inspector_id}', 'accept')->middleware('permission:accept_inspector')->name(config('app.admin') . $prefix . 'accept');
+            Route::get('/exam_observe', 'exam_observe')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'exam_observe');
+            Route::get('/is_come/{observe_id}', 'is_come')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'is_come');
             Route::get('/reject/{inspector_id}', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
-            Route::post('/filter_accounts', 'filter_accounts')->middleware('permission:filter_inspector')->name(config('app.admin') . $prefix . 'filter');
+            Route::get('/block/{inspector_id}', 'block')->middleware('permission:block_inspector')->name(config('app.admin') . $prefix . 'block');
+            Route::get('/delete/{inspector_id}', 'delete')->middleware('permission:delete_inspector')->name(config('app.admin') . $prefix . 'delete');
             //Post Functions
             Route::post('/store', 'store')->middleware('permission:add_inspector')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_inspector')->name(config('app.admin') . $prefix . 'update');
-            Route::get('/delete/{inspector_id}', 'delete')->middleware('permission:delete_inspector')->name(config('app.admin') . $prefix . 'delete');
+            Route::post('/filter_accounts', 'filter_accounts')->middleware('permission:filter_inspector')->name(config('app.admin') . $prefix . 'filter');
         });
 
         /**

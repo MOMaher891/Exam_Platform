@@ -172,22 +172,27 @@ class PermissionSeeder extends Seeder
 
             // Apply in Exams
             [
-                'name'=>'show_inspector_exams',
+                'name' => 'show_inspector_exams',
                 'display_name' => 'Show Inspector Exams',
             ],
             [
-                'name'=>'apply_inspector_exams',
+                'name' => 'apply_inspector_exams',
                 'display_name' => 'Apply in Exams',
             ],
 
 
             //Inspector Exams Profile
             [
-                'name'=>'show_inspector_exams_profile',
+                'name' => 'show_inspector_exams_profile',
                 'display_name' => 'Show Exams Profile',
             ],
 
-            
+            [
+                'name' => 'block_inspector',
+                'display_name' => 'Block inspector',
+            ],
+
+
         ];
 
 
