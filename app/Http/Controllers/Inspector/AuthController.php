@@ -49,7 +49,10 @@ class AuthController extends Controller
                     $data['img_personal'] = $this->uploadImage($request->file('img_personal'), $this->personal);
                 }
                 if ($request->file('img_national')) {
-                    $data['img_national'] = $this->uploadImage($request->file('img_national'), $this->national_id);
+                    $data['img_national'] = $this->uploadImage($request->file('img_national'), $this->national);
+                }
+                if ($request->file('img_national_back')) {
+                    $data['img_national_back'] = $this->uploadImage($request->file('img_national_back'), $this->national_back);
                 }
                 if ($request->file('img_passport')) {
                     $data['img_passport'] = $this->uploadImage($request->file('img_passport'), $this->passport);

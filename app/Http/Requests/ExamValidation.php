@@ -24,7 +24,6 @@ class ExamValidation extends FormRequest
     public function rules()
     {
         return [
-            'category_id' => 'required',
             'date' => 'required|date',
             'show_date' => 'required|date',
             'price' => 'required|numeric|gt:0',
@@ -37,7 +36,7 @@ class ExamValidation extends FormRequest
     {
         return [
             // 'name.required' => 'Name field required',
-            'category_id.required' => 'Name field required',
+            // 'category_id.required' => 'Name field required',
             'date.required' => 'Name field required',
             'price.required' => 'Name field required',
             'price.numeric' => "Price should be numeric",

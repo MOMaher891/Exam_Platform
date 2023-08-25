@@ -42,14 +42,13 @@ class ExamTimeController extends Controller
         $all =  array_merge($privateList, json_decode(json_encode($allPublicExams), true));
 
 
-        $data = Exam::query()->with('category')->whereIn('id', $all)->latest();
+        $data = Exam::query()->whereIn('id', $all)->latest();
         return DataTables::of($data)
-        ->addColumn('action',function($data){
-            return view('dashboard.exam_times.action',['data'=>$data,'type'=>'action']);
-        })
-        
-        ->make(true);
+            ->addColumn('action', function ($data) {
+                return view('dashboard.exam_times.action', ['data' => $data, 'type' => 'action']);
+            })
 
+            ->make(true);
     }
     public function create($id)
     {
@@ -65,13 +64,12 @@ class ExamTimeController extends Controller
         try {
             // if(count($data['from']) == count($data['to']) && count($data['from']) == count($data['num_of_observe']))
             // {
-                DB::beginTransaction();
-                foreach($data['num_of_observe'] as $index => $d)
-                {
-                    ExamTime::create(array_merge($data,[
-                    'exam_id'=>$id,
-                    'num_of_observe'=>$d,
-                    'shift'=>$index+1
+            DB::beginTransaction();
+            foreach ($data['num_of_observe'] as $index => $d) {
+                ExamTime::create(array_merge($data, [
+                    'exam_id' => $id,
+                    'num_of_observe' => $d,
+                    'shift' => $index + 1
                 ]));
             }
             DB::commit();

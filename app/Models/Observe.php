@@ -32,6 +32,7 @@ class Observe extends Authenticatable
         'address',
         'img_personal',
         'img_national',
+        'img_national_back',
         'img_passport',
         'img_certificate',
         'img_certificate_good_conduct',

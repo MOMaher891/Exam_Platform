@@ -28,20 +28,20 @@
                     <div class="row mb-3">
                         <div class="col-md-12">
                             <div class="py-2">
-                                <img src="{{asset('uploads/inspector/personal/'.auth('observe')->user()->img_personal)}}" alt="">
+                                <img src="{{asset('uploads/inspector/personal/'.auth('observe')->user()->img_personal)}}" style="width:200px;border-radius:20px" alt="">
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Image</label>
                             <div class="col-sm-10">
-                                <input class="form-control" type="file" name="image" 
+                                <input class="form-control" type="file" name="image"
                                     id="example-text-input" value="{{ old('image') }}" >
                                 @error('image')
                                     <span class="text-danger mt-2">{{ $message }}</span>
                                 @enderror
                             </div>
                         </div>
-                        
+
 
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Name</label>
@@ -64,6 +64,21 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="col-md-12 col-lg-12 col-sm-12">
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Company <span class="text-gray">(optional)</span></label>
+                            <div class="col-sm-10">
+                                <select name="center_id" id="" class="form-control">
+                                    <option value="" selected disabled>Choose your company</option>
+                                    @foreach ($centers as $center)
+                                        <option value="{{$center->id}}" @if (auth('observe')->user()->center_id == $center->id)
+                                            selected
+                                        @endif>{{$center->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
 
                         <div class="col-md-12 col-lg-12 col-sm-12">
                             <label for="example-text-input" class="col-sm-2 col-form-label">Phone</label>
