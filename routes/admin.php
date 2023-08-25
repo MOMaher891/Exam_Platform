@@ -95,6 +95,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/reject/{inspector_id}', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
             Route::get('/block/{inspector_id}', 'block')->middleware('permission:block_inspector')->name(config('app.admin') . $prefix . 'block');
             Route::get('/delete/{inspector_id}', 'delete')->middleware('permission:delete_inspector')->name(config('app.admin') . $prefix . 'delete');
+            Route::get('inspector_center/', 'Inspector_in_center')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'inspector_center');
+            Route::get('Inspector_in_center_data/', 'Inspector_in_center_data')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'Inspector_in_center_data');
             //Post Functions
             Route::post('/store', 'store')->middleware('permission:add_inspector')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_inspector')->name(config('app.admin') . $prefix . 'update');

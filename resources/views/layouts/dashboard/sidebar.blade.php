@@ -14,7 +14,16 @@
                 <img src="{{ asset('assets/images/users/person.jpg') }}" alt="" class="avatar-md rounded-circle">
             </div>
             <div class="mt-3">
-                <h4 class="font-size-16 mb-1">{{ Auth::guard()->user()->name }}</h4>
+                <h4 class="font-size-16 mb-1">
+                    @if (Auth::guard()->user()->hasRole('admin'))
+                    @php
+                        $center = App\Models\Center::select('name')->where('user_id', Auth::guard()->user()->id)->first();
+                    @endphp
+                    {{ $center->name }}
+                    @else
+                        {{ Auth::guard()->user()->name }}
+                    @endif
+                </h4>
                 <span class="text-muted"><i class="ri-record-circle-line align-middle font-size-14 text-success"></i>
                     Online</span>
             </div>
@@ -77,7 +86,9 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('admin.inspector.index') }}">Inspector List</a></li>
-                            <li><a href="{{ route('admin.inspector.create') }}">Add inspector</a></li>
+                            @if (auth()->user()->hasRole('admin'))
+                            <li><a href="{{ route('admin.inspector.inspector_center') }}">Inspector in center</a></li>
+                            @endif
                         </ul>
                     </li>
                 @endif
@@ -112,42 +123,23 @@
 
 
                 @if (auth()->user()->hasPermission('show_staff'))
-                    <li>
-                        <a href="javascript: void(0);" class="has-arrow waves-effect">
-
-                            <i class="ri-layout-3-line"></i>
-                            <span>Quiz & Categories</span>
-                        </a>
-                        <ul class="sub-menu" aria-expanded="true">
-                            <li>
-                                @if (App\Models\Exam::count() != 0)
-                                    <span
-                                        class="badge rounded-pill bg-success float-end">{{ App\Models\Exam::count() }}</span>
-                                @endif
-                                <a href="javascript: void(0);" class="has-arrow">Quiz</a>
-                                <ul class="sub-menu" aria-expanded="true">
-                                    <li><a href="{{ route('admin.exam.index') }}">Quiz List</a></li>
-                                    <li><a href="{{ route('admin.exam.create') }}">Add Quiz</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                @if (App\Models\Category::count() != 0)
-                                    <span
-                                        class="badge rounded-pill bg-success float-end">{{ App\Models\Category::count() }}</span>
-                                @endif
-                                <a href="javascript: void(0);" class="has-arrow">Categories</a>
-                                <ul class="sub-menu" aria-expanded="true">
-                                    <li><a href="{{ route('admin.category.index') }}">Category List</a></li>
-                                    <li><a href="{{ route('admin.category.create') }}">Add Category</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <span
+                            class="badge rounded-pill bg-success float-end">{{ App\Models\Exam::count() }}</span>
+                        <i class="ri-layout-3-line"></i>
+                        <span>Quizes</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{ route('admin.exam.index') }}">Quiz List</a></li>
+                        <li><a href="{{ route('admin.exam.create') }}">Add quiz</a></li>
+                    </ul>
+                </li>
                 @endif
 
 
 
-                @if ( auth()->user()->hasRole('admin') )
+                @if ( auth()->user()->hasRole('admin'))
                     <li>
                         <a href="{{ route('admin.exam_times.index') }}" class=" waves-effect">
                             {{-- @if (App\Models\Role::count() != 0)

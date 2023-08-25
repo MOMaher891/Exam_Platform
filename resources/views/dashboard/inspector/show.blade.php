@@ -97,16 +97,19 @@
 
                     <div class="row mt-5 mb-3">
                         <h4>Attachments</h4>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-3 col-lg-2 col-sm-12">
                             <img id="zoom-img_passport" src="{{asset('uploads/inspector/passport/'.$inspector->img_passport)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
-                            <img id="zoom-img_national_id" src="{{asset('uploads/inspector/national_id/'.$inspector->img_national)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
+                        <div class="col-md-3 col-lg-2 col-sm-12">
+                            <img id="zoom-img_national_id" src="{{asset('uploads/inspector/national/'.$inspector->img_national)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-3 col-lg-2 col-sm-12">
+                            <img id="zoom-img_national_id" src="{{asset('uploads/inspector/national_back/'.$inspector->img_national_back)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-sm-12">
                             <img id="zoom-img_certificate" src="{{asset('uploads/inspector/certificate/'.$inspector->img_certificate)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
                         </div>
-                        <div class="col-md-3 col-lg-3 col-sm-12">
+                        <div class="col-md-3 col-lg-2 col-sm-12">
                             <img id="zoom-img_certificate_good_conduct" src="{{asset('uploads/inspector/certificate_good_conduct/'.$inspector->img_certificate_good_conduct)}}" width="100%" height="100%" style="object-fit: contain;border-radius:20px;box-shadow:1px 1px 15px #CCC" alt="">
                         </div>
                     </div>

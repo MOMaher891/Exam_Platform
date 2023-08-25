@@ -10,7 +10,8 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     protected $personal = 'uploads/inspector/personal';
-    protected $national_id = 'uploads/inspector/national_id';
+    protected $national = 'uploads/inspector/national';
+    protected $national_back = 'uploads/inspector/national_back';
     protected $passport = 'uploads/inspector/passport';
     protected $certificate = 'uploads/inspector/certificate';
     protected $certificate_good_conduct = 'uploads/inspector/certificate_good_conduct';

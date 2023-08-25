@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Inspector;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ProfileEmail;
+use App\Models\Center;
 use App\Models\Observe;
 use App\Models\User;
 use Exception;
@@ -20,84 +21,75 @@ class ProfileController extends Controller
     }
     public function sendEmail()
     {
-        try{
-            $code = rand(10000,99999);
+        try {
+            $code = rand(10000, 99999);
             Mail::to(auth('observe')->user()->email)->send(new ProfileEmail($code));
-            $user = Observe::findOrFail(auth('observe')->user()->id);  
-            $user->update(['code'=>$code]); 
+            $user = Observe::findOrFail(auth('observe')->user()->id);
+            $user->update(['code' => $code]);
             return view('website.dashboard.profile.check');
-        }catch(Exception $e)
-        {
-            return redirect()->back()->with('error',$e->getMessage());
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
         }
     }
     public function checkCode(Request $request)
     {
-        $request->validate(['code'=>'required']);
-        if($request->code == auth('observe')->user()->code )
-        {
+        $request->validate(['code' => 'required']);
+        if ($request->code == auth('observe')->user()->code) {
             return view('website.dashboard.profile.change');
-        }else{
-            $code = rand(10000,99999);
+        } else {
+            $code = rand(10000, 99999);
             Mail::to(auth('observe')->user()->email)->send(new ProfileEmail($code));
-            $user = Observe::findOrFail(auth('observe')->user()->id);  
-            $user->update(['code'=>$code]); 
-            return redirect()->back()->with('error','Invaild Code Another Code Resend To Your Email');
+            $user = Observe::findOrFail(auth('observe')->user()->id);
+            $user->update(['code' => $code]);
+            return redirect()->back()->with('error', 'Invaild Code Another Code Resend To Your Email');
         }
     }
 
 
-    
+
     public function changePassword(Request $request)
     {
         $request->validate([
-            'password'=>'required',
-            'password_confirmation'=>'required',
-            'old_password'=>'required'
+            'password' => 'required',
+            'password_confirmation' => 'required',
+            'old_password' => 'required'
         ]);
-        if($request->password != $request->password_confirmation)
-        {
-            return redirect()->back()->with('error','Password Not Same');
+        if ($request->password != $request->password_confirmation) {
+            return redirect()->back()->with('error', 'Password Not Same');
         }
-        if(Hash::check($request->old_password,auth('observe')->user()->password))
-        {
+        if (Hash::check($request->old_password, auth('observe')->user()->password)) {
             $admin = Observe::find(auth('observe')->user()->id);
             $admin->update([
-                'password'=>Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
-            return redirect()->back()->with('success','Password Change');
-       
-        }else
-        {
-            return redirect()->back()->with('error','Invaild Password');
-     
+            return redirect()->back()->with('success', 'Password Change');
+        } else {
+            return redirect()->back()->with('error', 'Invaild Password');
         }
     }
     public function index()
     {
-        return view('website.dashboard.profile.index');
+        $centers = Center::all();
+        return view('website.dashboard.profile.index', compact('centers'));
     }
     public function update(Request $request)
     {
         $request->validate([
-            'name'=>'required',
-            'email'=>'required|unique:observes,email,'.auth('observe')->user()->id,
-            'phone'=>'required|unique:observes,phone,'.auth('observe')->user()->id,
-            'image'=>'file'
+            'name' => 'required',
+            'email' => 'required|unique:observes,email,' . auth('observe')->user()->id,
+            'phone' => 'required|unique:observes,phone,' . auth('observe')->user()->id,
+            'image' => 'file'
         ]);
         $data = $request->all();
 
-        if($request->file('image'))
-        {
-            $image =  $this->uploadImage($request->file('image'),$this->personal);    
+        if ($request->file('image')) {
+            $image =  $this->uploadImage($request->file('image'), $this->personal);
             $data['img_personal'] = $image;
-         }
-        if(Observe::findOrFail(auth('observe')->user()->id)->update($data))
-        {
-            return redirect()->back()->with('success','Profile Updated');
-        }else{
-            return redirect()->back()->with('Error','Error Accure');
-        }        
+        }
+        if (Observe::findOrFail(auth('observe')->user()->id)->update($data)) {
+            return redirect()->back()->with('success', 'Profile Updated');
+        } else {
+            return redirect()->back()->with('Error', 'Error Accure');
+        }
     }
-
 }

@@ -17,7 +17,7 @@
     @case('type')
         @if ($data->type == 'public')
             <p class="btn btn-sm btn-primary">Access To All Centers</p>
-        @else        
+        @else
             @foreach ($centers as $d )
                 <p>{{$d->name}}</p>
             @endforeach
