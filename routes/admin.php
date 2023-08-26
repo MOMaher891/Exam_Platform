@@ -92,7 +92,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/accept/{inspector_id}', 'accept')->middleware('permission:accept_inspector')->name(config('app.admin') . $prefix . 'accept');
             Route::get('/exam_observe', 'exam_observe')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'exam_observe');
             Route::get('/is_come/{observe_id}', 'is_come')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'is_come');
-            Route::get('/reject/{inspector_id}', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
+            Route::post('/reject', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
             Route::get('/block/{inspector_id}', 'block')->middleware('permission:block_inspector')->name(config('app.admin') . $prefix . 'block');
             Route::get('/delete/{inspector_id}', 'delete')->middleware('permission:delete_inspector')->name(config('app.admin') . $prefix . 'delete');
             Route::get('inspector_center/', 'Inspector_in_center')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'inspector_center');

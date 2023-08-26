@@ -117,11 +117,14 @@
                 @if ($inspector->status == 'pending')
             <a href="{{ route('admin.inspector.accept',$inspector->id) }}" class="btn btn-success waves-effect"
                 style="margin-top:20px">Accept</a>
-            <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
-                style="margin-top:20px">Reject</a>
+            {{-- <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
+                style="margin-top:20px">Reject</a> --}}
+                <button type="button" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
+
                 @elseif($inspector->status == 'accept')
-                <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
-                    style="margin-top:20px">Reject</a>
+                {{-- <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
+                    style="margin-top:20px">Reject</a> --}}
+                    <button type="button" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
             <a href="{{ route('admin.inspector.index') }}" class="btn btn-light waves-effect"
                 style="margin-top:20px">Cancel</a>
                 @else
@@ -136,6 +139,38 @@
         </div> <!-- end col -->
     </div>
 
+
+
+
+    {{-- Reject Modal --}}
+    <div class="modal fade bs-example-modal-center" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reject Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                   <form action="{{route('admin.inspector.reject')}}" method="POST">
+                    @csrf
+                    <input type="hidden" name="id" value="{{$inspector->id}}">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="">Message Body</label>
+                                <textarea name="reason" class="form-control" id="" cols="30" rows="10"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
+                            <input type="submit" class="btn btn-primary" value="Send">
+                        </div>
+                    </div>
+                   </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 @endsection
 @section('scripts')
 <script>
