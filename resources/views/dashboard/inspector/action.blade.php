@@ -25,6 +25,15 @@
                 </button>
             @endif
     @break
+    @case('status')
+    @if ($inspector->status == 'pending')
+    <p class="btn btn-warning">pending</p>
+    @elseif ($inspector->status == 'accept')
+        <p class="btn btn-info">Accept</p>
+    @else
+        <p class="btn btn-danger">Cencel</p>
+    @endif
+    @break
 @break
     @default
 @endswitch

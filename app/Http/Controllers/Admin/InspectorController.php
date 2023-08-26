@@ -28,23 +28,23 @@ class InspectorController extends Controller
     {
 
 
-        $user_id = Auth::user()->id;
-        $center = Center::where('user_id', $user_id)->first();
-        $data = Observe::with(['observe_activities' => function ($q) use ($center) {
-            $q->whereHas('exam_time', function ($q) use ($center) {
-                $q->where('center_id', $center->id);
-            })->with(['exam_time' => function ($q) {
-                $q->with('center');
-            }]);
-        }])->whereHas('observe_activities', function ($q) use ($center) {
-            $q->whereHas('exam_time', function ($q) use ($center) {
-                $q->where('center_id', $center->id);
-            })->with(['exam_time']);
-        })
-            ->with(['black_list' => function ($q) use ($center) {
-                $q->where('center_id', $center->id);
-            }])
-            ->get();
+        // $user_id = Auth::user()->id;
+        // $center = Center::where('user_id', $user_id)->first();
+        // $data = Observe::with(['observe_activities' => function ($q) use ($center) {
+        //     $q->whereHas('exam_time', function ($q) use ($center) {
+        //         $q->where('center_id', $center->id);
+        //     })->with(['exam_time' => function ($q) {
+        //         $q->with('center');
+        //     }]);
+        // }])->whereHas('observe_activities', function ($q) use ($center) {
+        //     $q->whereHas('exam_time', function ($q) use ($center) {
+        //         $q->where('center_id', $center->id);
+        //     })->with(['exam_time']);
+        // })
+        //     ->with(['black_list' => function ($q) use ($center) {
+        //         $q->where('center_id', $center->id);
+        //     }])
+        //     ->get();
 
         // return $data;
 
@@ -74,12 +74,15 @@ class InspectorController extends Controller
                     $q->where('center_id', $center->id);
                 }])
                 ->get();
-
-
-
             return $this->return_data($data);
         } else {
-            $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
+            
+            $data = Observe::query()->with('center')->latest()->get();
+
+            if($request->status)
+            {
+                $data = $data->where('status', $request->status);
+            }       
 
             return $this->return_data($data);
         }
@@ -96,6 +99,11 @@ class InspectorController extends Controller
             })
             ->addColumn('block', function ($data) {
             })
+            ->editColumn('status',function($data){
+                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'status']);
+
+            })
+            
             ->make(true);
     }
 

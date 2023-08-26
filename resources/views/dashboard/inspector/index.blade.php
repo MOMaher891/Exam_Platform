@@ -62,6 +62,7 @@
                                 <th>National ID</th>
                                 <th>Address</th>
                                 <th>Total price</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -122,6 +123,9 @@
                     },
                     {
                         data: 'price'
+                    },
+                    {
+                        data:'status'
                     },
                     {
                         data: 'action'
