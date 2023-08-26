@@ -30,7 +30,7 @@
                             <tr>
                                 <th>Date</th>
                                 <th>Center</th>
-                                <th>Number Of Hours</th>
+                                {{-- <th>Number Of Hours</th> --}}
                                 <th>Shifts</th>
                                 <th>Action</th>
                             </tr>
@@ -79,9 +79,6 @@
                     },
                     {
                         data:'center.name'
-                    },
-                    {
-                        data:'exam.num_of_hours'
                     },
                     {
                         data:'shift'

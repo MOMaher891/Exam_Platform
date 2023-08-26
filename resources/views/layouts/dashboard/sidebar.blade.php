@@ -77,7 +77,7 @@
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('admin.inspector.index') }}">Inspector List</a></li>
-                            <li><a href="{{ route('admin.inspector.create') }}">Add inspector</a></li>
+                            {{-- <li><a href="{{ route('admin.inspector.create') }}">Add inspector</a></li> --}}
                         </ul>
                     </li>
                 @endif
