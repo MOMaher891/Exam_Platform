@@ -26,7 +26,6 @@ class InspectorController extends Controller
      */
     public function index()
     {
-
         return view('dashboard.inspector.index');
     }
     public function data(Request $request)
@@ -53,11 +52,15 @@ class InspectorController extends Controller
                     $q->where('center_id', $center->id);
                 }])
                 ->get();
-
-
             return $this->return_data($data);
         } else {
-            $data = Observe::query()->where('status', $request->status)->with('center')->latest()->get();
+            
+            $data = Observe::query()->with('center')->latest()->get();
+
+            if($request->status)
+            {
+                $data = $data->where('status', $request->status);
+            }       
 
             return $this->return_data($data);
         }
@@ -74,6 +77,11 @@ class InspectorController extends Controller
             })
             ->addColumn('block', function ($data) {
             })
+            ->editColumn('status',function($data){
+                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'status']);
+
+            })
+            
             ->make(true);
     }
 

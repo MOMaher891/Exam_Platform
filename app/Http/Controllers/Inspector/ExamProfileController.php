@@ -31,7 +31,7 @@ class ExamProfileController extends Controller
             return $data->examTime->exam->date;
         })
         ->editColumn('is_done',function($data){
-            return $data->is_done == true ? 'Attended' : 'Not attended';
+            return $data->is_come == true ? 'Attended' : 'Not attended';
         })->make(true);     
     }
 
