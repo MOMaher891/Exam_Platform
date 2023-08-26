@@ -36,9 +36,6 @@ class ExamController extends Controller
 
         $data = Exam::query()->latest();
         return DataTables::of($data)
-            ->addColumn('category_id', function ($data) {
-                return $data->category->name;
-            })
             ->addColumn('price', function ($data) {
                 return $data->price . ' $';
             })
@@ -88,11 +85,11 @@ class ExamController extends Controller
             $categories = Category::get();
             $exam = Exam::find($exam_id);
             $centers =  Center::all();
-            $selectedCenter  = explode(',',$exam->centers);
+            $selectedCenter  = explode(',', $exam->centers);
             if (!$exam) {
                 return view('errors.404');
             }
-            return view('dashboard.exam.edit', compact('exam','selectedCenter','centers', 'categories'));
+            return view('dashboard.exam.edit', compact('exam', 'selectedCenter', 'centers', 'categories'));
         } catch (\Exception $ex) {
             return view('errors.500');
         }
@@ -105,19 +102,17 @@ class ExamController extends Controller
     {
         $data =  $request->validated();
 
-        try{
-            if($request->center_id)
-            {
-                $centers =  implode(',',$request->center_id);
-                Exam::create(array_merge($data,['centers'=>$centers]));
-            }else{
+        try {
+            if ($request->center_id) {
+                $centers =  implode(',', $request->center_id);
+                Exam::create(array_merge($data, ['centers' => $centers]));
+            } else {
                 Exam::create($data);
             }
 
-            return redirect()->back()->with(['success'=>'Data saved successfully!']);
-
-        }catch(\Exception $ex){
-            return redirect()->back()->with(['error'=>'There are error , Try again later...']);
+            return redirect()->back()->with(['success' => 'Data saved successfully!']);
+        } catch (\Exception $ex) {
+            return redirect()->back()->with(['error' => 'There are error , Try again later...']);
         }
     }
 
@@ -136,7 +131,7 @@ class ExamController extends Controller
                     Rule::unique('exams')->ignore($request->id), //Check Name In exam table
                 ],
                 'show_date' => 'required|date',
-                'center_id'=>'array'
+                'center_id' => 'array'
             ]);
             if ($validator->fails()) {
                 return redirect()->back()
@@ -148,12 +143,11 @@ class ExamController extends Controller
             if (!$exam) {
                 return view('errors.404');
             } else {
-                if($request->center_id)
-                {
-                    $centers =  implode(',',$request->center_id);
+                if ($request->center_id) {
+                    $centers =  implode(',', $request->center_id);
                     // Exam::create(array_merge($data,['centers'=>$centers]));
-                   $exam->update(array_merge($request->all(),['centers'=>$centers]));
-                }else{
+                    $exam->update(array_merge($request->all(), ['centers' => $centers]));
+                } else {
                     $exam->update($request->except('_token,center_id'));
                 }
                 return redirect()->back()->with(['success' => "Data saved successfully!"]);

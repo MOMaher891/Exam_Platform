@@ -61,16 +61,6 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <label for="example-tel-input" class="col-sm-2 col-form-label">Code</label>
-                        <div class="col-sm-10">
-                            <input class="form-control" name="code" type="text" placeholder="XXXXXXXXX"
-                                id="example-tel-input" value="{{ old('code') }}" required>
-                            @error('code')
-                                <span class="text-danger mt-2">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
                     <!-- end row -->
                     <div class="row mb-3">
                         <label for="example-password-input" class="col-sm-2 col-form-label">Password</label>

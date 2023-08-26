@@ -26,28 +26,6 @@ class InspectorController extends Controller
      */
     public function index()
     {
-
-
-        // $user_id = Auth::user()->id;
-        // $center = Center::where('user_id', $user_id)->first();
-        // $data = Observe::with(['observe_activities' => function ($q) use ($center) {
-        //     $q->whereHas('exam_time', function ($q) use ($center) {
-        //         $q->where('center_id', $center->id);
-        //     })->with(['exam_time' => function ($q) {
-        //         $q->with('center');
-        //     }]);
-        // }])->whereHas('observe_activities', function ($q) use ($center) {
-        //     $q->whereHas('exam_time', function ($q) use ($center) {
-        //         $q->where('center_id', $center->id);
-        //     })->with(['exam_time']);
-        // })
-        //     ->with(['black_list' => function ($q) use ($center) {
-        //         $q->where('center_id', $center->id);
-        //     }])
-        //     ->get();
-
-        // return $data;
-
         return view('dashboard.inspector.index');
     }
     public function data(Request $request)
@@ -123,9 +101,7 @@ class InspectorController extends Controller
     {
         $user_id = Auth::user()->id;
         $center = Center::where('user_id', $user_id)->first();
-        $data = ExamTime::where('center_id', $center->id)->with(['exam' => function ($q) {
-            $q->with('category');
-        }])->get();
+        $data = ExamTime::where('center_id', $center->id)->with(['exam'])->get();
         return DataTables::of($data)
             ->addColumn('action', function ($data) {
                 return view('dashboard.inspector.exam_action', ['inspector' => $data, 'type' => 'action']);
@@ -244,6 +220,7 @@ class InspectorController extends Controller
                 $this->personal . '/' . $inspector->img_personal,
                 $this->passport . '/' . $inspector->img_passport,
                 $this->national_id . '/' . $inspector->img_national,
+                $this->national_id . '/' . $inspector->img_national_back,
                 $this->certificate . '/' . $inspector->img_certificate,
                 $this->certificate_good_conduct . '/' . $inspector->img_certificate_good_conduct
             ];
@@ -255,5 +232,28 @@ class InspectorController extends Controller
             }
         } catch (\Exception $ex) {
         }
+    }
+
+    /**************************
+     * Inspector in specific center
+     ***************************/
+    public function Inspector_in_center()
+    {
+        return view('dashboard.inspector.center_inspector');
+    }
+    public function Inspector_in_center_data()
+    {
+        $user_id = Auth::user()->id;
+        $center = Center::where('user_id', $user_id)->first();
+        $data = Observe::where('center_id', $center->id)->get();
+
+        return DataTables::of($data)
+            ->addColumn('action', function ($data) {
+                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'action']);
+            })
+            ->addColumn('show_profile', function ($data) {
+                return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'show_profile']);
+            })
+            ->make(true);
     }
 }

@@ -31,7 +31,6 @@
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Exam</th>
                                 <th>date</th>
                                 <th>Show date</th>
                                 <th>Centers</th>
@@ -80,9 +79,6 @@
 
                 columns: [
 
-                    {
-                        data: 'category_id'
-                    },
                     {
                         data: 'date'
                     },

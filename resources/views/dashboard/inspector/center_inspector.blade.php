@@ -56,8 +56,10 @@
                         <thead>
 
                             <tr>
-                                <th>Date</th>
-                                <th>Shift</th>
+                                <th>Name</th>
+                                <th>National ID</th>
+                                <th>Email</th>
+                                <th>Phone</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -79,7 +81,7 @@
         let DataTable = null
 
         function setDatatable() {
-            var url = "{{ route('inspector.exam_data') }}";
+            var url = "{{ route('admin.inspector.Inspector_in_center_data') }}";
 
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
@@ -101,16 +103,22 @@
 
                 columns: [
 
+                {
+                    data: 'name'
+                },
 
                 {
-                data: 'exam.date'
-                    },
-                    {
-                        data: 'shift'
-                    },
-                    {
-                        data: 'action'
-                    }
+                    data: 'national_id'
+                },
+                {
+                    data: 'email'
+                },
+                {
+                    data: 'phone'
+                },
+                {
+                    data: 'action'
+                }
                 ],
             });
         }

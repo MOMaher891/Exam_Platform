@@ -16,26 +16,26 @@
 
                     <div class="form-group">
                       <label for="inputText">Name</label>
-                      <input type="text" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="name"  value="{{old('name')}}" >
+                      <input type="text" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="name"  value="{{old('name')}}" required>
                       @error('name')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                     </div>
                     <div class="form-group ">
                         <label for="inputPhone">Phone</label>
-                        <input type="tel" style="padding-left:52px !important" class=" form-control w-100" id="inputPhone" name="phone"  value="{{old('phone')}}" >
+                        <input type="tel" style="padding-left:52px !important" class=" form-control w-100" id="inputPhone" name="phone"  value="{{old('phone')}}" required>
                         @error('phone')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                       </div>
                     <div class="form-group ">
                         <label for="inputPhone">Birth Date</label>
-                        <input type="date" class=" form-control w-100" id="inputPhone" name="birth_date"  value="{{old('birth_date')}}" >
+                        <input type="date" class=" form-control w-100" id="inputPhone" name="birth_date"  value="{{old('birth_date')}}" required>
                         @error('birth_date')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                       </div>
-                    <div class="form-group ">
+                    {{-- <div class="form-group ">
                         <label for="inputPhone">Compoany <span class="text-gray">(Optional)</span></label>
                         <select name="center_id" class="form-control" id="">
                             <option value=""  selected disabled>Choose Company</option>
@@ -46,24 +46,24 @@
                         @error('job_title')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
-                    </div>
+                    </div> --}}
                     <div class="form-group ">
                         <label for="inputPhone">Job Title</label>
-                        <input type="text" class=" form-control w-100" id="inputPhone" name="job_title" placeholder="Academic Coordinator"  value="{{old('job_title')}}" >
+                        <input type="text" class=" form-control w-100" id="inputPhone" name="job_title" placeholder="Academic Coordinator"  value="{{old('job_title')}}" required>
                         @error('job_title')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                     </div>
                     <div class="form-group ">
-                        <label for="inputPhone">National ID</label>
-                        <input type="number" class=" form-control w-100" id="inputPhone" name="national_id"  value="{{old('national_id')}}" >
+                        <label for="inputPhone">Emirates ID</label>
+                        <input type="number" class=" form-control w-100" id="inputPhone" name="national_id"  value="{{old('national_id')}}" required>
                         @error('national_id')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                     </div>
                     <div class="form-group ">
                         <label for="inputPhone">Gender</label>
-                        <select name="gender" id="" class="form-control"  value="{{old('gender')}}" >
+                        <select name="gender" id="" class="form-control"  value="{{old('gender')}}" required>
                             <option value="" disabled selected>Choose Gender</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -75,7 +75,7 @@
 
                     <div class="form-group ">
                         <label for="inputPhone">Nationality</label>
-                        <input type="text" class=" form-control w-100" id="inputPhone" name="nationality" placeholder="Egyption"  value="{{old('nationality')}}" >
+                        <input type="text" class=" form-control w-100" id="inputPhone" name="nationality" placeholder="Egyption"  value="{{old('nationality')}}" required>
                         @error('nationality')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
@@ -83,28 +83,28 @@
 
                     <div class="form-group ">
                         <label for="inputPhone">Address</label>
-                        <input type="text" class=" form-control w-100" id="inputPhone" name="address" placeholder="Egypt/Cairo/Shubra"  value="{{old('address')}}" >
+                        <input type="text" class=" form-control w-100" id="inputPhone" name="address" placeholder="Egypt/Cairo/Shubra"  value="{{old('address')}}" required>
                         @error('address')
                         <span class="text-danger mt-2">{{ $message }}</span>
                       @enderror
                     </div>
                     <div class="form-group">
                       <label for="inputMail">Email Addresss</label>
-                      <input type="email" class="form-control" id="inputMail" placeholder="e.g. example@mail.com" name="email"  value="{{old('email')}}" >
+                      <input type="email" class="form-control" id="inputMail" placeholder="e.g. example@mail.com" name="email"  value="{{old('email')}}" required>
                       @error('email')
                       <span class="text-danger mt-2">{{ $message }}</span>
                     @enderror
                     </div>
                     <div class="form-group">
                       <label for="inputTextarea">Password</label>
-                      <input type="password" class="form-control" id="inputPhone" placeholder="ASDasd!@#123" name="password"  value="{{old('password')}}" >
+                      <input type="password" class="form-control" id="inputPhone" placeholder="ASDasd!@#123" name="password"  value="{{old('password')}}" required>
                       @error('password')
                       <span class="text-danger mt-2">{{ $message }}</span>
                     @enderror
                     </div>
                     <div class="form-group">
                       <label for="inputTextarea">Confirm password</label>
-                      <input type="password" class="form-control" id="inputPhone" name="confirm_password"  value="{{old('confirm_password')}}" >
+                      <input type="password" class="form-control" id="inputPhone" name="confirm_password"  value="{{old('confirm_password')}}" required>
                       @error('confirm_password')
                       <span class="text-danger mt-2">{{ $message }}</span>
                     @enderror
@@ -118,35 +118,45 @@
                       <form action="#">
                         <div class="form-group">
                           <label for="inputText">Personal Photo</label>
-                          <input type="file" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="img_personal"  value="{{old('img_personal')}}" >
+                          <input type="file" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="img_personal"  value="{{old('img_personal')}}" required>
                           @error('img_personal')
                           <span class="text-danger mt-2">{{ $message }}</span>
                         @enderror
                         </div>
-                        <div class="form-group ">
-                            <label for="inputPhone">ID Photo</label>
-                            <input type="file" class=" form-control" id="inputPhone" name="img_national"  value="{{old('img_national')}}" >
-                          @error('img_national')
-                          <span class="text-danger mt-2">{{ $message }}</span>
-                        @enderror
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label for="inputPhone">Emirates ID front</label>
+                                <input type="file" class=" form-control" id="inputPhone" name="img_national"  value="{{old('img_national')}}" required>
+                              @error('img_national')
+                              <span class="text-danger mt-2">{{ $message }}</span>
+                            @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputPhone">Emirates ID back</label>
+                                <input type="file" class=" form-control" id="inputPhone" name="img_national_back"  value="{{old('img_national')}}" required>
+                              @error('img_national')
+                              <span class="text-danger mt-2">{{ $message }}</span>
+                            @enderror
+                            </div>
+
                         </div>
                         <div class="form-group ">
                             <label for="inputPhone">Passport Photo</label>
-                            <input type="file" class=" form-control" id="inputPhone" name="img_passport"  value="{{old('img_passport')}}" >
+                            <input type="file" class=" form-control" id="inputPhone" name="img_passport"  value="{{old('img_passport')}}" required>
                           @error('img_passport')
                           <span class="text-danger mt-2">{{ $message }}</span>
                         @enderror
                         </div>
                         <div class="form-group ">
-                            <label for="inputPhone">Certificate Photo</label>
-                            <input type="file" class=" form-control" id="inputPhone" name="img_certificate"  value="{{old('img_certificate')}}" >
+                            <label for="inputPhone">Graduation certificate</label>
+                            <input type="file" class=" form-control" id="inputPhone" name="img_certificate"  value="{{old('img_certificate')}}" required>
                           @error('img_certificate')
                           <span class="text-danger mt-2">{{ $message }}</span>
                         @enderror
                         </div>
                         <div class="form-group ">
                             <label for="inputPhone">certificate good conduct Photo</label>
-                            <input type="file" class=" form-control" id="inputPhone" name="img_certificate_good_conduct"  value="{{old('img_certificate_good_conduct')}}" >
+                            <input type="file" class=" form-control" id="inputPhone" name="img_certificate_good_conduct"  value="{{old('img_certificate_good_conduct')}}" required>
                           @error('img_certificate_good_conduct')
                           <span class="text-danger mt-2">{{ $message }}</span>
                         @enderror

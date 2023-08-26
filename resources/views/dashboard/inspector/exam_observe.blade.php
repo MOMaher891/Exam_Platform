@@ -56,7 +56,6 @@
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
 
                         <thead>
-
                             <tr>
                                 <th>Name</th>
                                 <th>National_ID</th>
