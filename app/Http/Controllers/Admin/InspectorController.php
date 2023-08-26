@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ExamPlatFormMail;
 use App\Models\Center;
 use App\Models\ExamTime;
 use App\Models\Observe;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\accept_inspector;
 use App\Models\Black_lists;
 use App\Models\Exam;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class InspectorController extends Controller
@@ -183,13 +185,18 @@ class InspectorController extends Controller
         }
         try {
             $inspector->update(['status' => 'accept']);
-            $data = [
-                'subject' => 'Exam Platform mail',
-                'body' => 'Congratulation .
-                        Your data has been reviewed successfully, now you can log in'
-            ];
+            // $data = [
+            //     'subject' => 'Exam Platform mail',
+            //     'body' => 'Congratulation .
+            //             Your data has been reviewed successfully, now you can log in'
+            // ];
+            $subject = 'Exam Platform mail';
+            $body = 'Congratulation .
+                        Your data has been reviewed successfully, now you can log in';
 
-            Mail::to($inspector->email)->send(new accept_inspector($data));
+
+
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject,$body));
             return redirect()->back()->with(['success' => 'Data saved successfully!']);
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => 'There are error occur']);
@@ -197,15 +204,30 @@ class InspectorController extends Controller
     }
 
 
-    public function reject($inspector_id)
+    public function reject(Request $request)
     {
-        $inspector = Observe::findOrFail($inspector_id);
-        if (!$inspector) {
-            return response()->json(['error' => 'Inspector not found']);
+        try{
+            $inspector = Observe::findOrFail($request->id);
+            // $data = [
+            //     'subject' => 'Exam Platform mail',
+            //     'body' => $request->reason
+            // ];
+            $subject = 'Exam Platform mail';
+            $body = $request->reason;
+
+    
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject,$body));
+            if (!$inspector) {
+                return response()->json(['error' => 'Inspector not found']);
+            }
+            $inspector->update(['status' => 'cancel']);
+            return redirect()->back()->with(['success' => 'Data saved successfully!']);
+       
+            }catch(Exception $e)
+            {
+                return redirect()->back()->with(['error'=>$e->getMessage()]);
+            }
         }
-        $inspector->update(['status' => 'cancel']);
-        return redirect()->back()->with(['success' => 'Data saved successfully!']);
-    }
 
     public function delete($inspector_id)
     {
