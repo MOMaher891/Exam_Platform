@@ -56,13 +56,12 @@ class InspectorController extends Controller
                 ->get();
             return $this->return_data($data);
         } else {
-            
+
             $data = Observe::query()->with('center')->latest()->get();
 
-            if($request->status)
-            {
+            if ($request->status) {
                 $data = $data->where('status', $request->status);
-            }       
+            }
 
             return $this->return_data($data);
         }
@@ -79,11 +78,10 @@ class InspectorController extends Controller
             })
             ->addColumn('block', function ($data) {
             })
-            ->editColumn('status',function($data){
+            ->editColumn('status', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'status']);
-
             })
-            
+
             ->make(true);
     }
 
@@ -196,7 +194,7 @@ class InspectorController extends Controller
 
 
 
-            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject,$body));
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject, $body));
             return redirect()->back()->with(['success' => 'Data saved successfully!']);
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => 'There are error occur']);
@@ -206,7 +204,7 @@ class InspectorController extends Controller
 
     public function reject(Request $request)
     {
-        try{
+        try {
             $inspector = Observe::findOrFail($request->id);
             // $data = [
             //     'subject' => 'Exam Platform mail',
@@ -215,19 +213,17 @@ class InspectorController extends Controller
             $subject = 'Exam Platform mail';
             $body = $request->reason;
 
-    
-            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject,$body));
+
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject, $body));
             if (!$inspector) {
                 return response()->json(['error' => 'Inspector not found']);
             }
             $inspector->update(['status' => 'cancel']);
             return redirect()->back()->with(['success' => 'Data saved successfully!']);
-       
-            }catch(Exception $e)
-            {
-                return redirect()->back()->with(['error'=>$e->getMessage()]);
-            }
+        } catch (Exception $e) {
+            return redirect()->back()->with(['error' => $e->getMessage()]);
         }
+    }
 
     public function delete($inspector_id)
     {
@@ -241,8 +237,8 @@ class InspectorController extends Controller
             $attachments = [
                 $this->personal . '/' . $inspector->img_personal,
                 $this->passport . '/' . $inspector->img_passport,
-                $this->national_id . '/' . $inspector->img_national,
-                $this->national_id . '/' . $inspector->img_national_back,
+                $this->national . '/' . $inspector->img_national,
+                $this->national_back . '/' . $inspector->img_national_back,
                 $this->certificate . '/' . $inspector->img_certificate,
                 $this->certificate_good_conduct . '/' . $inspector->img_certificate_good_conduct
             ];
