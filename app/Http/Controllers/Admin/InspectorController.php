@@ -212,10 +212,10 @@ class InspectorController extends Controller
             //     'subject' => 'Exam Platform mail',
             //     'body' => $request->reason
             // ];
+            
             $subject = 'Exam Platform mail';
             $body = $request->reason;
 
-    
             Mail::to($inspector->email)->send(new ExamPlatFormMail($subject,$body));
             if (!$inspector) {
                 return response()->json(['error' => 'Inspector not found']);
