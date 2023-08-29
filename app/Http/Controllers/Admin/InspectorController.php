@@ -11,11 +11,9 @@ use App\Models\ObserveActivity;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\accept_inspector;
+use Carbon\Carbon;
 use App\Models\Black_lists;
 use App\Models\Exam;
 use Exception;
@@ -33,6 +31,7 @@ class InspectorController extends Controller
     public function data(Request $request)
     {
         $user_id = Auth::user()->id;
+
         $center = Center::where('user_id', $user_id)->first();
 
         if (Auth::user()->hasRole('admin')) {
@@ -81,7 +80,6 @@ class InspectorController extends Controller
             ->editColumn('status', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'status']);
             })
-
             ->make(true);
     }
 
@@ -120,7 +118,6 @@ class InspectorController extends Controller
             $q->with('observes');
         }])->first();
 
-        // return $data;
         return view('dashboard.inspector.exam_observe', compact('data'));
     }
 
@@ -271,6 +268,36 @@ class InspectorController extends Controller
             })
             ->addColumn('show_profile', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'show_profile']);
+            })
+            ->make(true);
+    }
+
+    /**
+     * Analyst
+     */
+
+    public function all_exams($inspector_id, Request $request)
+    {
+        $data = Observe::findOrFail($inspector_id);
+        return view('dashboard.inspector.all_exams', compact('data'));
+    }
+    public function all_exams_data($inspector_id, Request $request)
+    {
+        $data = ObserveActivity::filter($request->all())->with(['exam_time' => function ($q) use ($request) {
+            $q->with(['exam', 'center']);
+            $q->whereHas('exam', function ($q) use ($request) {
+                $q->filter($request->all()); // Assuming you have a custom filter method in your Exam model
+            });
+        }])->whereHas('exam_time', function ($q) use ($request) {
+            $q->with(['exam', 'center']);
+            $q->whereHas('exam', function ($q) use ($request) {
+                $q->filter($request->all()); // Assuming you have a custom filter method in your Exam model
+            });
+        })->where('observe_id', $inspector_id)->latest();
+
+        return DataTables::of($data)
+            ->editColumn('is_done', function ($data) {
+                return $data->is_come == true ? 'Attended' : 'Not attended';
             })
             ->make(true);
     }

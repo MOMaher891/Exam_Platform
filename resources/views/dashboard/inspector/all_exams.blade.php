@@ -5,13 +5,14 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Invigilator List</h4>
+                <h4 class="mb-sm-0">Exams List</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin') }}">DashBoard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.inspector.index') }}">Invigilator</a></li>
                         </li>
-                        <li class="breadcrumb-item active">Invigilator</li>
+                        <li class="breadcrumb-item active">Exams</li>
                     </ol>
                 </div>
 
@@ -24,48 +25,51 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row  w-100 ">
+                        <div class="row w-100">
+                            @if (auth()->user()->hasRole('superadmin')||auth()->user()->hasRole('analyst'))
 
-                        <div class="col-md-6"></div>
-                        @if (auth()->user()->hasRole('superadmin'))
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="">Status</label>
-                                <select name="" class=" form-control select" id="statuss">
-                                        <option value="" selected disabled>Choose Status</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="accept">Accept</option>
-                                        <option value="cancel">cencel</option>
-                                </select>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">Attend or not</label>
+                                    <select class="form-control" id="attend">
+                                        <option selected disabled>Choose status</option>
+                                        <option value="1">Attend</option>
+                                        <option value="0">Not attend</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">From</label>
+                                    <input type="date" class="form-control" id="date_from">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="">To</label>
+                                    <input type="date" class="form-control" id="date_to">
+                                </div>
                             </div>
                         </div>
 
-
-
                         <div class="col-md-2">
                             <div class="form-group d-flex" style="margin-top: 30px">
-                                <button onclick="handleFilter()" class="btn btn-primary p-2" >Search <i class="fa-solid fa-magnifying-glass"></i></button>
+                                <button onclick="handleFilter()" class="btn btn-primary p-2" >Search <i class="fa fa-magnifying-glass"></i></button>
                                 <button onclick="ClearFilter()" class="btn btn-light" >Clear</button>
                             </div>
                         </div>
                         @endif
 
                     </div>
-                    <h4 class="card-title">Inspector List</h4>
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
 
                         <thead>
 
                             <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>National ID</th>
-                                <th>Address</th>
-                                @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
-                                <th>Total price</th>
-                                <th>Status</th>
-                                @endif
-                                <th>Action</th>
+                                <th>Date</th>
+                                <th>Center</th>
+                                <th>Shift</th>
+                                <th>Attend</th>
                             </tr>
                         </thead>
 
@@ -86,7 +90,8 @@
         let DataTable = null
 
         function setDatatable() {
-            var url = "{{ route('inspector.data') }}";
+            var url = `{{ route('admin.inspector.all_exams_data',['inspector_id'=>':inspector']) }}`;
+            url = url.replace(':inspector',{{$data->id}});
 
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
@@ -107,34 +112,18 @@
 
 
                 columns: [
-
                 {
-                        data: 'name'
-                    },
-                    {
-                        data: 'email'
-                    },
-                    {
-                        data: 'phone'
-                    },
-                    {
-                        data: 'national_id'
-                    },
-                    {
-                        data: 'address'
-                    },
-                    @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
-
-                    {
-                        data: 'price'
-                    },
-                    {
-                        data:'status'
-                    },
-                    @endif
-                    {
-                        data: 'action'
-                    }
+                    data:"exam_time.exam.date"
+                },
+                {
+                    data:"exam_time.center.name"
+                },
+                {
+                    data:"exam_time.shift"
+                },
+                {
+                    data:"is_done"
+                },
                 ],
             });
         }
@@ -143,18 +132,24 @@
 
         function handleFilter()
         {
-            status = $("#statuss").val() || '';
+            date_from = $("#date_from").val() || ''; // date from
+            date_to = $("#date_to").val() || ''; //date to
+            attend = $("#attend").val() || ''; //date to
             if(DataTable){
-                url = "{{route('inspector.data')}}"+`?status=${status}`;
+                url = "{{route('admin.inspector.all_exams_data',['inspector_id'=>':center'])}}"+`?is_come=${attend}&date_from=${date_from}&date_to=${date_to}`;
+                url = url.replace(':center',{{$data->id}});
                 DataTable.ajax.url(url).load();
             }
         }
 
         function ClearFilter()
         {
-            status = $('#statuss').val('');
-            var url = "{{ route('inspector.data') }}";
-            DataTable.ajax.url(url).load();
+            date_from = $("#date_from").val(''); // date from
+            date_to = $("#date_to").val(''); //date to
+            attend = $("#attend").val('');
+            url = "{{route('admin.inspector.all_exams_data',['inspector_id'=>':center'])}}";
+                url = url.replace(':center',{{$data->id}});
+                DataTable.ajax.url(url).load();
 
         }
     </script>
