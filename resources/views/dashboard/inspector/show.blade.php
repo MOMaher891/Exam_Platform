@@ -6,13 +6,13 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Inspector profile</h4>
+                <h4 class="mb-sm-0">Invigilator profile</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin') }}">DashBoard</a></li>
                         </li>
-                        <li class="breadcrumb-item"><a href="{{ route('admin.inspector.index') }}">Inspector</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.inspector.index') }}">Invigilator</a></li>
                         </li>
                         <li class="breadcrumb-item active">{{$inspector->name}}</li>
                     </ol>
@@ -27,17 +27,18 @@
             <div class="card">
                 <form class="card-body" id="myForm" method="post" action="{{ route('admin.category.store') }}">
                     @csrf
-                    <h4 class="card-title">Inspector profile @if ($inspector->status == 'accept')
+                    <h4 class="card-title">Inspector profile @if(auth()->user()->hasRole('superadmin')) @if ($inspector->status == 'accept')
                         <span class="text-success" style="font-weight: bolder;font-size:18px">(Accepted)</span>
                     @elseif($inspector->status == 'cancel')
                         <span class="text-danger" style="font-weight: bolder;font-size:18px">(Rejected)</span>
-                    @endif</h4>
-                    @if ($inspector->status == 'pending')
-                        <p class="card-title-desc">Here are examples : You can accept or cancel inspector </p>
-                    @elseif($inspector->status == 'accept')
-                        <p class="card-title-desc">Here are examples : You can reject inspector</p>
-                    @else
-                        <p class="card-title-desc">Here are examples : You can accept inspector</p>
+                        @endif</h4>
+                        @if ($inspector->status == 'pending')
+                        <p class="card-title-desc">Here are examples : You can accept or cancel Invigilator </p>
+                        @elseif($inspector->status == 'accept')
+                        <p class="card-title-desc">Here are examples : You can reject Invigilator</p>
+                        @else
+                        <p class="card-title-desc">Here are examples : You can accept Invigilator</p>
+                        @endif
                     @endif
                     <p class="card-title-desc text-danger" style="font-weight: bolder;font-size:16px">Note : Click on image to zoom it</p>
 
@@ -62,12 +63,30 @@
                                 <input class="form-control"
                                     id="example-text-input" value="{{ $inspector->phone }}" disabled>
                             </div>
+                            @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
+
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Total Price</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"
+                                    id="example-text-input" value="{{ $inspector->price }}" disabled>
+                            </div>
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Bank Name</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"
+                                    id="example-text-input" value="{{ $inspector->bank_name }}" disabled>
+                            </div>
+                            <label for="example-text-input" class="col-sm-2 col-form-label">IBAN number</label>
+                            <div class="col-sm-10">
+                                <input class="form-control"
+                                    id="example-text-input" value="{{ $inspector->IBAN }}" disabled>
+                            </div>
+                            @endif
                             <label for="example-text-input" class="col-sm-2 col-form-label">Address</label>
                             <div class="col-sm-10">
                                 <input class="form-control"
                                     id="example-text-input" value="{{ $inspector->address }}" disabled>
                             </div>
-                            <label for="example-text-input" class="col-sm-2 col-form-label">National ID</label>
+                            <label for="example-text-input" class="col-sm-2 col-form-label">Emirates ID</label>
                             <div class="col-sm-10">
                                 <input class="form-control"
                                     id="example-text-input" value="{{ $inspector->national_id }}" disabled>
@@ -92,6 +111,7 @@
                                 <input class="form-control"
                                     id="example-text-input" value="{{ $inspector->birth_date }}" disabled>
                             </div>
+
                         </div>
                     </div>
 
@@ -114,17 +134,15 @@
                         </div>
                     </div>
 
+                @if(auth()->user()->hasRole('superadmin'))
                 @if ($inspector->status == 'pending')
             <a href="{{ route('admin.inspector.accept',$inspector->id) }}" class="btn btn-success waves-effect"
                 style="margin-top:20px">Accept</a>
-            {{-- <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
-                style="margin-top:20px">Reject</a> --}}
-                <button type="button" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
+
+                <button type="button" style="margin-top:20px" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
 
                 @elseif($inspector->status == 'accept')
-                {{-- <a href="{{ route('admin.inspector.reject',$inspector->id) }}" class="btn btn-danger waves-effect"
-                    style="margin-top:20px">Reject</a> --}}
-                    <button type="button" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
+                    <button type="button" style="margin-top:20px" class="btn btn-danger waves-effect" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">Reject</button>
             <a href="{{ route('admin.inspector.index') }}" class="btn btn-light waves-effect"
                 style="margin-top:20px">Cancel</a>
                 @else
@@ -134,6 +152,7 @@
                 style="margin-top:20px">Cancel</a>
                 @endif
 
+            @endif
                 </form>
             </div>
         </div> <!-- end col -->

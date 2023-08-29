@@ -115,7 +115,6 @@
                   <div class="col-lg-5 offset-lg-1">
                     <div class="contact-details">
                       <h2>Upload files.</h2>
-                      <form action="#">
                         <div class="form-group">
                           <label for="inputText">Personal Photo</label>
                           <input type="file" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="img_personal"  value="{{old('img_personal')}}" required>
@@ -162,7 +161,21 @@
                         @enderror
                         </div>
 
-
+                        <h2>Bank Info.</h2>
+                        <div class="form-group ">
+                            <label for="inputPhone">Bank Name</label>
+                            <input type="text" class=" form-control w-100" id="inputPhone" name="back_name" placeholder=""  value="{{old('job_title')}}" required>
+                            @error('back_name')
+                            <span class="text-danger mt-2">{{ $message }}</span>
+                          @enderror
+                        </div>
+                        <div class="form-group ">
+                            <label for="inputPhone">IBAN</label>
+                            <input type="number" class=" form-control w-100" id="inputPhone" name="IBAN"  value="{{old('IBAN')}}" required>
+                            @error('IBAN')
+                            <span class="text-danger mt-2">{{ $message }}</span>
+                          @enderror
+                        </div>
                     </div>
                   </div>
                 </form>

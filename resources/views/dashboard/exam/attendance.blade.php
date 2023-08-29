@@ -5,13 +5,14 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                <h4 class="mb-sm-0">Quiz List</h4>
+                <h4 class="mb-sm-0">{{$exam->date}}</h4>
 
                 <div class="page-title-right">
                     <ol class="breadcrumb m-0">
                         <li class="breadcrumb-item"><a href="{{ route('admin') }}">DashBoard</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.exam.index') }}">Exams</a></li>
                         </li>
-                        <li class="breadcrumb-item active">Quiz</li>
+                        <li class="breadcrumb-item active">Attendance</li>
                     </ol>
                 </div>
 
@@ -23,58 +24,35 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Quiz List</h4>
+                    <h4 class="card-title">Center List</h4>
                     <div class="text-center mb-3">
-                        @if (auth()->user()->hasPermission('add_exam'))
-                        <a href="{{ route('admin.exam.create') }}" class="btn btn-primary">Add Quiz <i
-                                class="fa fa-plus"></i></a>
-                        @endif
                     </div>
                     <div class="row w-100">
                         @if (auth()->user()->hasRole('superadmin')||auth()->user()->hasRole('analyst'))
+
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="">Expired or not</label>
-                                <select name="" class=" form-control select" id="expire">
-                                        <option value="" selected disabled>Choose Status</option>
-                                        <option value="0">Waiting</option>
-                                        <option value="1">Expired</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="">Public or Private</label>
+                                <label for="">Attend or not</label>
                                 <select name="" class=" form-control select" id="type">
                                         <option value="" selected disabled>Choose type</option>
-                                        <option value="public">Public</option>
-                                        <option value="private">Private</option>
+                                        <option value="1">Attend</option>
+                                        <option value="0">Not attend</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="">Paid or not</label>
-                                <select name="" class=" form-control select" id="paid">
-                                        <option value="" selected disabled>Choose type</option>
-                                        <option value="1">Paid</option>
-                                        <option value="0">Not paid</option>
+                                <label for="">Center</label>
+                                <select name="" class=" form-control select" id="center">
+                                        <option value="" selected disabled>Choose Center</option>
+                                        @foreach ($centers as $center)
+                                        <option value="{{$center->id}}">{{$center->name}}</option>
+                                        @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="">From</label>
-                                <input type="date" class="form-control" id="date_from">
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="">To</label>
-                                <input type="date" class="form-control" id="date_to">
-                            </div>
-                        </div>
+
                     </div>
 
                     <div class="col-md-2">
@@ -83,18 +61,18 @@
                             <button onclick="ClearFilter()" class="btn btn-light" >Clear</button>
                         </div>
                     </div>
+                    <input type="hidden" name="" id="exam_id" value="{{$exam->id}}">
                     @endif
                     <table id="datatable-buttons" class="table dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>date</th>
-                                <th>Show date</th>
-                                <th>Centers</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Centers</th>
+                                <th>Name</th>
+                                <th>Center</th>
+                                <th>Shift</th>
+                                <th>Attend</th>
+                                @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
                                 <th>Action</th>
-                                <th>Attendance</th>
+                                @endif
                             </tr>
                         </thead>
 
@@ -113,10 +91,9 @@
 @section('scripts')
     <script>
         let DataTable = null
-
         function setDatatable() {
-            var url = "{{ route('exam.data') }}";
-
+            var url = "{{ route('exam.attendance_data', ['exam_id' => ':exam']) }}";
+            url = url.replace(':exam', {{$exam->id}});
             DataTable = $("#datatable-buttons").DataTable({
                 processing: true,
                 serverSide: true,
@@ -136,30 +113,20 @@
 
 
                 columns: [
-
                     {
-                        data: 'date'
+                        data: 'observes.name'
                     },
                     {
-                        data: 'show_date'
+                        data: 'exam_time.center.name'
                     },
                     {
-                        data:'type'
+                        data: 'exam_time.shift'
                     },
                     {
-                        data: 'price'
-                    },
-                    {
-                        data: 'status'
-                    },
-                    {
-                        data: 'centers'
+                        data: 'attend'
                     },
                     {
                         data: 'action'
-                    },
-                    {
-                        data: 'attendance'
                     }
                 ],
             });
@@ -169,26 +136,22 @@
 
         function handleFilter()
         {
-            status = $("#expire").val() || ''; // Expire or not
+            center_id = $("#center").val() || ''; // Expire or not
             type = $("#type").val() || ''; // public or private
-            date_from = $("#date_from").val() || ''; // date from
-            date_to = $("#date_to").val() || ''; //date to
-            paid = $("#paid").val() || ''; //paid or not
 
             if(DataTable){
-                url = "{{route('exam.data')}}"+`?expire=${status}&type=${type}&date_from=${date_from}&date_to=${date_to}&paid=${paid}`;
+                var url = "{{ route('exam.attendance_data', ['exam_id' => ':exam']) }}"+`?is_come=${type}&center_id=${center_id}`;
+                url = url.replace(':exam', {{$exam->id}});
                 DataTable.ajax.url(url).load();
             }
         }
 
         function ClearFilter()
         {
-            status = $('#expire').val('');
-            public = $("#type").val('');
-            date_from = $("#date_from").val('');
-            date_to = $("#date_to").val('');
-            paid = $("#paid").val('');
-            url = "{{route('exam.data')}}";
+            center_id = $("#center").val(''); // Expire or not
+            type = $("#type").val(''); // public or private
+            var url = "{{ route('exam.attendance_data', ['exam_id' => ':exam']) }}";
+            url = url.replace(':exam', {{$exam->id}});
             DataTable.ajax.url(url).load();
 
         }

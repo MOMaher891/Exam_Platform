@@ -19,4 +19,9 @@ class Center extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function exam_time()
+    {
+        return $this->hasMany(ExamTime::class);
+    }
 }

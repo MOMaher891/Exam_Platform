@@ -1,8 +1,8 @@
 @switch($type)
     @case('action')
-        @if (auth()->user()->hasPermission('edit_inspector'))
-        <a href="{{ route('admin.inspector.edit', $inspector->id) }}" title="Edit" class="btn btn-secondary"><i
-                class="fa fa-pen"></i></a>
+    @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
+        <a href="{{ route('admin.inspector.all_exams', $inspector->id) }}" title="Show Exams" class="btn btn-secondary"><i
+                class="fa fa-newspaper"></i></a>
         @endif
         @if (auth()->user()->hasPermission('show_inspector'))
         <a href="{{ route('admin.inspector.show', $inspector->id) }}" title="Show" class="btn btn-info"><i
@@ -34,6 +34,6 @@
         <p class="btn btn-danger">Cencel</p>
     @endif
     @break
-@break
+
     @default
 @endswitch
