@@ -64,16 +64,28 @@ class ExamController extends Controller
     {
         try {
             $examTime = ExamTime::find($request->id);
-            $numOfActivity = ObserveActivity::where('exam_time_id', $request->id)->count();
-            if ($examTime->num_of_observe > $numOfActivity) {
-                $data =  ObserveActivity::create([
-                    'observe_id' => auth('observe')->user()->id,
-                    'exam_time_id' => $request->id,
-                ]);
-                return response()->json(['status' => true]);
-            } else {
-                $examTime->update(['is_done' => true]);
-                return response()->json(['status' => false, 'message' => 'Exam Completed']);
+
+            $numOfActivity= ObserveActivity::where('exam_time_id',$request->id)->count();
+            if($examTime->num_of_observe > $numOfActivity)
+            {
+                // Check Exams in Same Time
+                $examsTimes = ExamTime::where('exam_id',$examTime->exam_id)->where('shift',$examTime->shift)->pluck('id');
+                $isExist = ObserveActivity::whereIn('exam_time_id',$examsTimes)->exists();
+
+                if(! $isExist)
+                {
+                    $data =  ObserveActivity::create([
+                        'observe_id'=>auth('observe')->user()->id,
+                        'exam_time_id'=>$request->id,
+                    ]);
+                    return response()->json(['status'=>true]);
+                
+                }else{
+                    return response()->json(['status' => false,'message' =>'Cannot Applied in Exam in Same Shift Before ...']);
+                }
+                }else{
+                $examTime->update(['is_done'=>true]);
+                return response()->json(['status'=>false,'message'=>'Exam Completed']);
             }
         } catch (Exception $e) {
             return response()->json(['status' => false, 'message' => $e->getMessage()]);
