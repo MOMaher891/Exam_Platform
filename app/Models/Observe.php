@@ -30,6 +30,8 @@ class Observe extends Authenticatable
         'gender',
         'expire_date',
         'address',
+        'bank_name',
+        'IBAN',
         'img_personal',
         'img_national',
         'img_national_back',

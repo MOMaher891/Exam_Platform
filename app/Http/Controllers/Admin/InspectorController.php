@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ExamPlatFormMail;
 use App\Models\Center;
 use App\Models\ExamTime;
 use App\Models\Observe;
@@ -10,13 +11,12 @@ use App\Models\ObserveActivity;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Contracts\DataTable;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\accept_inspector;
+use Carbon\Carbon;
 use App\Models\Black_lists;
 use App\Models\Exam;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class InspectorController extends Controller
@@ -31,6 +31,7 @@ class InspectorController extends Controller
     public function data(Request $request)
     {
         $user_id = Auth::user()->id;
+
         $center = Center::where('user_id', $user_id)->first();
 
         if (Auth::user()->hasRole('admin')) {
@@ -54,13 +55,12 @@ class InspectorController extends Controller
                 ->get();
             return $this->return_data($data);
         } else {
-            
+
             $data = Observe::query()->with('center')->latest()->get();
 
-            if($request->status)
-            {
+            if ($request->status) {
                 $data = $data->where('status', $request->status);
-            }       
+            }
 
             return $this->return_data($data);
         }
@@ -77,11 +77,9 @@ class InspectorController extends Controller
             })
             ->addColumn('block', function ($data) {
             })
-            ->editColumn('status',function($data){
+            ->editColumn('status', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'status']);
-
             })
-            
             ->make(true);
     }
 
@@ -120,7 +118,6 @@ class InspectorController extends Controller
             $q->with('observes');
         }])->first();
 
-        // return $data;
         return view('dashboard.inspector.exam_observe', compact('data'));
     }
 
@@ -183,13 +180,18 @@ class InspectorController extends Controller
         }
         try {
             $inspector->update(['status' => 'accept']);
-            $data = [
-                'subject' => 'Exam Platform mail',
-                'body' => 'Congratulation .
-                        Your data has been reviewed successfully, now you can log in'
-            ];
+            // $data = [
+            //     'subject' => 'Exam Platform mail',
+            //     'body' => 'Congratulation .
+            //             Your data has been reviewed successfully, now you can log in'
+            // ];
+            $subject = 'Exam Platform mail';
+            $body = 'Congratulation .
+                        Your data has been reviewed successfully, now you can log in';
 
-            Mail::to($inspector->email)->send(new accept_inspector($data));
+
+
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject, $body));
             return redirect()->back()->with(['success' => 'Data saved successfully!']);
         } catch (\Exception $ex) {
             return redirect()->back()->with(['error' => 'There are error occur']);
@@ -197,14 +199,27 @@ class InspectorController extends Controller
     }
 
 
-    public function reject($inspector_id)
+    public function reject(Request $request)
     {
-        $inspector = Observe::findOrFail($inspector_id);
-        if (!$inspector) {
-            return response()->json(['error' => 'Inspector not found']);
+        try {
+            $inspector = Observe::findOrFail($request->id);
+            // $data = [
+            //     'subject' => 'Exam Platform mail',
+            //     'body' => $request->reason
+            // ];
+            $subject = 'Exam Platform mail';
+            $body = $request->reason;
+
+
+            Mail::to($inspector->email)->send(new ExamPlatFormMail($subject, $body));
+            if (!$inspector) {
+                return response()->json(['error' => 'Inspector not found']);
+            }
+            $inspector->update(['status' => 'cancel']);
+            return redirect()->back()->with(['success' => 'Data saved successfully!']);
+        } catch (Exception $e) {
+            return redirect()->back()->with(['error' => $e->getMessage()]);
         }
-        $inspector->update(['status' => 'cancel']);
-        return redirect()->back()->with(['success' => 'Data saved successfully!']);
     }
 
     public function delete($inspector_id)
@@ -219,8 +234,8 @@ class InspectorController extends Controller
             $attachments = [
                 $this->personal . '/' . $inspector->img_personal,
                 $this->passport . '/' . $inspector->img_passport,
-                $this->national_id . '/' . $inspector->img_national,
-                $this->national_id . '/' . $inspector->img_national_back,
+                $this->national . '/' . $inspector->img_national,
+                $this->national_back . '/' . $inspector->img_national_back,
                 $this->certificate . '/' . $inspector->img_certificate,
                 $this->certificate_good_conduct . '/' . $inspector->img_certificate_good_conduct
             ];
@@ -253,6 +268,36 @@ class InspectorController extends Controller
             })
             ->addColumn('show_profile', function ($data) {
                 return view('dashboard.inspector.action', ['inspector' => $data, 'type' => 'show_profile']);
+            })
+            ->make(true);
+    }
+
+    /**
+     * Analyst
+     */
+
+    public function all_exams($inspector_id, Request $request)
+    {
+        $data = Observe::findOrFail($inspector_id);
+        return view('dashboard.inspector.all_exams', compact('data'));
+    }
+    public function all_exams_data($inspector_id, Request $request)
+    {
+        $data = ObserveActivity::filter($request->all())->with(['exam_time' => function ($q) use ($request) {
+            $q->with(['exam', 'center']);
+            $q->whereHas('exam', function ($q) use ($request) {
+                $q->filter($request->all()); // Assuming you have a custom filter method in your Exam model
+            });
+        }])->whereHas('exam_time', function ($q) use ($request) {
+            $q->with(['exam', 'center']);
+            $q->whereHas('exam', function ($q) use ($request) {
+                $q->filter($request->all()); // Assuming you have a custom filter method in your Exam model
+            });
+        })->where('observe_id', $inspector_id)->latest();
+
+        return DataTables::of($data)
+            ->editColumn('is_done', function ($data) {
+                return $data->is_come == true ? 'Attended' : 'Not attended';
             })
             ->make(true);
     }

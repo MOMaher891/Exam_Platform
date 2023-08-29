@@ -7,18 +7,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class accept_inspector extends Mailable
+class ExamPlatFormMail extends Mailable
 {
     use Queueable, SerializesModels;
-    private $data = [];
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($data)
+    public $title;
+    public $body;
+    public function __construct($title , $body)
     {
-        $this->$data = $data;
+        //
+        $this->body = $body;
+        $this->title =  $title;
     }
 
     /**
@@ -28,7 +32,6 @@ class accept_inspector extends Mailable
      */
     public function build()
     {
-        return $this->from("mohamedmagdymohamed982@gmail.com", 'MOhamed Magdy')
-            ->subject($this->data['subject'])->view('emails.accept_mail')->with('data', $this->data);
+        return $this->markdown('emails.exam',['title'=>$this->title,'body'=>$this->body]);
     }
 }

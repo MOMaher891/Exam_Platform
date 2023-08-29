@@ -16,7 +16,7 @@ class ExamController extends Controller
 {
     //
     public function index()
-    {         
+    {
         return view('website.dashboard.exams.index');
     }
 
@@ -24,67 +24,59 @@ class ExamController extends Controller
     {
         $center  = auth('observe')->user()->center_id;
         $list = [];
-        
-        
+
+
         $data = ExamTime::query();
-        if($center != null)
-        {
+        if ($center != null) {
 
-           $private = Exam::where('type','private')->where('expire',0)->get();
-           
-           foreach($private as $exam)
-           {
-                if(in_array($center,explode(',',$exam->centers)))
-                {
-                    array_push($list,$exam->id);
+            $private = Exam::where('type', 'private')->where('expire', 0)->get();
+
+            foreach ($private as $exam) {
+                if (in_array($center, explode(',', $exam->centers))) {
+                    array_push($list, $exam->id);
                 }
-           }
-        }   
-        // Check if Applyed Before //
-        $activity  = ObserveActivity::where('observe_id',auth('observe')->user()->id)->pluck('exam_time_id');
-        if(count($activity) > 0)
-        {
-            $data->whereNotIn('id',json_decode(json_encode ( $activity ) , true));
+            }
         }
-        
-        $allExams  = Exam::where('type','public')->where('expire',0)->pluck('id');
+        // Check if Applyed Before //
+        $activity  = ObserveActivity::where('observe_id', auth('observe')->user()->id)->pluck('exam_time_id');
+        if (count($activity) > 0) {
+            $data->whereNotIn('id', json_decode(json_encode($activity), true));
+        }
 
-        $all =  array_merge($list,json_decode(json_encode ( $allExams ) , true));
+        $allExams  = Exam::where('type', 'public')->where('expire', 0)->pluck('id');
+
+        $all =  array_merge($list, json_decode(json_encode($allExams), true));
         $data = $data->with('center')->with('exam')->where('is_done', 0)
-          ->whereIn('exam_id', $all)
-          ->whereHas('exam', function($q) {
-            $q->whereDate('date','>',Carbon::now())->whereDate('show_date','<=',Carbon::now());
+            ->whereIn('exam_id', $all)
+            ->whereHas('exam', function ($q) {
+                $q->whereDate('date', '>', Carbon::now())->whereDate('show_date', '<=', Carbon::now());
+            })
+            ->latest();
+        return DataTables::of($data)->addColumn('action', function ($data) {
+            return view('website.dashboard.exams.action', ['type' => 'action', 'data' => $data]);
         })
-          ->latest();
-        return DataTables::of($data)->addColumn('action',function($data){
-            return view('website.dashboard.exams.action',['type'=>'action','data'=>$data]);
-        })
-        ->editColumn('shift',function($data){
-            return 'Shift'.$data->shift;
-        })->make(true);   
-  
+            ->editColumn('shift', function ($data) {
+                return 'Shift' . $data->shift;
+            })->make(true);
     }
 
     public function apply(Request $request)
     {
-        try{
+        try {
             $examTime = ExamTime::find($request->id);
-            $numOfActivity= ObserveActivity::where('exam_time_id',$request->id)->count();
-            if($examTime->num_of_observe > $numOfActivity)
-            {
+            $numOfActivity = ObserveActivity::where('exam_time_id', $request->id)->count();
+            if ($examTime->num_of_observe > $numOfActivity) {
                 $data =  ObserveActivity::create([
-                    'observe_id'=>auth('observe')->user()->id,
-                    'exam_time_id'=>$request->id,
+                    'observe_id' => auth('observe')->user()->id,
+                    'exam_time_id' => $request->id,
                 ]);
-                return response()->json(['status'=>true]);
-            }else{
-                $examTime->update(['is_done'=>true]);
-                return response()->json(['status'=>false,'message'=>'Exam Completed']);
+                return response()->json(['status' => true]);
+            } else {
+                $examTime->update(['is_done' => true]);
+                return response()->json(['status' => false, 'message' => 'Exam Completed']);
             }
-        }catch(Exception $e)
-        {
-            return response()->json(['status'=>false,'message'=>$e->getMessage()]);
+        } catch (Exception $e) {
+            return response()->json(['status' => false, 'message' => $e->getMessage()]);
         }
     }
-
 }

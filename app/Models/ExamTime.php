@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ExamTime extends Model
 {
     use HasFactory;
-    protected $fillable= [
+    protected $fillable = [
         'exam_id',
         'center_id',
         'from',
@@ -20,16 +20,23 @@ class ExamTime extends Model
 
     public function center()
     {
-        return $this->belongsTo(Center::class,'center_id');
+        return $this->belongsTo(Center::class, 'center_id');
     }
 
     public function exam()
     {
-        return $this->belongsTo(Exam::class,'exam_id');
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 
     public function observeActivity()
     {
         return $this->hasMany(ObserveActivity::class);
+    }
+
+    public function scopeFilter($query, $request)
+    {
+        if (isset($request['center_id'])) {
+            $query->where('center_id', $request['center_id']);
+        }
     }
 }

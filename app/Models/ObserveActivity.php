@@ -18,7 +18,7 @@ class ObserveActivity extends Model
 
     public function exam_time()
     {
-        return $this->belongsTo(ExamTime::class);
+        return $this->belongsTo(ExamTime::class, 'exam_time_id');
     }
 
 
@@ -28,7 +28,13 @@ class ObserveActivity extends Model
     }
     public function examTime()
     {
-        return $this->belongsTo(ExamTime::class,'exam_time_id');
+        return $this->belongsTo(ExamTime::class, 'exam_time_id');
     }
 
+    public function scopeFilter($query, $request)
+    {
+        if (isset($request['is_come'])) {
+            $query->where('is_come', $request['is_come']);
+        }
+    }
 }

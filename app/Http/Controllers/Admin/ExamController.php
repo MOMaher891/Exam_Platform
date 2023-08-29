@@ -7,6 +7,8 @@ use App\Http\Requests\ExamValidation;
 use App\Models\Category;
 use App\Models\Center;
 use App\Models\Exam;
+use App\Models\Observe;
+use App\Models\ObserveActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,15 +17,14 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ExamController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware(['role:superadmin']);
-    }
+
     /**
      * View Functions
      */
-    public function index()
+    public function index(Request $request)
     {
+        // return Carbon::today();
+
         try {
             return view('dashboard.exam.index');
         } catch (\Exception $ex) {
@@ -31,10 +32,9 @@ class ExamController extends Controller
         }
     }
 
-    public function data()
+    public function data(Request $request)
     {
-
-        $data = Exam::query()->latest();
+        $data = Exam::query()->filter($request->all())->latest();
         return DataTables::of($data)
             ->addColumn('price', function ($data) {
                 return $data->price . ' $';
@@ -44,11 +44,10 @@ class ExamController extends Controller
                 if ($data->type == 'private') {
                     $centers = Center::whereIn('id', explode(',', $data->centers))->get();
                 }
-
                 return view('dashboard.exam.action', ['data' => $data, 'centers' => $centers, 'type' => 'type']);
             })
             ->addColumn('status', function ($data) {
-                $current_date = Carbon::today()->addDay();
+                $current_date = Carbon::today();
                 $date = Carbon::parse($data->date)->format('Y-m-d');
                 $days = Carbon::parse($date)->diffInDays($current_date);
                 $diff = Carbon::parse($date)->diff($current_date)->invert;
@@ -65,7 +64,14 @@ class ExamController extends Controller
                 return view('dashboard.exam.action', ['status' => $status, 'type' => 'status']);
             })->addColumn('action', function ($data) {
                 return view('dashboard.exam.action', ['exam' => $data, 'type' => 'action']);
-            })->make(true);
+            })
+            ->addColumn('centers', function ($data) {
+                return view('dashboard.exam.action', ['exam' => $data, 'type' => 'centers']);
+            })
+            ->addColumn('attendance', function ($data) {
+                return view('dashboard.exam.action', ['exam' => $data, 'type' => 'attendance']);
+            })
+            ->make(true);
     }
 
     public function create()
@@ -93,6 +99,73 @@ class ExamController extends Controller
         } catch (\Exception $ex) {
             return view('errors.500');
         }
+    }
+
+    /**
+     * Centers join in exam
+     */
+    public function centers_show(Request $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        // return $exam_id;
+        return view('dashboard.exam.centers', compact('exam'));
+    }
+    public function centers_data($exam_id)
+    {
+        $data = Center::query()
+            ->whereHas('exam_time', function ($q) use ($exam_id) {
+                $q->where('exam_id', $exam_id);
+            })
+            ->with(['exam_time' => function ($q) use ($exam_id) {
+                $q->where('exam_id', $exam_id);
+            }])->with('user')
+            ->latest();
+
+        return DataTables::of($data)
+            ->addColumn('price', function ($data) {
+                return $data;
+            })
+            ->addColumn('action', function ($data) {
+                return view('dashboard.exam.action', ['type' => 'data']);
+            })
+            ->addColumn('shift', function ($data) {
+                $shift = $data->exam_time;
+                return view('dashboard.exam.action', ['data' => $shift, 'type' => 'shift']);
+            })
+            ->addColumn('Invigilator', function ($data) {
+                $Invigilator = $data->exam_time;
+                return view('dashboard.exam.action', ['data' => $Invigilator, 'type' => 'Invigilator']);
+            })
+            ->make(true);
+    }
+
+    /**
+     * attendance join in exam
+     */
+    public function attendance_show(Request $request)
+    {
+        $exam = Exam::find($request->exam_id);
+        $centers = Center::all();
+        return view('dashboard.exam.attendance', compact('exam', 'centers'));
+    }
+    public function attendance_data($exam_id, Request $request)
+    {
+        $data = ObserveActivity::filter($request->all())->whereHas('exam_time', function ($q) use ($request) {
+            $q->filter($request->all())->where('exam_id', $request->exam_id);
+        })
+            ->with(['exam_time' => function ($q) use ($request) {
+                $q->where('exam_id', $request->exam_id)->with('center');
+            }])
+            ->with(['observes'])->latest();
+
+        return DataTables::of($data)
+            ->addColumn('action', function ($data) {
+                return view('dashboard.exam.action', ['type' => 'data']);
+            })
+            ->addColumn('attend', function ($data) {
+                return view('dashboard.exam.action', ['data' => $data, 'type' => 'attend']);
+            })
+            ->make(true);
     }
 
     /**
@@ -167,6 +240,40 @@ class ExamController extends Controller
 
             $exam->delete();
             return response()->json(['success' => "Data deleted successfully!"]);
+        } catch (\Exception $ex) {
+            return view('errors.500');
+        }
+    }
+
+    public function payment($exam_id)
+    {
+        try {
+            $exam = Exam::findOrFail($exam_id);
+            if (!$exam) {
+                return view('errors.500');
+            }
+            if ($exam->paid == 0) {
+                $current_date = Carbon::today();
+                $date = Carbon::parse($exam->date)->format('Y-m-d');
+                $days = Carbon::parse($date)->diffInDays($current_date);
+                $diff = Carbon::parse($date)->diff($current_date)->invert;
+
+                if ($days != 0 && $diff == 0) {
+                    $status = -1;
+                } else if ($days == 0 && $diff == 0) {
+                    $status = 0;
+                } else {
+                    $status = 1;
+                }
+                if ($status != 1) {
+                    $exam->update(['paid' => 1]);
+                    return response()->json(['success' => "Data Updated successfully!"]);
+                } else {
+                    return response()->json(['error' => "You can only pay after completing the exam"]);
+                }
+            } else {
+                return response()->json(['error' => "Already Paid"]);
+            }
         } catch (\Exception $ex) {
             return view('errors.500');
         }

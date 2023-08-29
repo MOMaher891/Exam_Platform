@@ -82,12 +82,12 @@
                             @endif
 
                             <i class="ri-user-3-line"></i>
-                            <span>Inspector</span>
+                            <span>Invigilator</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('admin.inspector.index') }}">Inspector List</a></li>
+                            <li><a href="{{ route('admin.inspector.index') }}">Invigilator List</a></li>
                             @if (auth()->user()->hasRole('admin'))
-                            <li><a href="{{ route('admin.inspector.inspector_center') }}">Inspector in center</a></li>
+                            <li><a href="{{ route('admin.inspector.inspector_center') }}">Invigilator in center</a></li>
                             @endif
                         </ul>
                     </li>
@@ -109,20 +109,22 @@
                     <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <span
-                                class="badge rounded-pill bg-success float-end">{{ App\Models\User::count() - 1 }}</span>
+                                class="badge rounded-pill bg-success float-end">{{ App\Models\Center::count() }}</span>
                             <i class="ri-user-3-line"></i>
                             <span>Centers</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
                             <li><a href="{{ route('admin.center.index') }}">Center List</a></li>
+                            @if(auth()->user()->hasPermission('add_center'))
                             <li><a href="{{ route('admin.center.create') }}">Add Center</a></li>
+                            @endif
                         </ul>
                     </li>
                 @endif
 
 
 
-                @if (auth()->user()->hasPermission('show_staff'))
+                @if (auth()->user()->hasPermission('show_exam'))
                 <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <span
@@ -132,7 +134,10 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{ route('admin.exam.index') }}">Quiz List</a></li>
+
+                        @if (auth()->user()->hasPermission('add_exam'))
                         <li><a href="{{ route('admin.exam.create') }}">Add quiz</a></li>
+                        @endif
                     </ul>
                 </li>
                 @endif

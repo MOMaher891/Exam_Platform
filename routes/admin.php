@@ -69,11 +69,16 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', 'index')->middleware('permission:show_exam')->name(config('app.admin') . $prefix . 'index');
             Route::get('/create', 'create')->middleware('permission:add_exam')->name(config('app.admin') . $prefix . 'create');
             Route::get('/edit/{exam_id}', 'edit')->middleware('permission:edit_exam')->name(config('app.admin') . $prefix . 'edit');
+            Route::get('{exam_id}/centers/', 'centers_show')->middleware('permission:show_exam')->name(config('app.admin') . $prefix . 'centers_show');
+            Route::get('center_data/{exam_id}', 'centers_data')->middleware('permission:show_exam')->name($prefix . 'center_data');
+            Route::get('{exam_id}/attendance/', 'attendance_show')->middleware('permission:show_exam')->name(config('app.admin') . $prefix . 'attendance_show');
+            Route::get('attendance_data/{exam_id}', 'attendance_data')->middleware('permission:show_exam')->name($prefix . 'attendance_data');
             Route::get('data', 'data')->middleware('permission:show_exam')->name($prefix . 'data');
             //Post Functions
             Route::post('/store', 'store')->middleware('permission:add_exam')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_exam')->name(config('app.admin') . $prefix . 'update');
             Route::delete('/delete/{exam_id}', 'delete')->middleware('permission:delete_exam')->name(config('app.admin') . $prefix . 'delete');
+            Route::post('/payment/{exam_id}', 'payment')->middleware('permission:show_exam')->name(config('app.admin') . $prefix . 'payment');
         });
 
         /**
@@ -92,7 +97,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/accept/{inspector_id}', 'accept')->middleware('permission:accept_inspector')->name(config('app.admin') . $prefix . 'accept');
             Route::get('/exam_observe', 'exam_observe')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'exam_observe');
             Route::get('/is_come/{observe_id}', 'is_come')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'is_come');
-            Route::get('/reject/{inspector_id}', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
+            Route::post('/reject', 'reject')->middleware('permission:reject_inspector')->name(config('app.admin') . $prefix . 'reject');
             Route::get('/block/{inspector_id}', 'block')->middleware('permission:block_inspector')->name(config('app.admin') . $prefix . 'block');
             Route::get('/delete/{inspector_id}', 'delete')->middleware('permission:delete_inspector')->name(config('app.admin') . $prefix . 'delete');
             Route::get('inspector_center/', 'Inspector_in_center')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'inspector_center');
@@ -101,6 +106,12 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/store', 'store')->middleware('permission:add_inspector')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_inspector')->name(config('app.admin') . $prefix . 'update');
             Route::post('/filter_accounts', 'filter_accounts')->middleware('permission:filter_inspector')->name(config('app.admin') . $prefix . 'filter');
+
+            /**
+             * Analyst
+             */
+            Route::get('{inspector_id}/all_exams', 'all_exams')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'all_exams');
+            Route::get('{inspector_id}/all_exams_data', 'all_exams_data')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . 'all_exams_data');
         });
 
         /**
@@ -156,6 +167,15 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('{id}/update', 'update')->middleware('permission:edit_center')->name(config('app.admin') . $prefix . '.update');
             Route::post('/upload-excel', 'uploadCenters')->middleware('permission:add_center')->name(config('app.admin') . $prefix . '.upload-center');
             Route::get('delete/{id}', 'delete')->middleware('permission:delete_center')->name(config('app.admin') . $prefix . '.delete');
+
+            /**
+             * Analyst
+             */
+            Route::get('{center_id}/exams', 'exam_for_center_show')->middleware('permission:show_center')->name(config('app.admin') . $prefix . '.exam_for_center_show');
+            Route::get('exams/{center_id}', 'exam_for_center_data')->middleware('permission:show_center')->name(config('app.admin') . $prefix . '.exam_for_center_data');
+
+            Route::get('/{exam_time_id}/attendance', 'inspector_for_exam_show')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . '.inspector_for_exam_show');
+            Route::get('attendance/{exam_time_id}/', 'inspector_for_exam_data')->middleware('permission:show_inspector')->name(config('app.admin') . $prefix . '.inspector_for_exam_data');
         });
 
 

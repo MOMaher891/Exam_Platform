@@ -35,12 +35,12 @@ class InspectorValidation extends FormRequest
             'job_title' => 'required|string',
             'birth_date' => 'required|date',
             'gender' => 'required|in:male,female',
-            'img_personal' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
-            'img_national' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
-            'img_national_back' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
-            'img_passport' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
-            'img_certificate' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
-            'img_certificate_good_conduct' => 'required|mimes:jpeg,png,pdf,jpg,word,excel',
+            'img_personal' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'img_national' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'img_national_back' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'img_passport' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'img_certificate' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'img_certificate_good_conduct' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
         ];
     }
 

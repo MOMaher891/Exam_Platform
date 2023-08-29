@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RenameColumn extends Migration
+class AddBankInfoObserve extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class RenameColumn extends Migration
     public function up()
     {
         Schema::table('observes', function (Blueprint $table) {
-            $table->renameColumn('img_national', 'img_national_front');
+            $table->string('back_name')->default(null);
+            $table->string('IBAN')->default(null);
         });
     }
 
