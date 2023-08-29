@@ -155,7 +155,7 @@
                         @enderror
                         </div>
                         <div class="form-group ">
-                            <label for="inputPhone">certificate good conduct Photo</label>
+                            <label for="inputPhone">Police Clearance</label>
                             <input type="file" class=" form-control" id="inputPhone" name="img_certificate_good_conduct"  value="{{old('img_certificate_good_conduct')}}" required>
                           @error('img_certificate_good_conduct')
                           <span class="text-danger mt-2">{{ $message }}</span>

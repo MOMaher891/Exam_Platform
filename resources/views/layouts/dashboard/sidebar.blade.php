@@ -82,12 +82,12 @@
                             @endif
 
                             <i class="ri-user-3-line"></i>
-                            <span>Inspector</span>
+                            <span>Invigilator</span>
                         </a>
                         <ul class="sub-menu" aria-expanded="false">
-                            <li><a href="{{ route('admin.inspector.index') }}">Inspector List</a></li>
+                            <li><a href="{{ route('admin.inspector.index') }}">Invigilator List</a></li>
                             @if (auth()->user()->hasRole('admin'))
-                            <li><a href="{{ route('admin.inspector.inspector_center') }}">Inspector in center</a></li>
+                            <li><a href="{{ route('admin.inspector.inspector_center') }}">Invigilator in center</a></li>
                             @endif
                         </ul>
                     </li>
