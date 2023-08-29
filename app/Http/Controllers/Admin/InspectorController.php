@@ -210,6 +210,7 @@ class InspectorController extends Controller
             //     'subject' => 'Exam Platform mail',
             //     'body' => $request->reason
             // ];
+            
             $subject = 'Exam Platform mail';
             $body = $request->reason;
 

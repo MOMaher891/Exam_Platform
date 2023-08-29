@@ -107,7 +107,7 @@
                             toastr.success('Applyed Successfuly', 'success');
                             DataTable.ajax.reload()
                         }else{
-                            toastr.error(results.message, 'success');
+                            toastr.error(results.message, 'ERROR');
                         }
                      },
 

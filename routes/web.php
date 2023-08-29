@@ -36,7 +36,7 @@ Route::group(['middleware' => 'auth:observe'], function () {
     Route::group(['prefix'=>'exam','controller'=>ExamController::class],function(){
         Route::get('/','index')->name('inspector.exam.index');
         Route::get('/data','data')->name('inspector.exam.data');
-        Route::get('/apply','apply')->name('inspector.exam.apply');
+        Route::get('/apply','apply')->name('inspector.exam.apply')->middleware(['obvserve.block']);
     });
 
     Route::group(['prefix'=>'profile','controller'=>ProfileController::class],function(){
