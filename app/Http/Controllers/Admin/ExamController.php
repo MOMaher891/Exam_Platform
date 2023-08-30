@@ -100,8 +100,8 @@ class ExamController extends Controller
                         })->with(['exam' => function ($q)  use ($data) {
                             $q->where('id', $data->id);
                         }]);
-                    }])->get();
-                return $active->count() * $data->price;
+                    }])->count();
+                return $active * $data->price . ' AED';
             })
             ->addColumn('attendance', function ($data) {
                 return view('dashboard.exam.action', ['exam' => $data, 'type' => 'attendance']);

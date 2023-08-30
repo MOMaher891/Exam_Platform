@@ -59,10 +59,13 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>National ID</th>
+                                <th>EMIRATES ID</th>
+                                <th>Gender</th>
                                 <th>Address</th>
                                 @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
                                 <th>Total price</th>
+                                <th>Bank Name</th>
+                                <th>IBAN</th>
                                 <th>Status</th>
                                 @endif
                                 <th>Action</th>
@@ -106,6 +109,36 @@
                 },
 
 
+                buttons: [
+                    {
+                        extend: 'copyHtml5',
+                        exportOptions: {
+                            columns: [ 0,1, 2, 3,4,5,6,7,8,9 ]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: [ 0,1, 2, 3,4,5,6,7,8,9 ]
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        exportOptions: {
+                            columns: [ 0,1, 2, 3,4,5,6,7,8,9 ]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        exportOptions: {
+                            columns: [ 0,1, 2, 3,4,5,6,7,8,9 ]
+                        }
+                    },
+                    // 'colvis'
+
+                ],
+
+
                 columns: [
 
                 {
@@ -121,12 +154,22 @@
                         data: 'national_id'
                     },
                     {
+                        data: 'gender'
+                    },
+                    {
                         data: 'address'
                     },
                     @if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('analyst'))
 
                     {
                         data: 'price'
+                    },
+
+                    {
+                        data: 'bank_name'
+                    },
+                    {
+                        data:'IBAN'
                     },
                     {
                         data:'status'
