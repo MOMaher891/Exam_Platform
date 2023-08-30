@@ -88,9 +88,9 @@
                         <thead>
                             <tr>
                                 <th>date</th>
-                                <th>Show date</th>
+                                {{-- <th>Show date</th> --}}
                                 <th>Centers</th>
-                                <th>Price</th>
+                                <th>Total Price</th>
                                 <th>Status</th>
                                 <th>Centers</th>
                                 <th>Action</th>
@@ -140,14 +140,14 @@
                     {
                         data: 'date'
                     },
-                    {
-                        data: 'show_date'
-                    },
+                    // {
+                    //     data: 'show_date'
+                    // },
                     {
                         data:'type'
                     },
                     {
-                        data: 'price'
+                        data: 'total_price'
                     },
                     {
                         data: 'status'

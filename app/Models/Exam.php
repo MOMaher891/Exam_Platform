@@ -6,6 +6,8 @@ use Carbon\Carbon;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\ObserveActivity;
+use App\Models\ExamTime;
 
 class Exam extends Model
 {
@@ -55,5 +57,10 @@ class Exam extends Model
             $to = Carbon::parse($request['date_to']);
             $query->whereBetween('date', [$from, $to]);
         }
+    }
+
+    public function ObserveActivity()
+    {
+        return $this->hasManyThrough(ObserveActivity::class, ExamTime::class);
     }
 }
