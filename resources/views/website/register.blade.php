@@ -9,6 +9,17 @@
           <div class="row">
             <div class="col">
               <div class="ugf-contact-wrap">
+                <div class="card">
+                  @if(session('success'))
+                  <h6 class="alert alert-success">
+                      {{ session('success') }}
+                  </h6>
+                @elseif(session('error'))
+                  <h6 class="alert alert-danger">
+                    {{ session('error') }}
+                  </h6>
+                @endif               
+               </div>
                 <form class="row" enctype="multipart/form-data" method="POST" action="{{route('register')}}">
                     @csrf
                   <div class="col-lg-5 offset-lg-1">
@@ -164,14 +175,14 @@
                         <h2>Bank Info.</h2>
                         <div class="form-group ">
                             <label for="inputPhone">Bank Name</label>
-                            <input type="text" class=" form-control w-100" id="inputPhone" name="back_name" placeholder=""  value="{{old('job_title')}}" required>
+                            <input type="text" class=" form-control w-100" id="inputPhone" name="bank_name" placeholder="CIB"  value="{{old('job_title')}}" required>
                             @error('back_name')
                             <span class="text-danger mt-2">{{ $message }}</span>
                           @enderror
                         </div>
                         <div class="form-group ">
                             <label for="inputPhone">IBAN</label>
-                            <input type="number" class=" form-control w-100" id="inputPhone" name="IBAN"  value="{{old('IBAN')}}" required>
+                            <input type="text" class=" form-control w-100" id="inputPhone" name="IBAN" placeholder="EG:XXXXXXXX"  value="{{old('IBAN')}}" required>
                             @error('IBAN')
                             <span class="text-danger mt-2">{{ $message }}</span>
                           @enderror

@@ -72,12 +72,10 @@ class AuthController extends Controller
             // Attach User With Role Inspector //
             // $user->attachRole('inspector');
             DB::commit();
-
-
-            return redirect()->back()->with(['success' => "Data saved successfully!"]);
+            return redirect()->back()->with(['success' => "Your application will be reviewd and we will be responded to as soon as possible"]);
         } catch (\Exception $ex) {
             DB::rollBack();
-            return $ex;
+            // return $ex;
             return redirect()->back()->with(['error' => "There are error occur"]);
         }
     }

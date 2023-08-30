@@ -41,6 +41,8 @@ class InspectorValidation extends FormRequest
             'img_passport' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
             'img_certificate' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
             'img_certificate_good_conduct' => 'required|mimes:jpeg,png,pdf,jpg,word,xlsx,csv',
+            'bank_name'=>'required|string',
+            'IBAN'=>'required|string'
         ];
     }
 

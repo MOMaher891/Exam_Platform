@@ -187,7 +187,7 @@ class InspectorController extends Controller
             // ];
             $subject = 'Exam Platform mail';
             $body = 'Congratulation .
-                        Your data has been reviewed successfully, now you can log in';
+                        Your data has been reviewed successfully, now you can login now';
 
 
 
@@ -216,8 +216,34 @@ class InspectorController extends Controller
             if (!$inspector) {
                 return response()->json(['error' => 'Inspector not found']);
             }
-            $inspector->update(['status' => 'cancel']);
-            return redirect()->back()->with(['success' => 'Data saved successfully!']);
+            if($inspector->img_personal !=null)
+            {
+                $this->updateImage($inspector->img_personal,null,$this->personal);
+            }
+            if($inspector->img_national !=null)
+            {
+                $this->updateImage($inspector->img_national,null,$this->national);
+            }
+            if($inspector->img_national_back !=null)
+            {
+                $this->updateImage($inspector->img_national_back,null,$this->national_back);
+            }
+            if($inspector->img_passport !=null)
+            {
+                $this->updateImage($inspector->img_passport,null,$this->passport);
+            }
+            if($inspector->img_certificate !=null)
+            {
+                $this->updateImage($inspector->img_certificate,null,$this->certificate);
+            }
+            if($inspector->img_certificate_good_conduct !=null)
+            {
+                $this->updateImage($inspector->img_certificate_good_conduct,null,$this->certificate_good_conduct);
+            }
+            
+            $inspector->delete();
+            // $inspector->update(['status' => 'cancel']);
+            return redirect()->route('admin.inspector.index')->with(['success' => 'Data Deleted successfully!']);
         } catch (Exception $e) {
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
