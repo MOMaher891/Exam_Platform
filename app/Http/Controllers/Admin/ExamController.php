@@ -11,6 +11,7 @@ use App\Models\Observe;
 use App\Models\ObserveActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,8 +24,24 @@ class ExamController extends Controller
      */
     public function index(Request $request)
     {
-        // return Carbon::today();
+        $data = ObserveActivity::where('is_come', 1)
+            ->whereHas('exam_time', function ($q) {
+                $q->whereHas('exam', function ($q) {
+                    $q->where('id', 18);
+                })->with(['exam' => function ($q) {
+                    $q->where('id', 18);
+                }]);
+            })
+            ->with(['exam_time' => function ($q) {
+                $q->whereHas('exam', function ($q) {
+                    $q->where('id', 18);
+                })->with(['exam' => function ($q) {
+                    $q->where('id', 18);
+                }]);
+            }])->get();
 
+        $exam = Exam::select('price')->where('id', 18)->first();
+        // return $data->count() * $exam->price;
         try {
             return view('dashboard.exam.index');
         } catch (\Exception $ex) {
@@ -67,6 +84,24 @@ class ExamController extends Controller
             })
             ->addColumn('centers', function ($data) {
                 return view('dashboard.exam.action', ['exam' => $data, 'type' => 'centers']);
+            })
+            ->addColumn('total_price', function ($data) {
+                $active = ObserveActivity::where('is_come', 1)
+                    ->whereHas('exam_time', function ($q)  use ($data) {
+                        $q->whereHas('exam', function ($q)  use ($data) {
+                            $q->where('id', $data->id);
+                        })->with(['exam' => function ($q) use ($data) {
+                            $q->where('id', $data->id);
+                        }]);
+                    })
+                    ->with(['exam_time' => function ($q)  use ($data) {
+                        $q->whereHas('exam', function ($q)  use ($data) {
+                            $q->where('id', $data->id);
+                        })->with(['exam' => function ($q)  use ($data) {
+                            $q->where('id', $data->id);
+                        }]);
+                    }])->get();
+                return $active->count() * $data->price;
             })
             ->addColumn('attendance', function ($data) {
                 return view('dashboard.exam.action', ['exam' => $data, 'type' => 'attendance']);
@@ -266,9 +301,28 @@ class ExamController extends Controller
                     $status = 1;
                 }
                 if ($status != 1) {
+                    $exam = Exam::with(['ObserveActivity' => function ($q) {
+                        $q->with('observes');
+                    }])->get();
+                    DB::beginTransaction();
+                    $exam = Exam::where('id', $exam_id)
+                        ->with(['ObserveActivity' => function ($q) {
+                            $q->with(['observes' => function ($q) {
+                                $q->select('id', 'price');
+                            }]);
+                        }])->first();
+
+                    if ($exam) {
+                        $observeActivity = collect($exam->ObserveActivity);
+                        foreach ($observeActivity as $observe) {
+                            $observe->observes->update(['price' => $observe->observes->price - $exam->price]);
+                        }
+                    }
                     $exam->update(['paid' => 1]);
+                    DB::commit();
                     return response()->json(['success' => "Data Updated successfully!"]);
                 } else {
+                    DB::rollBack();
                     return response()->json(['error' => "You can only pay after completing the exam"]);
                 }
             } else {

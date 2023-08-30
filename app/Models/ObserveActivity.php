@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ExamTime;
+use App\Models\Exam;
 use App\Models\Observe;
 
 class ObserveActivity extends Model
@@ -19,6 +20,11 @@ class ObserveActivity extends Model
     public function exam_time()
     {
         return $this->belongsTo(ExamTime::class, 'exam_time_id');
+    }
+
+    public function exam()
+    {
+        return $this->hasManyThrough(Exam::class, ExamTime::class);
     }
 
 
