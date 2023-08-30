@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Exam : {{$exam->exam_time->exam->date}} <span style="display: block">Shift : {{$exam->exam_time->shift}}</span></h4>
+                    <h4 class="mb-sm-0">Exam : {{$exam->exam_time->exam->date != null ? $exam->exam_time->exam->date  : 'No Exams Applied'  }} <span style="display: block">Shift : {{$exam->exam_time->shift}}</span></h4>
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="{{route('admin')}}">Dashboard</a></li>
