@@ -166,9 +166,8 @@ class CenterController extends Controller
     public function inspector_for_exam_show(Request $request)
     {
         $data = $request->exam_time_id;
-        $exam = ObserveActivity::with(['observes', 'exam_time' => function ($q) {
-            $q->with('exam');
-        }])->where('exam_time_id', $request->exam_time_id)->first();
+
+        $exam = ExamTime::with('exam')->where('id', $request->exam_time_id)->first();
         // return $exam;
         return view('dashboard.centers.inspector', compact('data', 'exam'));
     }
