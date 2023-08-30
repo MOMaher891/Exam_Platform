@@ -6,6 +6,15 @@
 
       <div class="">
         <div class="container">
+            @if(session('info'))
+            <h6 class="alert alert-info">
+                {{ session('info') }}
+            </h6>
+           @elseif(session('error'))
+            <h6 class="alert alert-danger">
+              {{ session('error') }}
+            </h6>
+            @endif               
           <div class="row">
             <div class="col">
               <div class="ugf-contact-wrap">

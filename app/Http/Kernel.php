@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'obvserve.block'=>\App\Http\Middleware\blacklist_observes::class,
+        'observe.pending'=>\App\Http\Middleware\PendingMiddlware::class,
     ];
 }

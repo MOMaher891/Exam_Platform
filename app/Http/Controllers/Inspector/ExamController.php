@@ -17,6 +17,7 @@ class ExamController extends Controller
     //
     public function index()
     {
+        // return Carbon::now();
         return view('website.dashboard.exams.index');
     }
 
@@ -49,7 +50,7 @@ class ExamController extends Controller
         $data = $data->with('center')->with('exam')->where('is_done', 0)
             ->whereIn('exam_id', $all)
             ->whereHas('exam', function ($q) {
-                $q->whereDate('date', '>', Carbon::now())->whereDate('show_date', '<=', Carbon::now());
+                $q->whereDate('date', '>', Carbon::now()->toDateString())->whereDate('show_date', '<=', Carbon::now()->toDateString());
             })
             ->latest();
         return DataTables::of($data)->addColumn('action', function ($data) {
@@ -69,19 +70,32 @@ class ExamController extends Controller
             if($examTime->num_of_observe > $numOfActivity)
             {
                 // Check Exams in Same Time
-                $examsTimes = ExamTime::where('exam_id',$examTime->exam_id)->where('shift',$examTime->shift)->pluck('id');
-                $isExist = ObserveActivity::whereIn('exam_time_id',$examsTimes)->exists();
-
-                if(! $isExist)
+                // $examsTimes = ExamTime::where('exam_id',$examTime->exam_id)->where('shift',$examTime->shift)->pluck('id');
+                $Applyed = ObserveActivity::whereHas('exam_time',function($q) use($examTime){
+                    $q->with(['exam'=>function($q) use($examTime){
+                        $q->where('date',$examTime->exam->date);
+                    }])->where('exam_id',$examTime->exam_id);
+                })->where('observe_id',auth('observe')->user()->id)->first();
+                // dd($Applyed->exam_time);
+                if(!$Applyed)
+                {  
+                    ObserveActivity::create([
+                        'observe_id'=>auth('observe')->user()->id,
+                        'exam_time_id'=>$request->id,
+                    ]);
+                    return response()->json(['status'=>true]);  
+                }
+                if($Applyed->exam_time->center_id == $examTime->center_id)
                 {
-                    $data =  ObserveActivity::create([
+                    
+                    ObserveActivity::create([
                         'observe_id'=>auth('observe')->user()->id,
                         'exam_time_id'=>$request->id,
                     ]);
                     return response()->json(['status'=>true]);
-                
+
                 }else{
-                    return response()->json(['status' => false,'message' =>'Cannot Applied in Exam in Same Shift Before ...']);
+                    return response()->json(['status' => false,'message' =>'Cannot Applied in Exam in Different Center ...']);
                 }
                 }else{
                 $examTime->update(['is_done'=>true]);

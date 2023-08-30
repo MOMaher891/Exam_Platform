@@ -14,6 +14,10 @@
                   <h6 class="alert alert-success">
                       {{ session('success') }}
                   </h6>
+                @elseif(session('error'))
+                  <h6 class="alert alert-danger">
+                    {{ session('error') }}
+                  </h6>
                 @endif               
                </div>
                 <form class="row" enctype="multipart/form-data" method="POST" action="{{route('register')}}">
