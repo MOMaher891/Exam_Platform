@@ -14,7 +14,14 @@
             <h6 class="alert alert-danger">
               {{ session('error') }}
             </h6>
+
+            @elseif (session('success'))
+            <h6 class="alert alert-danger">
+              {{ session('error') }}
+            </h6>
+            
             @endif               
+
           <div class="row">
             <div class="col">
               <div class="ugf-contact-wrap">
@@ -40,6 +47,8 @@
                     </div>
 
                     <button type="submit" class="btn">SignUp</button>
+                    <a href="{{route('verify')}}" class="text-decoration-none text-light-emphasis">Forget Password</a>
+
                   </div>
 
                   <div class="col-lg-5 offset-lg-1">

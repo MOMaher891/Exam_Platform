@@ -146,4 +146,20 @@ class StaffController extends Controller
             return view('errors.500');
         }
     }
+
+    public function changePasswordView($id)
+    {
+        $data = User::findOrFail($id);
+        return view('dashboard.staff.change-password',['data'=>$data]);        
+    }
+    
+    public function changePassword(Request $request,$id)
+    {
+        $request->validate([
+            'password'=>'required|confirmed'
+        ]);
+        $data = User::findOrFail($id);
+        $data->update(['password'=>Hash::make($request->password)]);
+        return redirect()->route('admin.staff.index')->with('success','Password Changed');
+    }
 }

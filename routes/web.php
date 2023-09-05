@@ -27,6 +27,10 @@ Route::group(['controller' => AuthController::class], function () {
     Route::get('/signin', 'loginView')->name('login.view');
     Route::post('/register', 'register')->name('register');
     Route::post('/signin', 'login')->name('login');
+    Route::get('verify','verify')->name('verify');
+    Route::post('send-email','sendEmail')->name('send-email');
+    Route::post('check-code','checkCode')->name('check-code');
+    Route::post('change-password/{id}','changePassword')->name('change-password');
 });
 
 Route::group(['middleware' => ['auth:observe','observe.pending']], function () {
@@ -43,13 +47,11 @@ Route::group(['middleware' => ['auth:observe','observe.pending']], function () {
     Route::group(['prefix'=>'profile','controller'=>ProfileController::class],function(){
         Route::get('/', 'index')->name('inspector.profile.index');
         Route::get('verify', 'verify')->name('inspector.profile.verify');
-
         Route::get('send-mail', 'sendEmail')->name('inspector.profile.send-email');
         Route::get('check-code', 'checkCode')->name('inspector.profile.check');
         Route::post('change-password', 'changePassword')->name('inspector.profile.change-password');
         Route::post('update', 'update')->name('inspector.profile.update');
-  
-    });
+   });
 
     Route::group(['prefix'=>'exam-profile','controller'=>ExamProfileController::class],function(){
         Route::get('/','index')->name('inspector.exam.profile.index');

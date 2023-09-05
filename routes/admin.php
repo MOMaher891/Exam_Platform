@@ -58,6 +58,10 @@ Route::group(['prefix' => 'admin'], function () {
             Route::post('/store', 'store')->middleware('permission:add_staff')->name(config('app.admin') . $prefix . 'store');
             Route::post('update', 'update')->middleware('permission:edit_staff')->name(config('app.admin') . $prefix . 'update');
             Route::get('/delete/{stf_id}', 'delete')->middleware('permission:delete_staff')->name(config('app.admin') . $prefix . 'delete');
+
+            Route::get('change-password/{id}','changePasswordView')->name(config('app.admin').$prefix.'change-password-view');
+            Route::post('change-password/{id}','changePassword')->name(config('app.admin').$prefix.'change-password');
+            
         });
 
         /**

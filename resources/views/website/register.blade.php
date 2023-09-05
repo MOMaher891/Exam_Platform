@@ -25,6 +25,9 @@
                   <div class="col-lg-5 offset-lg-1">
                     <h2>Personal Info.</h2>
 
+                    <select name="address" id="">
+                      <option value=""></option>
+                    </select>
                     <div class="form-group">
                       <label for="inputText">Name</label>
                       <input type="text" class="form-control" id="inputText" placeholder="e.g. Robert Smith" name="name"  value="{{old('name')}}" required>
@@ -120,7 +123,6 @@
                       <span class="text-danger mt-2">{{ $message }}</span>
                     @enderror
                     </div>
-                    <button type="submit" class="btn">SignUp</button>
                   </div>
 
                   <div class="col-lg-5 offset-lg-1">
@@ -187,6 +189,12 @@
                             <span class="text-danger mt-2">{{ $message }}</span>
                           @enderror
                         </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-2 text-center m-auto">
+                    <div class="form-group">
+                      <button type="submit" class="btn">SignUp</button>
                     </div>
                   </div>
                 </form>

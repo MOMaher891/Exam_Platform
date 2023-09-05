@@ -8,7 +8,7 @@
             <div class="w-layout-grid grid-two introduction">
                 <div class="introduction-headings">
                     <h1>Workplace Wellbeing</h1>
-                    <p class="subheading">Mental health courses designed to help your business grow.</p>
+                    <p class="subheading">A platform to facilitate examination invigilators</p>
                 </div><img
                     src="https://uploads-ssl.webflow.com/60fff0c2ee17fc46c9f078db/6102a5804733360b13bd1fd4_great-minds-introduction-working.svg"
                     loading="lazy" id="w-node-_749094cd-3351-73b1-4786-0f89e0b5a528-0862c5d4"
@@ -16,7 +16,7 @@
             </div>
         </div>
     </header>
-    <section class="xl-gap wf-section">
+    {{-- <section class="xl-gap wf-section">
         <div class="container w-container">
             <div class="w-layout-grid grid-four">
                 <div id="w-node-_5e6b692d-801f-8c96-0952-0b35636ec606-0862c5d4" class="relative organic-wrapper">
@@ -58,8 +58,8 @@
                 </div>
             </div>
         </div>
-    </section>
-    <section id="Benefits" class="xl-gap wf-section">
+    </section> --}}
+    {{-- <section id="Benefits" class="xl-gap wf-section">
         <div class="container w-container">
             <h2>Transform your team</h2>
             <div class="w-layout-grid grid-three">
@@ -280,6 +280,6 @@
                     alt="A woman typing a message on a laptop" />
             </div>
         </div>
-    </section>
+    </section> --}}
 </main>
 @endsection

@@ -5,7 +5,8 @@ data-easing2="ease-out-quart" role="banner" class="navbar w-nav">
                 src="https://uploads-ssl.webflow.com/60fff0c2ee17fc46c9f078db/61016a56d5025f592225c024_greatminds-logo.svg"
                 loading="lazy" width="220" alt="Great Minds Logo" /></div>
         <div class="nav-wrapper">
-            <nav role="navigation" glass="2" class="nav-menu w-nav-menu "><a href="#Benefits"
+            {{-- <nav role="navigation" glass="2" class="nav-menu w-nav-menu ">
+                <a href="#Benefits"
                     class="nav-link w-inline-block">
                     <div>Benefits</div>
                 </a><a href="#Courses" class="nav-link w-inline-block">
@@ -14,7 +15,7 @@ data-easing2="ease-out-quart" role="banner" class="navbar w-nav">
                     <div>MHFA</div>
                 </a><a href="#Contact" class="nav-link last w-inline-block">
                     <div>Contact me</div>
-                </a></nav>
+                </a></nav> --}}
                 <a data-w-id="c25a8e20-cb14-d39c-5bae-82075acd46a9" href="{{route('login.view')}}"
                 class="button mobile w-button"><span class="free-copy-switch">Sign In</span>
                 </a>

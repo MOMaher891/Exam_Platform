@@ -3,14 +3,14 @@
 @section('content')
     <div class="card-body">
 
-        <div class="text-center mt-4">
+        {{-- <div class="text-center mt-4">
             <div class="mb-3">
                 <img src="{{ asset('assets/images/logo-dark.png') }}" height="30" class="logo-dark mx-auto" alt="">
                 <img src="{{ asset('assets/images/logo-light.png') }}" height="30" class="logo-light mx-auto"
                     alt="">
 
             </div>
-        </div>
+        </div> --}}
 
         <h4 class="text-muted text-center font-size-18"><b>SignIn</b></h4>
 
@@ -48,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="form-group mb-0 row mt-2">
+                {{-- <div class="form-group mb-0 row mt-2">
                     <div class="col-sm-7 mt-3">
                         <a href="auth-recoverpw.html" class="text-muted"><i class="mdi mdi-lock"></i> Forgot your
                             password?</a>
@@ -57,7 +57,7 @@
                         <a href="auth-register.html" class="text-muted"><i class="mdi mdi-account-circle"></i> Create an
                             account</a>
                     </div>
-                </div>
+                </div> --}}
             </form>
         </div>
         <!-- end -->

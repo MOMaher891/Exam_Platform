@@ -70,8 +70,8 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end d-none d-sm-block">
-                            Created <i class="mdi mdi-heart text-danger"></i> by <a href="" target="">M &
-                                M</a>
+                            {{-- Created <i class="mdi mdi-heart text-danger"></i> by <a href="" target="">M &
+                                M</a> --}}
                         </div>
                     </div>
                 </div>
